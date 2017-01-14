@@ -1,7 +1,7 @@
 # DataTables plugin for CakePHP 3.x
 
 
-Note: Hey, English is not my primary language, if you find any error here in this documentation or have an idea how to improve it, I'll be happy to hear it. I say the same for the plugin code.
+**Note:** Hey, English is not my primary language, if you find any error here in this documentation or have an idea how to improve it, I'll be happy to hear it. I say the same for the plugin code.
 
 There are currently some plugins that implement the jQuery DataTables library in CakePHP 3.x. This library on the "client" side is a powerful tool for showing and managing data. But most of the plugins that implement it are no more than small helpers, because they do not provide the complete automatic connection between server side and client side, which in my case (speaking from a developer's point of view) is not compatible as our "automagic" framework.
 Why use this plugin for DataTables:
