@@ -186,7 +186,6 @@ echo $this->DataTables->response();
 **Note:** `*` items are options from [DataTables] jQuery Library. To learn more read your documentation.
 
   
-
 License
 ----
 
