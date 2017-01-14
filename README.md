@@ -112,6 +112,7 @@ class AppView extends View
 ...
 ```
 **Note:** When `->table('TableName')` method is omitted the configuration name is taken as the name of the database table.
+
 **Note:** You can create as many configurations as you need, as long as their names are unique.
 
 **2** - Setting the `viewsVars` for chosen `configuration(s)` in the Controller action
