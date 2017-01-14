@@ -21,7 +21,7 @@ Don't worry, you only need:
 
 * [Composer] - Not mandatory but highly recommended;
 * [DataTables library] - Choose what you need and put it in your code (DataTables has a wide variety of download options);
-* [CakePHP] - Recommended always use the latest available version;
+* [CakePHP 3.x] - Recommended always use the latest available version;
 
 
 ### Installation
@@ -197,6 +197,6 @@ MIT
    [DataTables library]: <https://datatables.net/download/index>
    [DataTables]: <https://datatables.net/>
    [Composer]: <https://getcomposer.org/download/>
-   [CakePHP]: <https://book.cakephp.org/3.0/en/installation.html>
+   [CakePHP 3.x]: <https://book.cakephp.org/3.0/en/installation.html>
    [Allan Carvalho]: <https://www.facebook.com/Allan.Mariucci.Carvalho>
    
