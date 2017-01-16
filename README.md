@@ -101,7 +101,6 @@ class AppView extends View
                 ->column('Users.name', ['label' => 'Name'])
                 ->column('Users.email', ['label' => 'Email'])
                 ->column('Users.age', ['label' => 'Age'])
-                ->column('Users.age', ['label' => 'Age'])
                 ->column('actions', ['label' => 'Actions', 'database' => false]);
 
         $this->DataTables->createConfig('UsersActive')
