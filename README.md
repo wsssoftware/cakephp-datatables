@@ -52,7 +52,11 @@ Plugin::load('DataTables');
 
 **2** - In the `ExampleController.php` that you will use DataTables use the `DataTablesAjaxRequestTrait` and load `DataTablesComponent`
 ```php
-...
+
+namespace App\Controller;
+
+use DataTables\Controller\DataTablesAjaxRequestTrait;
+
 class ExampleController extends AppController
 {
     use DataTablesAjaxRequestTrait;
