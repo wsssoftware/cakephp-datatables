@@ -60,9 +60,15 @@ class ExampleController extends AppController
     {
         parent::initialize();
         $this->loadComponent('DataTables.DataTables');
+        
+        //OR
+        
+        $this->loadComponent('DataTables.DataTables', ['language' => ['url => 'http://cdn.datatables.net/plug-ins/1.10.13/i18n/Portuguese-Brasil.json']]);
     }
 ```
 **Note:** `Trait` is required in controller that you will use DataTables because it implements the ajax `action` that returns the data to the table.
+
+**Note:** The second way to load the component shows you how to pass default options to the DataTables library, so all `configs` will get it by default (unless you overwrite it).
 
 **3** - In `AppView.php` load `DataTablesHelper`
 
