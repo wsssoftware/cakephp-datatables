@@ -63,7 +63,7 @@ class ExampleController extends AppController
         
         //OR
         
-        $this->loadComponent('DataTables.DataTables', ['language' => ['url => 'cdn.datatables.net/plug-ins/1.10.13/i18n/Portuguese-Brasil.json']]);
+        $this->loadComponent('DataTables.DataTables', ['language' => ['url => 'Portuguese-Brasil.json']]);
     }
 ```
 **Note:** `Trait` is required in controller that you will use DataTables because it implements the ajax `action` that returns the data to the table.
