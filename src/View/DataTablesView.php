@@ -15,7 +15,7 @@ use Cake\View\View;
 class DataTablesView extends View
 {
 
-    public $layout = 'DataTables.ajax';
+    public $layout = 'DataTables.datatables';
 
     public function initialize()
     {

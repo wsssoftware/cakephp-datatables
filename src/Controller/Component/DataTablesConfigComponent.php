@@ -20,6 +20,7 @@ class DataTablesConfigComponent extends Component
 
     private $dataTableConfig = [];
     private $currentConfig   = null;
+    private $defaultOptions = [];
 
     public function initialize(array $config)
     {
@@ -32,12 +33,14 @@ class DataTablesConfigComponent extends Component
      * @param string $name
      * @return $this
      */
-    public function setConfig($name)
+    public function setConfig($name, $defaultOptions)
     {
+        $this->defaultOptions = $defaultOptions;
         $this->currentConfig                   = $name;
         $this->dataTableConfig[$name]['id']    = 'dt' . $name;
         $this->dataTableConfig[$name]['table'] = $name;
         $this->dataTableConfig[$name]['queryOptions'] = [];
+        $this->dataTableConfig[$name]['options'] = $this->defaultOptions;
         return $this;
     }
 
@@ -109,9 +112,15 @@ class DataTablesConfigComponent extends Component
     public function options(array $options = [])
     {
         $this->dataTableConfig[$this->currentConfig]['options'] = $options;
+        $this->dataTableConfig[$this->currentConfig]['options'] += $this->defaultOptions;
         return $this;
     }
     
+    /**
+     * Set options for SQL query
+     * @param array $options
+     * @return $this
+     */
     public function queryOptions(array $options = [])
     {
         $this->dataTableConfig[$this->currentConfig]['queryOptions'] = $options;

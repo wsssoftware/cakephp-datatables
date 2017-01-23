@@ -22,6 +22,7 @@ class DataTablesComponent extends Component
 {
 
     private $configs = [];
+    private $defaultOptions = [];
 
     /**
      *
@@ -37,13 +38,14 @@ class DataTablesComponent extends Component
     public function __construct($registry, $config = [])
     {
         $this->controller = $registry->getController();
-
+        $this->defaultOptions = $config;
         $this->components = [
             'DataTables.DataTablesConfig' => [
                 'DataTablesConfig' => &$this->configs
             ]
         ];
 
+        
         parent::__construct($registry, $config);
     }
 
@@ -54,7 +56,7 @@ class DataTablesComponent extends Component
      */
     public function createConfig($name)
     {
-        return $this->DataTablesConfig->setConfig(Inflector::camelize($name));
+        return $this->DataTablesConfig->setConfig(Inflector::camelize($name), $this->defaultOptions);
     }
 
     /**

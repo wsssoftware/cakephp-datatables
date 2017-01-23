@@ -14,6 +14,10 @@ use \Cake\Utility\Inflector;
 trait DataTablesAjaxRequestTrait
 {
 
+    /**
+     * Ajax method to get data dynamically to the DataTables
+     * @param string $config
+     */
     public function getDataTablesContent($config)
     {
         $this->request->allowMethod('ajax');
