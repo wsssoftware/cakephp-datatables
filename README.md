@@ -140,7 +140,7 @@ class AppView extends View
 ```
 **Note:** You must call the rendering method for all the configuration that you want to create a DataTables
 
-**4** - Setting the `ajax` response view in `Template/{Controller}/json/datatables/user_statuses.ctp`
+**4** - Setting the `ajax` response view in `Template/{Controller}/datatables/user_statuses.ctp`
 
 ```php
 <?php
