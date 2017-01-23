@@ -16,14 +16,13 @@ trait DataTablesAjaxRequestTrait
 
     public function getDataTablesContent($config)
     {
+        $this->request->allowMethod('ajax');
         $configName = $config;
         $config     = $this->DataTables->getConfig($configName);
         $params     = $this->request->query;
-        $this->viewBuilder()->className('Ajax');
-        $this->viewBuilder()->autoLayout(false);
+        $this->viewBuilder()->className('DataTables.DataTables');
 
-        $this->viewBuilder()->layout('ajax');
-        $this->viewBuilder()->template('datatables/' . Inflector::underscore($configName));
+        $this->viewBuilder()->template( Inflector::underscore($configName));
 
 
 
