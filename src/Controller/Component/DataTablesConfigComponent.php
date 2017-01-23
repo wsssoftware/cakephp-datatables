@@ -86,6 +86,13 @@ class DataTablesConfigComponent extends Component
             'contentPadding' => null,
             'cellType'       => 'td',
         ];
+        
+        if($options['database'] === false)
+        {
+            $options['orderable'] = false;
+            $options['searchable'] = false;
+        }
+        
 
         $this->dataTableConfig[$this->currentConfig]['columns'][$name] = $options;
         $this->dataTableConfig[$this->currentConfig]['columnsIndex'][] = $name;
