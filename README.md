@@ -125,6 +125,8 @@ class AppView extends View
 
 **Note:** You can create as many configurations as you need, as long as their names are unique.
 
+**Note:** When use `AuthComponent` to allow a action that contain DataTables you must allow the action `getDataTablesContent` too in this controller.
+
 **2** - Setting the `viewsVars` for chosen `configuration(s)` in the Controller action
 
 ```php
