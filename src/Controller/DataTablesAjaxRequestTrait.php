@@ -22,14 +22,11 @@ trait DataTablesAjaxRequestTrait
     {
         $this->request->allowMethod('ajax');
         $configName = $config;
-        $config     = $this->DataTables->getConfig($configName);
+        $config     = $this->DataTables->getDataTableConfig($configName);
         $params     = $this->request->query;
         $this->viewBuilder()->className('DataTables.DataTables');
 
         $this->viewBuilder()->template( Inflector::underscore($configName));
-
-
-
 
         $where = [];
         if (!empty($params['search']['value']))
@@ -43,8 +40,6 @@ trait DataTablesAjaxRequestTrait
             }
         }
         
-
-
         $order = [];
         if (!empty($params['order']))
         {
