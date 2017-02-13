@@ -106,7 +106,7 @@ class DataTablesComponent extends Component
      * Get all configs
      * @return array
      */
-    public function getConfigs()
+    public function getDataTableConfigs()
     {
         return $this->configs;
     }
@@ -117,7 +117,7 @@ class DataTablesComponent extends Component
      * @return array
      * @throws \Cake\Error\FatalErrorException
      */
-    public function getConfig($name)
+    public function getDataTableConfig($name)
     {
         if(empty($this->configs[$name]))
         {
