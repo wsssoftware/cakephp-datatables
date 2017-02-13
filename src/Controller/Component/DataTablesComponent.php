@@ -56,7 +56,7 @@ class DataTablesComponent extends Component
      */
     public function createConfig($name)
     {
-        return $this->DataTablesConfig->setConfig(Inflector::camelize($name), $this->defaultOptions);
+        return $this->DataTablesConfig->setDataTableConfig(Inflector::camelize($name), $this->defaultOptions);
     }
 
     /**

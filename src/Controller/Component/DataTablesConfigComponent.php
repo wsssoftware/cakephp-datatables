@@ -33,7 +33,7 @@ class DataTablesConfigComponent extends Component
      * @param string $name
      * @return $this
      */
-    public function setConfig($name, $defaultOptions)
+    public function setDataTableConfig($name, $defaultOptions)
     {
         $this->defaultOptions = $defaultOptions;
         $this->currentConfig                   = $name;
