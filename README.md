@@ -24,6 +24,8 @@ Don't worry, you only need:
 * [DataTables library] - Choose what you need and put it in your code (DataTables has a wide variety of download options);
 * [CakePHP 3.x] - Recommended always use the latest available version;
 
+**Note:** `DataTablesView` extends from `AppView`. Then it must exist.
+
 
 ### Installation
 
