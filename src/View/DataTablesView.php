@@ -5,6 +5,7 @@ namespace DataTables\View;
 use Cake\Event\EventManager;
 use Cake\Network\Request;
 use Cake\Network\Response;
+use Cake\Utility\Inflector;
 use App\View\AppView;
 
 /**
@@ -20,7 +21,8 @@ class DataTablesView extends AppView
     {
         parent::initialize();
         $this->layoutPath('/');
-        $this->templatePath($this->request->param('controller').DS.'datatables');
+        $this->templatePath(
+          ($this->request->params['prefix'] != '' ? Inflector::camelize($this->request->params['prefix']).DS : '').$this->request->param('controller').DS.'datatables');
         $this->loadHelper('DataTables.DataTables');
     }
 }
