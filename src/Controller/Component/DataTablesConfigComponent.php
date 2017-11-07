@@ -45,7 +45,7 @@ class DataTablesConfigComponent extends Component
         return $this;
     }
     
-    public function setFinder($finder = "all") {
+    public function finder($finder = "all") {
         $this->dataTableConfig[$this->currentConfig]['finder'] = $finder;
     }
 
