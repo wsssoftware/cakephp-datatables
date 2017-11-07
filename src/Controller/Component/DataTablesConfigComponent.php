@@ -45,8 +45,15 @@ class DataTablesConfigComponent extends Component
         return $this;
     }
     
+    /**
+     * Set a finder type from method "find()"
+     * @param string $finder
+     * @return $this
+     */
     public function finder($finder = "all") {
         $this->dataTableConfig[$this->currentConfig]['finder'] = $finder;
+        
+        return $this;
     }
 
     /**
