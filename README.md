@@ -179,7 +179,8 @@ echo $this->DataTables->response();
 - `->databaseColumn($name)` - Inserts a database column in the SQL search result that can be used in ajax view;
 - `->options(array $options = [])` - Used to setup [DataTables] library settings;
 - `->table($name)` - Use a database table different from the configuration name;
-- `->queryOptions(array $options = [])` - Used to make all the possible configurations in the SQL search that you would do in `find('type', '$options')`
+- `->queryOptions(array $options = [])` - Used to make all the possible configurations in the SQL search that you would do in `find('type', '$options')`;
+- `->finder($finder)` - Used to change the finder type from query in `find('type')`. 
 
 
 **2** - In the column `->column('column_name', $options = [])` you can use this `$options`
