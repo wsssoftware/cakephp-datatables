@@ -41,7 +41,12 @@ class DataTablesConfigComponent extends Component
         $this->dataTableConfig[$name]['table'] = $name;
         $this->dataTableConfig[$name]['queryOptions'] = [];
         $this->dataTableConfig[$name]['options'] = $this->defaultOptions;
+        $this->dataTableConfig[$name]['finder'] = "all";
         return $this;
+    }
+    
+    public function setFinder($finder = "all") {
+        $this->dataTableConfig[$this->currentConfig]['finder'] = $finder;
     }
 
     /**

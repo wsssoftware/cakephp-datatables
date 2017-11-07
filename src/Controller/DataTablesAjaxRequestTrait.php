@@ -65,7 +65,7 @@ trait DataTablesAjaxRequestTrait
             }
         }
 
-        $results = $this->{$config['table']}->find('all', $config['queryOptions'])
+        $results = $this->{$config['table']}->find($config['finder'], $config['queryOptions'])
                 ->select($select)
                 ->where($where)
                 ->limit($params['length'])
