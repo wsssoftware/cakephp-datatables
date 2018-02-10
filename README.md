@@ -34,14 +34,14 @@ There are two recommended ways to install this plugin:
 **1** - Using `composer.json`
 ```javascript
 "require": {
-    "allanmcarvalho/datatables": "1.*"
+    "allanmcarvalho/cakephp-datatables": "1.*"
 }
 ```
 
 **2** - Using `prompt`
 
 ```sh
-$ php composer.phar require allanmcarvalho/datatables
+$ php composer.phar require allanmcarvalho/cakephp-datatables
 ```
 
 
