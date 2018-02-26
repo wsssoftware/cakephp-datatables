@@ -8,10 +8,12 @@
 
 namespace DataTables\View\Helper;
 
+use Cake\Error\FatalErrorException;
 use Cake\View\Helper;
 
 /**
  * CakePHP DataTablesHelper
+ * @property Helper\HtmlHelper Html
  * @author allan
  */
 class DataTablesHelper extends Helper
@@ -30,14 +32,11 @@ class DataTablesHelper extends Helper
     public function render($name, array $options = [])
     {
         if (empty($this->_View->viewVars["DataTables"][$name])) {
-            throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not configured or set to view in controller'));
+            throw new FatalErrorException(__d('datatables', 'The requested DataTables config was not configured or set to view in controller'));
         }
         $config = $this->_View->viewVars["DataTables"][$name];
-
         $this->wasRendered[] = $name;
-
         $options['id'] = $config['id'];
-
         $options += [
             'width' => '100%',
             'cellspacing' => 0,
@@ -48,9 +47,7 @@ class DataTablesHelper extends Helper
             $cols[] = $item['label'];
         }
 
-        $html = $this->Html->tag('table', $this->Html->tag('thead', $this->Html->tableHeaders($cols)), $options);
-
-        return $html;
+        return $this->Html->tag('table', $this->Html->tag('thead', $this->Html->tableHeaders($cols)), $options);
     }
 
     public function prepareData(array $data)
@@ -61,10 +58,8 @@ class DataTablesHelper extends Helper
     public function response()
     {
         $data = $this->json['data'];
-
         $this->json = $this->_View->viewVars['resultInfo'];
         $this->json['data'] = $data;
-
         echo json_encode($this->json, JSON_PRETTY_PRINT);
     }
 

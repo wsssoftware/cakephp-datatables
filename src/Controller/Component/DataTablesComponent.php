@@ -13,9 +13,9 @@ use Cake\Utility\Inflector;
 
 /**
  * CakePHP DataTablesComponent
- * 
+ *
  * @property \DataTables\Controller\Component\DataTablesConfigComponent $DataTablesConfig
- * 
+ *
  * @author allan
  */
 class DataTablesComponent extends Component
@@ -31,7 +31,7 @@ class DataTablesComponent extends Component
     private $controller = null;
 
     /**
-     * 
+     *
      * @param \Cake\Controller\ComponentRegistry $registry
      * @param array() $config
      */
@@ -45,7 +45,7 @@ class DataTablesComponent extends Component
             ]
         ];
 
-        
+
         parent::__construct($registry, $config);
     }
 
@@ -66,17 +66,12 @@ class DataTablesComponent extends Component
      */
     public function setViewVars($configs)
     {
-        if (is_array($configs))
-        {
-            foreach ($configs as $config)
-            {
-                if (empty($this->configs[$config]))
-                {
+        if (is_array($configs)) {
+            foreach ($configs as $config) {
+                if (empty($this->configs[$config])) {
                     throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
-                } else
-                {
-                    if (empty($this->configs[$config]['columns']))
-                    {
+                } else {
+                    if (empty($this->configs[$config]['columns'])) {
                         throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config must have at least one column'));
                     }
                 }
@@ -84,20 +79,16 @@ class DataTablesComponent extends Component
             }
             $this->controller->set(["DataTables" => $configItems]);
         }
-        if (is_string($configs))
-        {
-            if (empty($this->configs[$configs]))
-            {
+        if (is_string($configs)) {
+            if (empty($this->configs[$configs])) {
                 throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
-            } else
-            {
-                if (empty($this->configs[$configs]['columns']))
-                {
+            } else {
+                if (empty($this->configs[$configs]['columns'])) {
                     throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config must have at least one column'));
                 }
             }
             $this->controller->set(["DataTables" => [
-                    $configs => $this->configs[$configs]
+                $configs => $this->configs[$configs]
             ]]);
         }
     }
@@ -110,7 +101,7 @@ class DataTablesComponent extends Component
     {
         return $this->configs;
     }
-    
+
     /**
      * Get a specific config
      * @param string $name
@@ -119,13 +110,12 @@ class DataTablesComponent extends Component
      */
     public function getDataTableConfig($name)
     {
-        if(empty($this->configs[$name]))
-        {
+        if (empty($this->configs[$name])) {
             throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
         }
-        
+
         return $this->configs[$name];
     }
-    
+
 
 }

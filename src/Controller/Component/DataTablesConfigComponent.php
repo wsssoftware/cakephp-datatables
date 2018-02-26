@@ -19,7 +19,7 @@ class DataTablesConfigComponent extends Component
 {
 
     private $dataTableConfig = [];
-    private $currentConfig   = null;
+    private $currentConfig = null;
     private $defaultOptions = [];
 
     public function initialize(array $config)
@@ -36,23 +36,24 @@ class DataTablesConfigComponent extends Component
     public function setDataTableConfig($name, $defaultOptions)
     {
         $this->defaultOptions = $defaultOptions;
-        $this->currentConfig                   = $name;
-        $this->dataTableConfig[$name]['id']    = 'dt' . $name;
+        $this->currentConfig = $name;
+        $this->dataTableConfig[$name]['id'] = 'dt' . $name;
         $this->dataTableConfig[$name]['table'] = $name;
         $this->dataTableConfig[$name]['queryOptions'] = [];
         $this->dataTableConfig[$name]['options'] = $this->defaultOptions;
         $this->dataTableConfig[$name]['finder'] = "all";
         return $this;
     }
-    
+
     /**
      * Set a finder type from method "find()"
      * @param string $finder
      * @return $this
      */
-    public function finder($finder = "all") {
+    public function finder($finder = "all")
+    {
         $this->dataTableConfig[$this->currentConfig]['finder'] = $finder;
-        
+
         return $this;
     }
 
@@ -70,41 +71,38 @@ class DataTablesConfigComponent extends Component
 
     /**
      * Set a column at datatable config
-     * @param type $name
+     * @param string $name
      * @param array $options
      * @return DataTablesConfigComponent
      */
     public function column($name, array $options = [])
     {
-        if (!empty($options['order']))
-        {
-            if (!in_array($options['order'], ['asc', 'desc']))
-            {
+        if (!empty($options['order'])) {
+            if (!in_array($options['order'], ['asc', 'desc'])) {
                 unset($options['order']);
             }
         }
         $options += [
-            'label'          => $name,
-            'database'       => true,
-            'searchable'     => true,
-            'orderable'      => true,
-            'className'      => null,
-            'orderDataType'  => 'dom-text',
-            'type'           => 'text',
-            'name'           => $name,
-            'visible'        => true,
-            'width'          => null,
+            'label' => $name,
+            'database' => true,
+            'searchable' => true,
+            'orderable' => true,
+            'className' => null,
+            'orderDataType' => 'dom-text',
+            'type' => 'text',
+            'name' => $name,
+            'visible' => true,
+            'width' => null,
             'defaultContent' => null,
             'contentPadding' => null,
-            'cellType'       => 'td',
+            'cellType' => 'td',
         ];
-        
-        if($options['database'] === false)
-        {
+
+        if ($options['database'] === false) {
             $options['orderable'] = false;
             $options['searchable'] = false;
         }
-        
+
 
         $this->dataTableConfig[$this->currentConfig]['columns'][$name] = $options;
         $this->dataTableConfig[$this->currentConfig]['columnsIndex'][] = $name;
@@ -125,7 +123,7 @@ class DataTablesConfigComponent extends Component
 
     /**
      * Set DataTables general configs
-     * @param string $options
+     * @param array $options
      * @return $this
      */
     public function options(array $options = [])
@@ -134,7 +132,7 @@ class DataTablesConfigComponent extends Component
         $this->dataTableConfig[$this->currentConfig]['options'] += $this->defaultOptions;
         return $this;
     }
-    
+
     /**
      * Set options for SQL query
      * @param array $options

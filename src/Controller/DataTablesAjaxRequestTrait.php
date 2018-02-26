@@ -6,9 +6,9 @@ use \Cake\Utility\Inflector;
 
 /**
  * CakePHP DataTablesComponent
- * 
+ *
  * @property \DataTables\Controller\Component\DataTablesComponent $DataTables
- * 
+ *
  * @author allan
  */
 trait DataTablesAjaxRequestTrait
@@ -22,65 +22,78 @@ trait DataTablesAjaxRequestTrait
     {
         $this->request->allowMethod('ajax');
         $configName = $config;
-        $config     = $this->DataTables->getDataTableConfig($configName);
-        $params     = $this->request->query;
+        $config = $this->DataTables->getDataTableConfig($configName);
+        $params = $this->request->query;
         $this->viewBuilder()->className('DataTables.DataTables');
-
-        $this->viewBuilder()->template( Inflector::underscore($configName));
+        $this->viewBuilder()->template(Inflector::underscore($configName));
 
         $where = [];
-        if (!empty($params['search']['value']))
-        {
-            foreach ($config['columns'] as $colums)
-            {
-                if($colums['searchable'] == true)
-                {
-                    $where['OR'][$colums['name'] . ' like'] =  "%{$params['search']['value']}%";
+        if (!empty($params['search']['value'])) {
+            foreach ($config['columns'] as $column) {
+                if ($column['searchable'] == true) {
+                    $explodedColumnName = explode(".", $column['name']);
+                    if (count($explodedColumnName) == 2) {
+                        if ($explodedColumnName[0] === $this->{$config['table']}->getAlias()) {
+                            $columnType = !empty($this->{$config['table']}->getSchema()->getColumn($explodedColumnName[1])['type']) ? $this->{$config['table']}->getSchema()->getColumn($explodedColumnName[1])['type'] : 'string';
+                        } else {
+                            $columnType = !empty($this->{$config['table']}->{$explodedColumnName[0]}->getSchema()->getColumn($explodedColumnName[1])['type']) ? $this->{$config['table']}->getSchema()->getColumn($explodedColumnName[1])['type'] : 'string';
+                        }
+                    } else {
+                        $columnType = !empty($this->{$config['table']}->getSchema()->getColumn($column['name'])['type']) ? $this->{$config['table']}->getSchema()->getColumn($column['name'])['type'] : 'string';
+                    }
+                    switch ($columnType) {
+                        case "integer":
+                            $where['OR']["{$column['name']}"] = "{$params['search']['value']}";
+                            break;
+                        case "string":
+                            $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
+                            break;
+                        case "boolean":
+                            $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
+                            break;
+                        case "datetime":
+                            $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
+                            break;
+                    }
                 }
             }
         }
-        
+
         $order = [];
-        if (!empty($params['order']))
-        {
-            foreach ($params['order'] as $item)
-            {
+        if (!empty($params['order'])) {
+            foreach ($params['order'] as $item) {
                 $order[$config['columnsIndex'][$item['column']]] = $item['dir'];
             }
         }
 
-        foreach ($config['columns'] as $key => $item)
-        {
-            if ($item['database'] == true)
-            {
+        foreach ($config['columns'] as $key => $item) {
+            if ($item['database'] == true) {
                 $select[] = $key;
             }
         }
 
-        if (!empty($config['databaseColumns']))
-        {
-            foreach ($config['databaseColumns'] as $key => $item)
-            {
+        if (!empty($config['databaseColumns'])) {
+            foreach ($config['databaseColumns'] as $key => $item) {
                 $select[] = $item;
             }
         }
 
         $results = $this->{$config['table']}->find($config['finder'], $config['queryOptions'])
-                ->select($select)
-                ->where($where)
-                ->limit($params['length'])
-                ->offset($params['start'])
-                ->order($order);
+            ->select($select)
+            ->where($where)
+            ->limit($params['length'])
+            ->offset($params['start'])
+            ->order($order);
 
-        
+
         $resultInfo = [
-            'draw'            => (int) $params['draw'],
-            'recordsTotal'    => (int) $this->{$config['table']}->find('all', $config['queryOptions'])->count(),
-            'recordsFiltered' => (int) $results->count()
+            'draw' => (int)$params['draw'],
+            'recordsTotal' => (int)$this->{$config['table']}->find('all', $config['queryOptions'])->count(),
+            'recordsFiltered' => (int)$results->count()
         ];
 
         $this->set([
-            'results'    => $results,
+            'results' => $results,
             'resultInfo' => $resultInfo,
         ]);
     }

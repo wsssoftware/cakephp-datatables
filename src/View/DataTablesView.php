@@ -10,7 +10,7 @@ use App\View\AppView;
 
 /**
  * CakePHP DataTablesView
- * 
+ *
  * @author allan
  */
 class DataTablesView extends AppView
@@ -21,8 +21,8 @@ class DataTablesView extends AppView
     {
         parent::initialize();
         $this->autoLayout = false;
-        $this->templatePath(
-          (!empty($this->request->params['prefix']) ? Inflector::camelize($this->request->params['prefix']) . DS : '').$this->request->param('controller').DS.'datatables');
+        $this->setTemplatePath(
+            (!empty($this->request->params['prefix']) ? Inflector::camelize($this->request->params['prefix']) . DS : '') . $this->request->param('controller') . DS . 'datatables');
         $this->loadHelper('DataTables.DataTables');
     }
 }
