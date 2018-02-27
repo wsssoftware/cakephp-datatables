@@ -2,6 +2,7 @@
 
 namespace DataTables\Controller;
 
+use Cake\Error\FatalErrorException;
 use \Cake\Utility\Inflector;
 
 /**
@@ -15,11 +16,49 @@ trait DataTablesAjaxRequestTrait
 {
 
     /**
+     * @var callable
+     */
+    private $dataTableBeforeAjaxFunction = null;
+
+    /**
+     * @var callable
+     */
+    private $dataTableAfterAjaxFunction = null;
+
+    /**
+     * Set a function to be exec before ajax request
+     * @param callable $dataTableBeforeAjaxFunction
+     */
+    public function setDataTableBeforeAjaxFunction(callable $dataTableBeforeAjaxFunction)
+    {
+        if (!is_callable($dataTableBeforeAjaxFunction)) {
+            throw new FatalErrorException(__d("datatables", "the parameter must be a function"));
+        }
+        $this->dataTableBeforeAjaxFunction = $dataTableBeforeAjaxFunction;
+    }
+
+    /**
+     * Set a function to be exec after ajax request
+     * @param callable $dataTableAfterAjaxFunction
+     */
+    public function setDataTableAfterAjaxFunction(callable $dataTableAfterAjaxFunction)
+    {
+        if (!is_callable($dataTableAfterAjaxFunction)) {
+            throw new FatalErrorException(__d("datatables", "the parameter must be a function"));
+        }
+        $this->dataTableAfterAjaxFunction = $dataTableAfterAjaxFunction;
+    }
+
+    /**
      * Ajax method to get data dynamically to the DataTables
      * @param string $config
      */
     public function getDataTablesContent($config)
     {
+        if (!empty($this->dataTableBeforeAjaxFunction) and is_callable($this->dataTableBeforeAjaxFunction)) {
+            call_user_func($this->dataTableBeforeAjaxFunction);
+        }
+
         $this->request->allowMethod('ajax');
         $configName = $config;
         $config = $this->DataTables->getDataTableConfig($configName);
@@ -96,6 +135,10 @@ trait DataTablesAjaxRequestTrait
             'results' => $results,
             'resultInfo' => $resultInfo,
         ]);
+
+        if (!empty($this->dataTableAfterAjaxFunction) and is_callable($this->dataTableAfterAjaxFunction)) {
+            call_user_func($this->dataTableAfterAjaxFunction);
+        }
     }
 
 }
