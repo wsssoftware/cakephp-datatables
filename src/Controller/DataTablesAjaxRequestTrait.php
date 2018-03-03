@@ -117,6 +117,10 @@ trait DataTablesAjaxRequestTrait
                     }
                     $where[] = [$paramColumn['name'] . $operator => $columnSearch];
                 break;
+
+                default:
+                    $where[] = ["{$paramColumn['name']} like" => "%{$columnSearch}%"];
+                break;
             }
         }
 
