@@ -110,7 +110,7 @@ trait DataTablesAjaxRequestTrait
             $columnType = $config['columns'][$paramColumn['name']]['type'];
 
             switch ($columnType) {
-                case 'text':
+                case 'string':
                     $operator = ' LIKE';
                     if (strpos($columnSearch, '%') === false) {
                         $columnSearch = '%' . $columnSearch . '%';

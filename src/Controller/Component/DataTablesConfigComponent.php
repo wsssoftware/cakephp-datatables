@@ -107,7 +107,7 @@ class DataTablesConfigComponent extends Component
             'orderable' => true,
             'className' => null,
             'orderDataType' => 'dom-text',
-            'type' => 'text',
+            'type' => 'string',
             'name' => $name,
             'visible' => true,
             'width' => null,
