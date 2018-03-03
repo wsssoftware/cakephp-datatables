@@ -66,6 +66,7 @@ trait DataTablesAjaxRequestTrait
         $this->viewBuilder()->className('DataTables.DataTables');
         $this->viewBuilder()->template(Inflector::underscore($configName));
 
+        // searching all fields
         $where = [];
         if (!empty($params['search']['value'])) {
             foreach ($config['columns'] as $column) {
@@ -95,6 +96,27 @@ trait DataTablesAjaxRequestTrait
                             break;
                     }
                 }
+            }
+        }
+
+        // searching individual field
+        foreach ($params['columns'] as $paramColumn) {
+            $columnSearch = $paramColumn['search']['value'];
+            if (!$columnSearch || !$paramColumn['searchable']) {
+                continue;
+            }
+
+            $operator = '';
+            $columnType = $config['columns'][$paramColumn['name']]['type'];
+
+            switch ($columnType) {
+                case 'text':
+                    $operator = ' LIKE';
+                    if (strpos($columnSearch, '%') === false) {
+                        $columnSearch = '%' . $columnSearch . '%';
+                    }
+                    $where[] = [$paramColumn['name'] . $operator => $columnSearch];
+                break;
             }
         }
 
