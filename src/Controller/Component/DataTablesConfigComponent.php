@@ -22,6 +22,24 @@ class DataTablesConfigComponent extends Component
     private $currentConfig = null;
     private $defaultOptions = [];
 
+    /**
+     * Supported type maps
+     *
+     * See: https://datatables.net/reference/option/columns.type
+     */
+    private $typeMap = [
+        'date' => 'date',
+        'datetime' => 'date',
+        'num' => 'num',
+        'integer' => 'num',
+        'int' => 'num',
+        'num-fmt' => 'num-fmt',
+        'html-num-fmt' => 'html-num-fmt',
+        'html' => 'html',
+        'string' => 'string',
+        'text' => 'string',
+    ];
+
     public function initialize(array $config)
     {
         $this->dataTableConfig = &$config['DataTablesConfig'];
@@ -103,6 +121,10 @@ class DataTablesConfigComponent extends Component
             $options['searchable'] = false;
         }
 
+        if (!array_key_exists($options['type'], $this->typeMap)) {
+            throw new \InvalidArgumentException($options['type'] . ' is not a supported type');
+        }
+        $options['type'] = $this->typeMap[$options['type']];
 
         $this->dataTableConfig[$this->currentConfig]['columns'][$name] = $options;
         $this->dataTableConfig[$this->currentConfig]['columnsIndex'][] = $name;
