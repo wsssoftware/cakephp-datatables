@@ -166,4 +166,29 @@ class DataTablesConfigComponent extends Component
         return $this;
     }
 
+    /**
+     * Add a new type map
+     * @return $this
+     */
+    public function addType($newType, $map = null)
+    {
+        if (array_key_exists($newType, $this->typeMap)) {
+            throw new \InvalidArgumentException("$type is already mapped.");
+        }
+        if ($map && !in_array($map, array_values($this->typeMap))) {
+            throw new \InvalidArgumentException("$map is not a supported type");
+        }
+        $this->typeMap[$newType] = $map === null ? $newType : $map;
+        return $this;
+    }
+
+    /**
+     * Get list of supported type maps
+     * @return array
+     */
+    public function getTypeMap()
+    {
+        return $this->typeMap;
+    }
+
 }
