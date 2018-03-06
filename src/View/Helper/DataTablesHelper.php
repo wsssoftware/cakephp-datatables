@@ -86,28 +86,18 @@ class DataTablesHelper extends Helper
                         $order[] = [$columnCount, $column['order']];
                     }
 
-                    $columnDefs[] = [
+                    $columnDefs[] = array_merge([
                         'targets' => $columnCount,
-                        'searchable' => $column['searchable'],
-                        'orderable' => $column['orderable'],
-                        'className' => $column['className'],
-                        'name' => $column['name'],
-                        'orderDataType' => $column['orderDataType'],
-                        'type' => $column['type'],
-                        'title' => $column['label'],
-                        'visible' => $column['visible'],
-                        'width' => $column['width'],
-                        'defaultContent' => $column['defaultContent'],
-                        'contentPadding' => $column['contentPadding'],
-                        'cellType' => $column['cellType']
-                    ];
+                    ], $column);
 
                     $columnCount++;
                 }
 
                 $options['processing'] = true;
                 $options['serverSide'] = true;
-                $options['ajax']['url'] = \Cake\Routing\Router::url(['controller' => $this->request->params['controller'], 'action' => 'getDataTablesContent', $item]);
+                if (empty($options['ajax']['url'])) {
+                    $options['ajax']['url'] = \Cake\Routing\Router::url(['controller' => $this->request->params['controller'], 'action' => 'getDataTablesContent', $item]);
+                }
                 if (!empty($options['ajax']['error'])) {
                     $functionCode = $this->minifyJs($options['ajax']['error']);
                     $options['ajax']['error'] = "%f%function(xhr, error, thrown){{$functionCode}}%f%";
@@ -117,7 +107,9 @@ class DataTablesHelper extends Helper
 
                 $html .= "$('#" . $config['id'] . "').DataTable(";
                 $html .= json_encode($options);
-                $html = str_replace(['"%f%', '%f%"'], "", $html);
+                $html = preg_replace_callback('/("%f%)(.*?)(%f%"){1}?/', function($matches) {
+                    return str_replace(['\n'], "\n", $matches[2]);
+                }, $html);
                 $html .= ");";
             }
             $html .= '} );</script>';
