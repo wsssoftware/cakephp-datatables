@@ -91,10 +91,16 @@ trait DataTablesAjaxRequestTrait
                         case "string":
                             $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
                             break;
+                        case "text":
+                            $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
+                            break;
                         case "boolean":
                             $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
                             break;
                         case "datetime":
+                            $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
+                            break;
+                        default:
                             $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
                             break;
                     }
