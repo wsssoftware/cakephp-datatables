@@ -2,6 +2,7 @@
 
 namespace DataTables\Controller;
 
+use Cake\Controller\Controller;
 use Cake\Error\FatalErrorException;
 use Cake\Http\ServerRequest;
 use \Cake\Utility\Inflector;
@@ -12,6 +13,7 @@ use Cake\View\ViewBuilder;
  *
  * @property \DataTables\Controller\Component\DataTablesComponent $DataTables
  * @property ServerRequest|null request
+ * @property Controller $this
  * @method ViewBuilder viewBuilder()
  * @author allan
  */
@@ -69,6 +71,10 @@ trait DataTablesAjaxRequestTrait
         $this->viewBuilder()->setClassName('DataTables.DataTables');
         $this->viewBuilder()->setTemplate(Inflector::underscore($configName));
 
+        if(empty($this->{$config['table']})) {
+            $this->loadModel($config['table']);
+        }
+
         // searching all fields
         $where = [];
         if (!empty($params['search']['value'])) {
@@ -86,7 +92,14 @@ trait DataTablesAjaxRequestTrait
                     }
                     switch ($columnType) {
                         case "integer":
-                            $where['OR']["{$column['name']}"] = "{$params['search']['value']}";
+                            if (is_numeric($params['search']['value'])) {
+                                $where['OR']["{$column['name']}"] = $params['search']['value'];
+                            }
+                            break;
+                        case "decimal":
+                            if (is_numeric($params['search']['value'])) {
+                                $where['OR']["{$column['name']}"] = $params['search']['value'];
+                            }
                             break;
                         case "string":
                             $where['OR']["{$column['name']} like"] = "%{$params['search']['value']}%";
@@ -127,7 +140,14 @@ trait DataTablesAjaxRequestTrait
             }
             switch ($columnType) {
                 case "integer":
-                    $where[] = [$paramColumn['name'] => $columnSearch];
+                    if (is_numeric($params['search']['value'])) {
+                        $where[] = [$paramColumn['name'] => $columnSearch];
+                    }
+                    break;
+                case "decimal":
+                    if (is_numeric($params['search']['value'])) {
+                        $where[] = [$paramColumn['name'] => $columnSearch];
+                    }
                     break;
                 case 'string':
                     $where[] = ["{$paramColumn['name']} like" => "%$columnSearch%"];
