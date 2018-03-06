@@ -49,6 +49,7 @@ class DataTablesConfigComponent extends Component
     /**
      * Set initial config name
      * @param string $name
+     * @param $defaultOptions
      * @return $this
      */
     public function setDataTableConfig($name, $defaultOptions)
@@ -168,12 +169,14 @@ class DataTablesConfigComponent extends Component
 
     /**
      * Add a new type map
+     * @param $newType
+     * @param null $map
      * @return $this
      */
     public function addType($newType, $map = null)
     {
         if (array_key_exists($newType, $this->typeMap)) {
-            throw new \InvalidArgumentException("$type is already mapped.");
+            throw new \InvalidArgumentException("$newType is already mapped.");
         }
         if ($map && !in_array($map, array_values($this->typeMap))) {
             throw new \InvalidArgumentException("$map is not a supported type");

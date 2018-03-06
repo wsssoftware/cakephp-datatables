@@ -9,6 +9,7 @@
 namespace DataTables\Controller\Component;
 
 use Cake\Controller\Component;
+use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
 
 /**
@@ -62,17 +63,17 @@ class DataTablesComponent extends Component
     /**
      * Set the views vars fot the selected configs
      * @param string $configs
-     * @throws \Cake\Error\FatalErrorException
+     * @throws FatalErrorException
      */
     public function setViewVars($configs)
     {
         if (is_array($configs)) {
             foreach ($configs as $config) {
                 if (empty($this->configs[$config])) {
-                    throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
+                    throw new FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
                 } else {
                     if (empty($this->configs[$config]['columns'])) {
-                        throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config must have at least one column'));
+                        throw new FatalErrorException(__d('datatables', 'The requested DataTables config must have at least one column'));
                     }
                 }
                 $configItems[$config] = $this->configs[$config];
@@ -81,10 +82,10 @@ class DataTablesComponent extends Component
         }
         if (is_string($configs)) {
             if (empty($this->configs[$configs])) {
-                throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
+                throw new FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
             } else {
                 if (empty($this->configs[$configs]['columns'])) {
-                    throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config must have at least one column'));
+                    throw new FatalErrorException(__d('datatables', 'The requested DataTables config must have at least one column'));
                 }
             }
             $this->controller->set(["DataTables" => [
@@ -106,14 +107,13 @@ class DataTablesComponent extends Component
      * Get a specific config
      * @param string $name
      * @return array
-     * @throws \Cake\Error\FatalErrorException
+     * @throws FatalErrorException
      */
     public function getDataTableConfig($name)
     {
         if (empty($this->configs[$name])) {
-            throw new \Cake\Error\FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
+            throw new FatalErrorException(__d('datatables', 'The requested DataTables config was not found'));
         }
-
         return $this->configs[$name];
     }
 

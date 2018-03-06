@@ -9,6 +9,7 @@
 namespace DataTables\View\Helper;
 
 use Cake\Error\FatalErrorException;
+use Cake\Routing\Router;
 use Cake\View\Helper;
 
 /**
@@ -29,6 +30,12 @@ class DataTablesHelper extends Helper
         $this->json['data'] = [];
     }
 
+    /**
+     * Create base datatables html structure
+     * @param string $name
+     * @param array $options
+     * @return string
+     */
     public function render($name, array $options = [])
     {
         if (empty($this->_View->viewVars["DataTables"][$name])) {
@@ -50,11 +57,27 @@ class DataTablesHelper extends Helper
         return $this->Html->tag('table', $this->Html->tag('thead', $this->Html->tableHeaders($cols)), $options);
     }
 
+    /**
+     * @param array $data
+     * @deprecated 1.4.0 deprecated by inconsistency in method name. Use appendRow() instead. This method will be removed in future version.
+     */
     public function prepareData(array $data)
+    {
+        $this->appendRow($data);
+    }
+
+    /**
+     * Append datatables row into json response
+     * @param array $data
+     */
+    public function appendRow(array $data)
     {
         $this->json['data'][] = $data;
     }
 
+    /**
+     * echo all appended rows as json response
+     */
     public function response()
     {
         $data = $this->json['data'];
@@ -63,13 +86,15 @@ class DataTablesHelper extends Helper
         echo json_encode($this->json, JSON_PRETTY_PRINT);
     }
 
+    /**
+     * If exists config for current request generate datatables js code
+     * @return null|string|string[]
+     */
     public function setJs()
     {
-
         if (!empty($this->_View->viewVars["DataTables"])) {
-            $html = "<script>$(document).ready(function() {";
+            $readyFunctionContent = "";
             foreach ($this->wasRendered as $item) {
-
                 $config = $this->_View->viewVars["DataTables"][$item];
 
                 if (!empty($config['options'])) {
@@ -96,7 +121,7 @@ class DataTablesHelper extends Helper
                 $options['processing'] = true;
                 $options['serverSide'] = true;
                 if (empty($options['ajax']['url'])) {
-                    $options['ajax']['url'] = \Cake\Routing\Router::url(['controller' => $this->request->params['controller'], 'action' => 'getDataTablesContent', $item]);
+                    $options['ajax']['url'] = Router::url(['controller' => $this->request->getParam('controller'), 'action' => 'getDataTablesContent', $item]);
                 }
                 if (!empty($options['ajax']['error'])) {
                     $functionCode = $this->minifyJs($options['ajax']['error']);
@@ -105,24 +130,27 @@ class DataTablesHelper extends Helper
                 $options['order'] = $order;
                 $options['columnDefs'] = $columnDefs;
 
-                $html .= "$('#" . $config['id'] . "').DataTable(";
-                $html .= json_encode($options);
-                $html = preg_replace_callback('/("%f%)(.*?)(%f%"){1}?/', function($matches) {
+                $readyFunctionContent .= "$('#" . $config['id'] . "').DataTable(";
+                $readyFunctionContent .= json_encode($options);
+                $readyFunctionContent = preg_replace_callback('/("%f%)(.*?)(%f%"){1}?/', function ($matches) {
                     return str_replace(['\n'], "\n", $matches[2]);
-                }, $html);
-                $html .= ");";
+                }, $readyFunctionContent);
+                $readyFunctionContent .= ");";
             }
-            $html .= '} );</script>';
-
-            return $html;
+            return "<script>$(document).ready(function() {" . $readyFunctionContent . "} );</script>";
         }
     }
 
-    function minifyJs($input)
+    /**
+     * Minify any js code to prevent php break line (/n) errors and optimize the code
+     * @param string $input
+     * @return null|string|string[]
+     */
+    private function minifyJs($input)
     {
         if (trim($input) === "") return $input;
         return preg_replace(
-            array(
+            [
                 // Remove comment(s)
                 '#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#',
                 // Remove white-space(s) outside the string and regex
@@ -133,14 +161,14 @@ class DataTablesHelper extends Helper
                 '#([\{,])([\'])(\d+|[a-z_][a-z0-9_]*)\2(?=\:)#i',
                 // --ibid. From `foo['bar']` to `foo.bar`
                 '#([a-z0-9_\)\]])\[([\'"])([a-z_][a-z0-9_]*)\2\]#i'
-            ),
-            array(
+            ],
+            [
                 '$1',
                 '$1$2',
                 '}',
                 '$1$3',
                 '$1.$3'
-            ),
+            ],
             $input);
     }
 

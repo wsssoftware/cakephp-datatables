@@ -3,13 +3,17 @@
 namespace DataTables\Controller;
 
 use Cake\Error\FatalErrorException;
+use Cake\Http\ServerRequest;
+use Cake\ORM\Table;
 use \Cake\Utility\Inflector;
+use Cake\View\ViewBuilder;
 
 /**
  * CakePHP DataTablesComponent
  *
  * @property \DataTables\Controller\Component\DataTablesComponent $DataTables
- *
+ * @property ServerRequest|null request
+ * @method ViewBuilder viewBuilder()
  * @author allan
  */
 trait FocSearchRequestTrait
@@ -62,9 +66,9 @@ trait FocSearchRequestTrait
         $this->request->allowMethod('ajax');
         $configName = $config;
         $config = $this->DataTables->getDataTableConfig($configName);
-        $params = $this->request->query;
-        $this->viewBuilder()->className('DataTables.DataTables');
-        $this->viewBuilder()->template(Inflector::underscore($configName));
+        $params = $this->request->getQuery();
+        $this->viewBuilder()->setClassName('DataTables.DataTables');
+        $this->viewBuilder()->setTemplate(Inflector::underscore($configName));
 
         $order = [];
         if (!empty($params['order'])) {
@@ -73,6 +77,7 @@ trait FocSearchRequestTrait
             }
         }
 
+        /** @var Table $Table */
         $Table = $this->{$config['table']};
 
         $results = $Table
@@ -86,7 +91,7 @@ trait FocSearchRequestTrait
 
         if (!empty($params['search']['value'])) {
             $Schema = $Table->getSchema();
-            if ($displayField = $Table->displayField()) {
+            if ($displayField = $Table->getDisplayField()) {
                 if ($Schema->getColumnType($displayField) == 'string') {
                     $cond = [
                         "$displayField like" => "%{$params['search']['value']}%",

@@ -3,13 +3,16 @@
 namespace DataTables\Controller;
 
 use Cake\Error\FatalErrorException;
+use Cake\Http\ServerRequest;
 use \Cake\Utility\Inflector;
+use Cake\View\ViewBuilder;
 
 /**
  * CakePHP DataTablesComponent
  *
  * @property \DataTables\Controller\Component\DataTablesComponent $DataTables
- *
+ * @property ServerRequest|null request
+ * @method ViewBuilder viewBuilder()
  * @author allan
  */
 trait DataTablesAjaxRequestTrait
@@ -62,9 +65,9 @@ trait DataTablesAjaxRequestTrait
         $this->request->allowMethod('ajax');
         $configName = $config;
         $config = $this->DataTables->getDataTableConfig($configName);
-        $params = $this->request->query;
-        $this->viewBuilder()->className('DataTables.DataTables');
-        $this->viewBuilder()->template(Inflector::underscore($configName));
+        $params = $this->request->getQuery();
+        $this->viewBuilder()->setClassName('DataTables.DataTables');
+        $this->viewBuilder()->setTemplate(Inflector::underscore($configName));
 
         // searching all fields
         $where = [];
@@ -106,21 +109,26 @@ trait DataTablesAjaxRequestTrait
                 continue;
             }
 
-            $operator = '';
-            $columnType = $config['columns'][$paramColumn['name']]['type'];
-
+            $explodedColumnName = explode(".", $paramColumn['name']);
+            if (count($explodedColumnName) == 2) {
+                if ($explodedColumnName[0] === $this->{$config['table']}->getAlias()) {
+                    $columnType = !empty($this->{$config['table']}->getSchema()->getColumn($explodedColumnName[1])['type']) ? $this->{$config['table']}->getSchema()->getColumn($explodedColumnName[1])['type'] : 'string';
+                } else {
+                    $columnType = !empty($this->{$config['table']}->{$explodedColumnName[0]}->getSchema()->getColumn($explodedColumnName[1])['type']) ? $this->{$config['table']}->getSchema()->getColumn($explodedColumnName[1])['type'] : 'string';
+                }
+            } else {
+                $columnType = !empty($this->{$config['table']}->getSchema()->getColumn($paramColumn['name'])['type']) ? $this->{$config['table']}->getSchema()->getColumn($paramColumn['name'])['type'] : 'string';
+            }
             switch ($columnType) {
+                case "integer":
+                    $where[] = [$paramColumn['name'] => $columnSearch];
+                    break;
                 case 'string':
-                    $operator = ' LIKE';
-                    if (strpos($columnSearch, '%') === false) {
-                        $columnSearch = '%' . $columnSearch . '%';
-                    }
-                    $where[] = [$paramColumn['name'] . $operator => $columnSearch];
-                break;
-
+                    $where[] = ["{$paramColumn['name']} like" => "%$columnSearch%"];
+                    break;
                 default:
-                    $where[] = ["{$paramColumn['name']} like" => "%{$columnSearch}%"];
-                break;
+                    $where[] = ["{$paramColumn['name']} like" => "%$columnSearch%"];
+                    break;
             }
         }
 
@@ -143,6 +151,7 @@ trait DataTablesAjaxRequestTrait
             }
         }
 
+        /** @var array $select */
         $results = $this->{$config['table']}->find($config['finder'], $config['queryOptions'])
             ->select($select)
             ->where($where)

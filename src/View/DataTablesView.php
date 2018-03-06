@@ -22,7 +22,7 @@ class DataTablesView extends AppView
         parent::initialize();
         $this->autoLayout = false;
         $this->setTemplatePath(
-            (!empty($this->request->params['prefix']) ? Inflector::camelize($this->request->params['prefix']) . DS : '') . $this->request->param('controller') . DS . 'datatables');
+            (!empty($this->request->getParam('prefix')) ? Inflector::camelize($this->request->getParam('prefix')) . DS : '') . $this->request->getParam('controller') . DS . 'datatables');
         $this->loadHelper('DataTables.DataTables');
     }
 }
