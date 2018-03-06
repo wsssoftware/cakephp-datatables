@@ -105,7 +105,9 @@ class DataTablesHelper extends Helper
 
                 $html .= "$('#" . $config['id'] . "').DataTable(";
                 $html .= json_encode($options);
-                $html = str_replace(['"%f%', '%f%"'], "", $html);
+                $html = preg_replace_callback('/("%f%)(.*?)(%f%"){1}?/', function($matches) {
+                    return str_replace(['\n'], "\n", $matches[2]);
+                }, $html);
                 $html .= ");";
             }
             $html .= '} );</script>';
