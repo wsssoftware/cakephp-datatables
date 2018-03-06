@@ -22,6 +22,24 @@ class DataTablesConfigComponent extends Component
     private $currentConfig = null;
     private $defaultOptions = [];
 
+    /**
+     * Supported type maps
+     *
+     * See: https://datatables.net/reference/option/columns.type
+     */
+    private $typeMap = [
+        'date' => 'date',
+        'datetime' => 'date',
+        'num' => 'num',
+        'integer' => 'num',
+        'int' => 'num',
+        'num-fmt' => 'num-fmt',
+        'html-num-fmt' => 'html-num-fmt',
+        'html' => 'html',
+        'string' => 'string',
+        'text' => 'string',
+    ];
+
     public function initialize(array $config)
     {
         $this->dataTableConfig = &$config['DataTablesConfig'];
@@ -89,7 +107,7 @@ class DataTablesConfigComponent extends Component
             'orderable' => true,
             'className' => null,
             'orderDataType' => 'dom-text',
-            'type' => 'text',
+            'type' => 'string',
             'name' => $name,
             'visible' => true,
             'width' => null,
@@ -103,6 +121,10 @@ class DataTablesConfigComponent extends Component
             $options['searchable'] = false;
         }
 
+        if (!array_key_exists($options['type'], $this->typeMap)) {
+            throw new \InvalidArgumentException($options['type'] . ' is not a supported type');
+        }
+        $options['type'] = $this->typeMap[$options['type']];
 
         $this->dataTableConfig[$this->currentConfig]['columns'][$name] = $options;
         $this->dataTableConfig[$this->currentConfig]['columnsIndex'][] = $name;
@@ -142,6 +164,31 @@ class DataTablesConfigComponent extends Component
     {
         $this->dataTableConfig[$this->currentConfig]['queryOptions'] = $options;
         return $this;
+    }
+
+    /**
+     * Add a new type map
+     * @return $this
+     */
+    public function addType($newType, $map = null)
+    {
+        if (array_key_exists($newType, $this->typeMap)) {
+            throw new \InvalidArgumentException("$type is already mapped.");
+        }
+        if ($map && !in_array($map, array_values($this->typeMap))) {
+            throw new \InvalidArgumentException("$map is not a supported type");
+        }
+        $this->typeMap[$newType] = $map === null ? $newType : $map;
+        return $this;
+    }
+
+    /**
+     * Get list of supported type maps
+     * @return array
+     */
+    public function getTypeMap()
+    {
+        return $this->typeMap;
     }
 
 }
