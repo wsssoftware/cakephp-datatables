@@ -86,21 +86,9 @@ class DataTablesHelper extends Helper
                         $order[] = [$columnCount, $column['order']];
                     }
 
-                    $columnDefs[] = [
+                    $columnDefs[] = array_merge([
                         'targets' => $columnCount,
-                        'searchable' => $column['searchable'],
-                        'orderable' => $column['orderable'],
-                        'className' => $column['className'],
-                        'name' => $column['name'],
-                        'orderDataType' => $column['orderDataType'],
-                        'type' => $column['type'],
-                        'title' => $column['label'],
-                        'visible' => $column['visible'],
-                        'width' => $column['width'],
-                        'defaultContent' => $column['defaultContent'],
-                        'contentPadding' => $column['contentPadding'],
-                        'cellType' => $column['cellType']
-                    ];
+                    ], $column);
 
                     $columnCount++;
                 }
