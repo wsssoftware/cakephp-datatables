@@ -95,7 +95,9 @@ class DataTablesHelper extends Helper
 
                 $options['processing'] = true;
                 $options['serverSide'] = true;
-                $options['ajax']['url'] = \Cake\Routing\Router::url(['controller' => $this->request->params['controller'], 'action' => 'getDataTablesContent', $item]);
+                if (empty($options['ajax']['url'])) {
+                    $options['ajax']['url'] = \Cake\Routing\Router::url(['controller' => $this->request->params['controller'], 'action' => 'getDataTablesContent', $item]);
+                }
                 if (!empty($options['ajax']['error'])) {
                     $functionCode = $this->minifyJs($options['ajax']['error']);
                     $options['ajax']['error'] = "%f%function(xhr, error, thrown){{$functionCode}}%f%";
