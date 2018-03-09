@@ -191,6 +191,7 @@ echo $this->DataTables->response();
 - `*defaultContent` - The content for when a column element is empty. **default:** `null`;
 - `label` - Name to show on table head. **default:** `column_name`;
 - `*name` - Technical column name. **default:** `column_name`;
+- `order` - Must be passed `asc` or `desc`. If this is configured for more than one column, it will sort by the order in which the columns were registered in the Component. If you want to choose which column to order first use `'order' => ['index' => -1, 'dir' => 'asc']` by passing a numerical for index to say which one should be sorted first.;
 - `*orderable` - If `true`, the column can be sorted. **default:** `true`;
 - `*orderDataType` - Sort type that DataTables will do. **default:** `'dom-text'`;
 - `*searchable` - If `true`, the column will be included in the table search. **default:** `true`;
