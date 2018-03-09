@@ -97,9 +97,20 @@ class DataTablesConfigComponent extends Component
     public function column($name, array $options = [])
     {
         if (!empty($options['order'])) {
-            if (!in_array($options['order'], ['asc', 'desc'])) {
-                unset($options['order']);
+            if (is_array($options['order'])) {
+                if (empty($options['order']['index']) and empty($options['order']['dir'])) {
+                    unset($options['order']);
+                } else if (!empty($options['order']['index']) and empty($options['order']['dir'])) {
+                    unset($options['order']);
+                } else if (empty($options['order']['index']) and !empty($options['order']['dir'])) {
+                    $options['order'] = $options['order']['dir'];
+                }
+            } else {
+                if (!in_array($options['order'], ['asc', 'desc'])) {
+                    unset($options['order']);
+                }
             }
+
         }
         $options += [
             'label' => $name,

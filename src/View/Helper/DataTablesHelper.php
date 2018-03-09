@@ -108,7 +108,12 @@ class DataTablesHelper extends Helper
                 $columnDefs = [];
                 foreach ($config['columns'] as $column) {
                     if (!empty($column['order'])) {
-                        $order[] = [$columnCount, $column['order']];
+                        if(is_array($column['order'])) {
+                            $order[$column['order']['index']] = [$columnCount, $column['order']['dir']];
+                        } else {
+                            $order[] = [$columnCount, $column['order']];
+                        }
+
                     }
 
                     $columnDefs[] = array_merge([
@@ -116,6 +121,14 @@ class DataTablesHelper extends Helper
                     ], $column);
 
                     $columnCount++;
+                }
+                ksort($order);
+                $oldOrder = $order;
+                $order = [];
+                if(!empty($oldOrder)) {
+                    foreach ($oldOrder as $orderItem) {
+                        $order[] = [$orderItem[0], $orderItem[1]];
+                    }
                 }
 
                 $options['processing'] = true;
