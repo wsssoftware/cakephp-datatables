@@ -13,7 +13,6 @@ use Cake\View\ViewBuilder;
  *
  * @property \DataTables\Controller\Component\DataTablesComponent $DataTables
  * @property ServerRequest|null request
- * @property Controller $this
  * @method ViewBuilder viewBuilder()
  * @author allan
  */
