@@ -134,7 +134,8 @@ class DataTablesHelper extends Helper
                 $options['processing'] = true;
                 $options['serverSide'] = true;
                 if (empty($options['ajax']['url'])) {
-                    $options['ajax']['url'] = Router::url(['controller' => $this->request->getParam('controller'), 'action' => 'getDataTablesContent', $item]);
+                    $url = $config['urls'][$config['trait']] + [$item];
+                    $options['ajax']['url'] = Router::url($url);
                 }
                 if (!empty($options['ajax']['error'])) {
                     $functionCode = $this->minifyJs($options['ajax']['error']);
