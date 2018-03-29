@@ -22,45 +22,45 @@ trait FocSearchRequestTrait
     /**
      * @var callable
      */
-    private $dataTableBeforeAjaxFunction = null;
+    private $focSearchDataTableBeforeAjaxFunction = null;
 
     /**
      * @var callable
      */
-    private $dataTableAfterAjaxFunction = null;
+    private $focSearchDataTableAfterAjaxFunction = null;
 
     /**
      * Set a function to be exec before ajax request
      * @param callable $dataTableBeforeAjaxFunction
      */
-    public function setDataTableBeforeAjaxFunction(callable $dataTableBeforeAjaxFunction)
+    public function setFocSearchDataTableBeforeAjaxFunction(callable $dataTableBeforeAjaxFunction)
     {
-        if (!is_callable($dataTableBeforeAjaxFunction)) {
+        if (!is_callable($focSearchDataTableBeforeAjaxFunction)) {
             throw new FatalErrorException(__d("datatables", "the parameter must be a function"));
         }
-        $this->dataTableBeforeAjaxFunction = $dataTableBeforeAjaxFunction;
+        $this->focSearchDataTableBeforeAjaxFunction = $dataTableBeforeAjaxFunction;
     }
 
     /**
      * Set a function to be exec after ajax request
      * @param callable $dataTableAfterAjaxFunction
      */
-    public function setDataTableAfterAjaxFunction(callable $dataTableAfterAjaxFunction)
+    public function setFocSearchDataTableAfterAjaxFunction(callable $dataTableAfterAjaxFunction)
     {
         if (!is_callable($dataTableAfterAjaxFunction)) {
             throw new FatalErrorException(__d("datatables", "the parameter must be a function"));
         }
-        $this->dataTableAfterAjaxFunction = $dataTableAfterAjaxFunction;
+        $this->focSearchDataTableAfterAjaxFunction = $dataTableAfterAjaxFunction;
     }
 
     /**
      * Ajax method to get data dynamically to the DataTables
      * @param string $config
      */
-    public function getDataTablesContent($config)
+    public function getFocSearchDataTablesContent($config)
     {
-        if (!empty($this->dataTableBeforeAjaxFunction) and is_callable($this->dataTableBeforeAjaxFunction)) {
-            call_user_func($this->dataTableBeforeAjaxFunction);
+        if (!empty($this->focSearchDataTableBeforeAjaxFunction) and is_callable($this->focSearchDataTableBeforeAjaxFunction)) {
+            call_user_func($this->focSearchDataTableBeforeAjaxFunction);
         }
 
         $this->request->allowMethod('ajax');
@@ -125,8 +125,8 @@ trait FocSearchRequestTrait
             'resultInfo' => $resultInfo,
         ]);
 
-        if (!empty($this->dataTableAfterAjaxFunction) and is_callable($this->dataTableAfterAjaxFunction)) {
-            call_user_func($this->dataTableAfterAjaxFunction);
+        if (!empty($this->focSearchDataTableAfterAjaxFunction) and is_callable($this->focSearchDataTableAfterAjaxFunction)) {
+            call_user_func($this->focSearchDataTableAfterAjaxFunction);
         }
     }
 
