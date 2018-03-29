@@ -135,6 +135,9 @@ class DataTablesHelper extends Helper
                 $options['serverSide'] = true;
                 if (empty($options['ajax']['url'])) {
                     $url = $config['urls'][$config['trait']] + [$item];
+                    if ($config['trait'] === 'FocSearchRequestTrait') {
+                        $url = array_merge($url, $this->request->query);
+                    }
                     $options['ajax']['url'] = Router::url($url);
                 }
                 if (!empty($options['ajax']['error'])) {
