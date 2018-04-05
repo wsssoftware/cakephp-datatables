@@ -241,7 +241,8 @@ class DataTablesConfigComponent extends Component
     public function setTrait($name)
     {
         $supportedTraits = array_map(function($val) {
-            return array_pop(explode('\\', $val));
+            $vals = explode('\\', $val);
+            return array_pop($vals);
         }, $this->supportedTraits);
         if (!in_array($name, $supportedTraits)) {
             throw new \InvalidArgumentException($name . ' is not a supported trait');
