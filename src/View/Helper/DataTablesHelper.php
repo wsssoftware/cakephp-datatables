@@ -134,7 +134,14 @@ class DataTablesHelper extends Helper
                 $options['processing'] = true;
                 $options['serverSide'] = true;
                 if (empty($options['ajax']['url'])) {
-                    $options['ajax']['url'] = Router::url(['controller' => $this->request->getParam('controller'), 'action' => 'getDataTablesContent', $item]);
+                    if (!$config['urls'][$config['trait']]) {
+                        throw new FatalErrorException('Cannot find url configuration for ' . $config['trait'] . ' for DataTable ' . $item . '. Perhaps you have not called setTrait() in your DataTable configuration.');
+                    }
+                    $url = $config['urls'][$config['trait']] + [$item];
+                    if ($config['trait'] === 'FocSearchRequestTrait') {
+                        $url = array_merge($url, $this->request->query);
+                    }
+                    $options['ajax']['url'] = Router::url($url);
                 }
                 if (!empty($options['ajax']['error'])) {
                     $functionCode = $this->minifyJs($options['ajax']['error']);

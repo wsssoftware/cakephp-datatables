@@ -40,6 +40,11 @@ class DataTablesConfigComponent extends Component
         'text' => 'string',
     ];
 
+    private $supportedTraits = [
+        'DataTables\Controller\DataTablesAjaxRequestTrait',
+        'DataTables\Controller\FocSearchRequestTrait',
+    ];
+
     public function initialize(array $config)
     {
         $this->dataTableConfig = &$config['DataTablesConfig'];
@@ -61,6 +66,29 @@ class DataTablesConfigComponent extends Component
         $this->dataTableConfig[$name]['queryOptions'] = [];
         $this->dataTableConfig[$name]['options'] = $this->defaultOptions;
         $this->dataTableConfig[$name]['finder'] = "all";
+        $this->dataTableConfig[$name]['trait'] = "DataTablesAjaxRequestTrait";
+        $urls = [];
+        $controller = $this->getController();
+        foreach (class_uses($controller) as $trait) {
+            if (!in_array($trait, $this->supportedTraits)) {
+                continue;
+            }
+            switch ($trait) {
+                case 'DataTables\Controller\DataTablesAjaxRequestTrait':
+                    $urls['DataTablesAjaxRequestTrait'] = [
+                        'controller' => $controller->name,
+                        'action' => 'getDataTablesContent',
+                    ];
+                break;
+                case 'DataTables\Controller\FocSearchRequestTrait':
+                    $urls['FocSearchRequestTrait'] = [
+                        'controller' => $controller->name,
+                        'action' => 'getFocSearchDataTablesContent',
+                    ];
+                break;
+            }
+        }
+        $this->dataTableConfig[$name]['urls'] = $urls;
         return $this;
     }
 
@@ -203,6 +231,25 @@ class DataTablesConfigComponent extends Component
     public function getTypeMap()
     {
         return $this->typeMap;
+    }
+
+    /**
+     * Sets the trait to use for this table
+     * @param string $name Trait name to use
+     * @return $this
+     */
+    public function setTrait($name)
+    {
+        $supportedTraits = array_map(function($val) {
+            $vals = explode('\\', $val);
+            return array_pop($vals);
+        }, $this->supportedTraits);
+        if (!in_array($name, $supportedTraits)) {
+            throw new \InvalidArgumentException($name . ' is not a supported trait');
+        }
+        $this->dataTableConfig[$this->currentConfig]['trait'] = $name;
+
+        return $this;
     }
 
 }
