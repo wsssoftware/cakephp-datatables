@@ -79,7 +79,7 @@ class DataTablesConfigComponent extends Component
         $urls = [];
         /** @var Controller $controller */
         $controller = $this->getController();
-        foreach (class_uses($controller) as $trait) {
+        foreach ($this->classUsesDeep($controller) as $trait) {
             if (!in_array($trait, $this->supportedTraits)) {
                 continue;
             }
@@ -89,13 +89,13 @@ class DataTablesConfigComponent extends Component
                         'controller' => $controller->getName(),
                         'action' => 'getDataTablesContent',
                     ];
-                break;
+                    break;
                 case 'DataTables\Controller\FocSearchRequestTrait':
                     $urls['FocSearchRequestTrait'] = [
                         'controller' => $controller->getName(),
                         'action' => 'getFocSearchDataTablesContent',
                     ];
-                break;
+                    break;
             }
         }
         $this->dataTableConfig[$name]['urls'] = $urls;
@@ -250,7 +250,7 @@ class DataTablesConfigComponent extends Component
      */
     public function setTrait($name)
     {
-        $supportedTraits = array_map(function($val) {
+        $supportedTraits = array_map(function ($val) {
             $vals = explode('\\', $val);
             return array_pop($vals);
         }, $this->supportedTraits);
@@ -260,6 +260,30 @@ class DataTablesConfigComponent extends Component
         $this->dataTableConfig[$this->currentConfig]['trait'] = $name;
 
         return $this;
+    }
+
+    private function classUsesDeep($class, $autoload = false)
+    {
+        $traits = [];
+
+        // Get traits of all parent classes
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+
+        // Get traits of all parent traits
+        $traitsToSearch = $traits;
+        while (!empty($traitsToSearch)) {
+            $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
+            $traits = array_merge($newTraits, $traits);
+            $traitsToSearch = array_merge($newTraits, $traitsToSearch);
+        };
+
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
     }
 
 }
