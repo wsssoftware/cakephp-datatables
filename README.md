@@ -170,6 +170,59 @@ echo $this->DataTables->response();
 ```
 **Note:** This code is the same for all configurations, only changing the contents within the array of the `$this->DataTables->prepareData([])` method.
 
+## Useful examples
+
+**1** - Trivial : Displaying association values in datatables
+
+Let's say you have a `department_id` in the `Users` table, referencing a department in the `Departments` table, and you want to display the department name in your datatable.
+
+First you'll have to add the association in the configuration, via the `queryOptions()` method:
+
+```php
+$this->DataTables->createConfig('Users')
+    ->queryOptions(['contain' => ['Departments' => ['fields' => ['Departments__name' => 'Departments.name']]]])
+    ->column('Departments.name', ['label' => 'Department']);
+```
+
+In the template, reference the field `name` like:
+
+```php
+<?php
+foreach ($results as $result)
+{
+    $this->DataTables->prepareData([
+        $result->id,
+        $result->department->name,
+        $result->created,
+        $result->modified,
+        $this->Html->link('Edit', ['action' => 'edit', $result->id])
+    ]);
+}
+echo $this->DataTables->response();
+```
+
+**2** - Complex : Adding contextual conditions with where
+
+Now you have a datatable to list the objects of the current user. This is not easy, because the html and the ajax call are separated. How can you pass the parameter to the ajax ? As explained in the issue #6, a solution was to write the value in session when displaying the HTML part, and retrieve it where sending back the JSON part. It could lead to some issues, if you open two tabs in the browser and refreshing the datatables via some javascript (for example after adding an element).
+
+A better solution is to parse the id from the referer. Let's say the URL for the list of user's objects is something like `/users/objects/1` ; when you call the AJAX via `/users/get-data-tables-content/Objects?draw=...`, this URL is in the referer.
+
+So in the `initialize()` method of the controller:
+
+```php
+$elts = preg_split('/\//', $this->referer());
+$user_id = array_pop($elts);
+```
+
+Use this value in a `where` clause :
+
+```php
+$this->DataTables->createConfig('UserObjects')
+  ->queryOptions([
+      'conditions' => ['user_id' => $user_id],
+  ])
+```
+
 ## Other configurations options
 
 **1** - In `return` of `$this->DataTables->createConfig('ListPhones'))` method you can call
