@@ -15,26 +15,13 @@
  * permissions and limitations under the License.
  */
 
-namespace DataTables\View;
+namespace DataTables;
 
-use App\View\AppView;
-use Cake\Utility\Inflector;
+use Cake\Core\BasePlugin;
 
 /**
- * CakePHP DataTablesView
- *
- * @author allan
+ * Plugin for DataTables
  */
-class DataTablesView extends AppView
+class Plugin extends BasePlugin
 {
-    public $layout = 'DataTables.datatables';
-
-    public function initialize()
-    {
-        parent::initialize();
-        $this->autoLayout = false;
-        $this->setTemplatePath(
-            (!empty($this->request->getParam('prefix')) ? Inflector::camelize($this->request->getParam('prefix')) . DS : '') . $this->request->getParam('controller') . DS . 'datatables');
-        $this->loadHelper('DataTables.DataTables');
-    }
 }

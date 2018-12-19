@@ -1,4 +1,4 @@
-# DataTables plugin for CakePHP 3.x
+# DataTables plugin for CakePHP 3.7 or higher
 
 
 
@@ -22,7 +22,7 @@ Don't worry, you only need:
 
 * [Composer] - Not mandatory but highly recommended;
 * [DataTables library] - Choose what you need and put it in your code (DataTables has a wide variety of download options);
-* [CakePHP 3.x] - Recommended always use the latest available version;
+* [CakePHP 3.7] or higher - Recommended always use the latest available version;
 
 **Note:** `DataTablesView` extends from `AppView`. Then it must exist.
 
@@ -265,6 +265,6 @@ MIT
    [DataTables library]: <https://datatables.net/download/index>
    [DataTables]: <https://datatables.net/>
    [Composer]: <https://getcomposer.org/download/>
-   [CakePHP 3.x]: <https://book.cakephp.org/3.0/en/installation.html>
-   [Allan Carvalho]: <https://www.facebook.com/Allan.Mariucci.Carvalho>
+   [CakePHP 3.7]: <https://book.cakephp.org/3.0/en/installation.html>
+   [Allan Carvalho]: <https://www.facebook.com/allanmcarvalho>
    

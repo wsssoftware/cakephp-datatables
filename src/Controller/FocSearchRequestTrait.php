@@ -1,19 +1,35 @@
 <?php
+/**
+ * Copyright (c) 2018. Allan Carvalho
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 namespace DataTables\Controller;
 
 use Cake\Error\FatalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Table;
-use \Cake\Utility\Inflector;
+use Cake\Utility\Inflector;
 use Cake\View\ViewBuilder;
 
 /**
  * CakePHP DataTablesComponent
  *
  * @property \DataTables\Controller\Component\DataTablesComponent $DataTables
- * @property ServerRequest|null request
  * @method ViewBuilder viewBuilder()
+ * @method ServerRequest getRequest()
+ * @method \Controller set($name, $value = null)
  * @author allan
  */
 trait FocSearchRequestTrait
@@ -35,7 +51,7 @@ trait FocSearchRequestTrait
      */
     public function setFocSearchDataTableBeforeAjaxFunction(callable $dataTableBeforeAjaxFunction)
     {
-        if (!is_callable($focSearchDataTableBeforeAjaxFunction)) {
+        if (!is_callable($dataTableBeforeAjaxFunction)) {
             throw new FatalErrorException(__d("datatables", "the parameter must be a function"));
         }
         $this->focSearchDataTableBeforeAjaxFunction = $dataTableBeforeAjaxFunction;
@@ -63,10 +79,10 @@ trait FocSearchRequestTrait
             call_user_func($this->focSearchDataTableBeforeAjaxFunction);
         }
 
-        $this->request->allowMethod('ajax');
+        $this->getRequest()->allowMethod('ajax');
         $configName = $config;
         $config = $this->DataTables->getDataTableConfig($configName);
-        $params = $this->request->getQuery();
+        $params = $this->getRequest()->getQuery();
         $this->viewBuilder()->setClassName('DataTables.DataTables');
         $this->viewBuilder()->setTemplate(Inflector::underscore($configName));
 
@@ -82,7 +98,7 @@ trait FocSearchRequestTrait
 
         $results = $Table
             ->find('search', [
-                'search' => $this->request->query,
+                'search' => $this->getRequest()->getQuery(),
             ]);
 
         if ($config['finder'] != 'all') {

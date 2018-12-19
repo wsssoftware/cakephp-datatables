@@ -1,9 +1,18 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright (c) 2018. Allan Carvalho
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 namespace DataTables\View\Helper;
@@ -38,10 +47,10 @@ class DataTablesHelper extends Helper
      */
     public function render($name, array $options = [])
     {
-        if (empty($this->_View->viewVars["DataTables"][$name])) {
-            throw new FatalErrorException(__d('datatables', 'The requested DataTables config was not configured or set to view in controller'));
+        if (empty($this->getView()->get('DataTables')[$name])) {
+            throw new FatalErrorException(__d('datatables', 'The requested DataTables {0} config was not configured or set to view in controller', $name));
         }
-        $config = $this->_View->viewVars["DataTables"][$name];
+        $config = $this->getView()->get('DataTables')[$name];
         $this->wasRendered[] = $name;
         $options['id'] = $config['id'];
         $options += [
@@ -49,7 +58,7 @@ class DataTablesHelper extends Helper
             'cellspacing' => 0,
             'class' => 'display'
         ];
-
+        $cols = [];
         foreach ($config['columns'] as $item) {
             $cols[] = $item['label'];
         }
@@ -81,21 +90,21 @@ class DataTablesHelper extends Helper
     public function response()
     {
         $data = $this->json['data'];
-        $this->json = $this->_View->viewVars['resultInfo'];
+        $this->json = $this->getView()->get('resultInfo');
         $this->json['data'] = $data;
         echo json_encode($this->json, JSON_PRETTY_PRINT);
     }
 
     /**
      * If exists config for current request generate datatables js code
-     * @return null|string|string[]
+     * @return null|string
      */
     public function setJs()
     {
-        if (!empty($this->_View->viewVars["DataTables"])) {
+        if (!empty($this->getView()->get('DataTables'))) {
             $readyFunctionContent = "";
             foreach ($this->wasRendered as $item) {
-                $config = $this->_View->viewVars["DataTables"][$item];
+                $config = $this->getView()->get('DataTables')[$item];
 
                 if (!empty($config['options'])) {
                     $options = $config['options'];
@@ -139,7 +148,7 @@ class DataTablesHelper extends Helper
                     }
                     $url = $config['urls'][$config['trait']] + [$item];
                     if ($config['trait'] === 'FocSearchRequestTrait') {
-                        $url = array_merge($url, $this->request->query);
+                        $url = array_merge($url, $this->getView()->getRequest()->getQuery());
                     }
                     $options['ajax']['url'] = Router::url($url);
                 }
@@ -159,6 +168,7 @@ class DataTablesHelper extends Helper
             }
             return "<script>$(document).ready(function() {" . $readyFunctionContent . "} );</script>";
         }
+        return null;
     }
 
     /**
