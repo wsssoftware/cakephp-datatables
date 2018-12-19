@@ -143,7 +143,7 @@ class DataTablesHelper extends Helper
                 $options['processing'] = true;
                 $options['serverSide'] = true;
                 if (empty($options['ajax']['url'])) {
-                    if (!$config['urls'][$config['trait']]) {
+                    if (empty($config['urls'][$config['trait']])) {
                         throw new FatalErrorException('Cannot find url configuration for ' . $config['trait'] . ' for DataTable ' . $item . '. Perhaps you have not called setTrait() in your DataTable configuration.');
                     }
                     $url = $config['urls'][$config['trait']] + [$item];
