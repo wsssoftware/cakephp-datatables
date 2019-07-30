@@ -19,6 +19,7 @@ namespace DataTables\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\Controller;
+use Cake\Error\FatalErrorException;
 
 /**
  * CakePHP DataTableConfigComponent
@@ -79,7 +80,11 @@ class DataTablesConfigComponent extends Component
         $urls = [];
         /** @var Controller $controller */
         $controller = $this->getController();
-        foreach ($this->classUsesDeep($controller) as $trait) {
+        $traits = $this->classUsesDeep($controller);
+        if(empty($traits)) {
+            throw new FatalErrorException('Cannot find any traits loaded in controller.');
+        }
+        foreach ($traits as $trait) {
             if (!in_array($trait, $this->supportedTraits)) {
                 continue;
             }
