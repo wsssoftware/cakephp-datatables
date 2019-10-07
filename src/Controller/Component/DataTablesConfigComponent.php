@@ -81,7 +81,7 @@ class DataTablesConfigComponent extends Component
         /** @var Controller $controller */
         $controller = $this->getController();
         $traits = $this->classUsesDeep($controller);
-        if(empty($traits)) {
+        if (empty($traits)) {
             throw new FatalErrorException('Cannot find any traits loaded in controller.');
         }
         foreach ($traits as $trait) {
@@ -188,12 +188,16 @@ class DataTablesConfigComponent extends Component
 
     /**
      * Set a database column to use in data render
-     * @param string $name
+     * @param string $name a database table column name
+     * @param bool $searchable if true, the search query will find this column too
      * @return $this
      */
-    public function databaseColumn($name)
+    public function databaseColumn($name, $searchable = false)
     {
-        $this->dataTableConfig[$this->currentConfig]['databaseColumns'][] = $name;
+        $this->dataTableConfig[$this->currentConfig]['databaseColumns'][$name] = [
+            'name' => $name,
+            'searchable' => (bool)$searchable
+        ];
 
         return $this;
     }
