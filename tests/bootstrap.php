@@ -37,4 +37,3 @@ if (file_exists($root . '/config/bootstrap.php')) {
 
 	return;
 }
-
