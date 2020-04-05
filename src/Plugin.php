@@ -1,27 +1,62 @@
 <?php
-/**
- * Copyright (c) 2018. Allan Carvalho
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+declare(strict_types = 1);
 
 namespace DataTables;
 
 use Cake\Core\BasePlugin;
+use Cake\Core\PluginApplicationInterface;
+use Cake\Http\MiddlewareQueue;
+use Cake\Routing\RouteBuilder;
 
 /**
  * Plugin for DataTables
  */
-class Plugin extends BasePlugin
-{
+class Plugin extends BasePlugin {
+
+	/**
+	 * Load all the plugin configuration and bootstrap logic.
+	 *
+	 * The host application is provided as an argument. This allows you to load
+	 * additional plugin dependencies, or attach events.
+	 *
+	 * @param \Cake\Core\PluginApplicationInterface $app The host application
+	 * @return void
+	 */
+	public function bootstrap(PluginApplicationInterface $app): void {
+	}
+
+	/**
+	 * Add routes for the plugin.
+	 *
+	 * If your plugin has many routes and you would like to isolate them into a separate file,
+	 * you can create `$plugin/config/routes.php` and delete this method.
+	 *
+	 * @param \Cake\Routing\RouteBuilder $routes The route builder to update.
+	 * @return void
+	 */
+	public function routes(RouteBuilder $routes): void {
+		$routes->plugin(
+			'DataTables',
+			['path' => '/data-tables'],
+			function (RouteBuilder $builder) {
+				// Add custom routes here
+
+				$builder->fallbacks();
+			}
+		);
+		parent::routes($routes);
+	}
+
+	/**
+	 * Add middleware for the plugin.
+	 *
+	 * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to update.
+	 * @return \Cake\Http\MiddlewareQueue
+	 */
+	public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue {
+		// Add your middlewares here
+
+		return $middlewareQueue;
+	}
+
 }
