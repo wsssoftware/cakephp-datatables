@@ -1,6 +1,6 @@
 # CakePHP Queue Plugin
-[![Build Status](https://api.travis-ci.org/allanmcarvalho/cakephp-datatables.svg?branch=master)](https://travis-ci.org/github/allanmcarvalho/cakephp-datatables)
-[![Coverage Status](https://img.shields.io/codecov/c/github/allanmcarvalho/cakephp-datatables/master.svg)]()
+[![Build Status](https://api.travis-ci.com/allanmcarvalho/cakephp-datatables.svg?branch=master)](https://travis-ci.com/github/allanmcarvalho/cakephp-datatables)
+[![Coverage Status](https://img.shields.io/codecov/c/github/allanmcarvalho/cakephp-datatables/master.svg)](https://codecov.io/github/allanmcarvalho/cakephp-datatables?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/allanmcarvalho/cakephp-datatables/v/stable.svg)](https://packagist.org/packages/allanmcarvalho/cakephp-datatables)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.2-8892BF.svg)](https://php.net/)
 [![License](https://poser.pugx.org/allanmcarvalho/cakephp-datatables/license)](https://packagist.org/packages/allanmcarvalho/cakephp-datatables)
