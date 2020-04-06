@@ -31,7 +31,7 @@ matrix:
       env: CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://root@127.0.0.1/cakephp_test'
 
     - php: 7.3
-      env: CHECKS=1 DEFAULT=0
+      env: CHECKS=1 DEFAULT=1
 
 before_install:
   - phpenv config-rm xdebug.ini
