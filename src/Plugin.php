@@ -62,7 +62,6 @@ class Plugin extends BasePlugin {
 			foreach ($value as $childConfig => $childValue) {
 				$this->mergeConfiguration("$currentPath.$config", $childConfig, $childValue);
 			}
-
 		} elseif (!empty($value)) {
 			Configure::write("$currentPath.$config", $value);
 		}
