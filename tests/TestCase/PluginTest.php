@@ -15,34 +15,11 @@ namespace DataTables\Test\TestCase;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\Router;
 use DataTables\Plugin;
 use PHPUnit\Framework\TestCase;
 use TestApp\Application;
 
 class PluginTest extends TestCase {
-
-	/**
-	 * @return void
-	 */
-	public function testMiddleware() {
-		$plugin = new Plugin();
-		$middlewareQueue = new MiddlewareQueue();
-
-		$response = $plugin->middleware($middlewareQueue);
-
-		$this->assertInstanceOf(MiddlewareQueue::class, $response);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function testRoutes() {
-		$plugin = new Plugin();
-		$plugin->routes(Router::createRouteBuilder('test'));
-		$this->markTestIncomplete();
-	}
 
 	/**
 	 * @return void
