@@ -3,7 +3,7 @@
 
 ## Installation
 ```
-composer require dereuromark/cakephp-queue
+composer require allanmcarvalho/cakephp-datatables
 ```
 Load the plugin in your `src/Application.php`'s bootstrap() using:
 ```php
