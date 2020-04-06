@@ -25,11 +25,6 @@ class SessionEngineTest extends TestCase {
 	private $randomKeyName = null;
 
 	/**
-	 * @var \DataTables\TableConfig\Engine\SessionEngine|null
-	 */
-	private $sessionEngine = null;
-
-	/**
 	 * SessionEngineTest constructor.
 	 *
 	 * @param string|null $name
@@ -38,8 +33,6 @@ class SessionEngineTest extends TestCase {
 	 */
 	public function __construct($name = null, array $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
-
-		$this->sessionEngine = new SessionEngine();
 		$this->randomKeyName = 'table_config_' . str_pad(rand(0, 99999), 5, 0, STR_PAD_LEFT);
 	}
 
@@ -47,40 +40,44 @@ class SessionEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testSave() {
+		$sessionEngine = new SessionEngine();
 		$tableConfig = new TableConfig();
 		$tableConfig->setConfigName($this->randomKeyName);
-		$this->assertEquals(true, $this->sessionEngine->save($tableConfig));
+		$this->assertEquals(true, $sessionEngine->save($tableConfig));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testCheck() {
+		$sessionEngine = new SessionEngine();
 	    $tableConfig = new TableConfig();
 	    $tableConfig->setConfigName($this->randomKeyName);
-		$this->sessionEngine->save($tableConfig);
-		$this->assertEquals(true, $this->sessionEngine->exists($this->randomKeyName));
+		$sessionEngine->save($tableConfig);
+		$this->assertEquals(true, $sessionEngine->exists($this->randomKeyName));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testRead() {
+		$sessionEngine = new SessionEngine();
 	    $tableConfig = new TableConfig();
 	    $tableConfig->setConfigName($this->randomKeyName);
-		$this->sessionEngine->save($tableConfig);
-		$this->assertInstanceOf(TableConfig::class, $this->sessionEngine->read($this->randomKeyName));
+		$sessionEngine->save($tableConfig);
+		$this->assertInstanceOf(TableConfig::class, $sessionEngine->read($this->randomKeyName));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testDelete() {
+		$sessionEngine = new SessionEngine();
 		$tableConfig = new TableConfig();
 		$tableConfig->setConfigName($this->randomKeyName);
-		$this->sessionEngine->save($tableConfig);
-		$exist = $this->sessionEngine->exists($this->randomKeyName);
-		$deleted = $this->sessionEngine->delete($this->randomKeyName);
+		$sessionEngine->save($tableConfig);
+		$exist = $sessionEngine->exists($this->randomKeyName);
+		$deleted = $sessionEngine->delete($this->randomKeyName);
 		$this->assertEquals($exist, $deleted);
 	}
 

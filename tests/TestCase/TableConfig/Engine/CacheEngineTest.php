@@ -25,11 +25,6 @@ class CacheEngineTest extends TestCase {
 	private $randomKeyName = null;
 
 	/**
-	 * @var \DataTables\TableConfig\Engine\SessionEngine|null
-	 */
-	private $cacheEngine = null;
-
-	/**
 	 * CacheEngineTest constructor.
 	 *
 	 * @param string|null $name
@@ -38,8 +33,6 @@ class CacheEngineTest extends TestCase {
 	 */
 	public function __construct($name = null, array $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
-
-		$this->cacheEngine = new CacheEngine();
 		$this->randomKeyName = str_pad(rand(0, 99999), 5, 0, STR_PAD_LEFT);
 	}
 
@@ -47,40 +40,44 @@ class CacheEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testSave() {
+		$cacheEngine = new CacheEngine();
 		$tableConfig = new TableConfig();
 		$tableConfig->setConfigName($this->randomKeyName);
-		$this->assertEquals(true, $this->cacheEngine->save($tableConfig));
+		$this->assertEquals(true, $cacheEngine->save($tableConfig));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testCheck() {
+		$cacheEngine = new CacheEngine();
 	    $tableConfig = new TableConfig();
 	    $tableConfig->setConfigName($this->randomKeyName);
-		$this->cacheEngine->save($tableConfig);
-		$this->assertEquals(true, $this->cacheEngine->exists($this->randomKeyName));
+		$cacheEngine->save($tableConfig);
+		$this->assertEquals(true, $cacheEngine->exists($this->randomKeyName));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testRead() {
+		$cacheEngine = new CacheEngine();
 	    $tableConfig = new TableConfig();
 	    $tableConfig->setConfigName($this->randomKeyName);
-		$this->cacheEngine->save($tableConfig);
-		$this->assertInstanceOf(TableConfig::class, $this->cacheEngine->read($this->randomKeyName));
+		$cacheEngine->save($tableConfig);
+		$this->assertInstanceOf(TableConfig::class, $cacheEngine->read($this->randomKeyName));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testDelete() {
+		$cacheEngine = new CacheEngine();
 		$tableConfig = new TableConfig();
 		$tableConfig->setConfigName($this->randomKeyName);
-		$this->cacheEngine->save($tableConfig);
-		$exist = $this->cacheEngine->exists($this->randomKeyName);
-		$deleted = $this->cacheEngine->delete($this->randomKeyName);
+		$cacheEngine->save($tableConfig);
+		$exist = $cacheEngine->exists($this->randomKeyName);
+		$deleted = $cacheEngine->delete($this->randomKeyName);
 		$this->assertEquals($exist, $deleted);
 	}
 
