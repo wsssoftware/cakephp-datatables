@@ -44,7 +44,7 @@ class Plugin extends BasePlugin {
 		}
 		Configure::load('DataTables.app', 'default', true);
 		foreach ($applicationDataTablesConfigs as $config => $value) {
-			$this->mergeConfiguration('DataTables', $config, $value);
+			$this->mergeConfiguration('DataTables', (string)$config, $value);
 		}
 
 	}
@@ -60,7 +60,7 @@ class Plugin extends BasePlugin {
 	private function mergeConfiguration(string $currentPath, string $config, $value) {
 		if (is_array($value)) {
 			foreach ($value as $childConfig => $childValue) {
-				$this->mergeConfiguration("$currentPath.$config", $childConfig, $childValue);
+				$this->mergeConfiguration("$currentPath.$config", (string)$childConfig, $childValue);
 			}
 		} elseif (!empty($value)) {
 			Configure::write("$currentPath.$config", $value);

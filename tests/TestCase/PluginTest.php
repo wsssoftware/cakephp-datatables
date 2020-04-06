@@ -14,7 +14,9 @@
 namespace DataTables\Test\TestCase;
 
 use Cake\Core\Configure;
+use Cake\Error\FatalErrorException;
 use Cake\Http\MiddlewareQueue;
+use Cake\Routing\Router;
 use DataTables\Plugin;
 use PHPUnit\Framework\TestCase;
 use TestApp\Application;
@@ -37,18 +39,37 @@ class PluginTest extends TestCase {
 	 * @return void
 	 */
 	public function testRoutes() {
-		$this->markTestSkipped();
+		$plugin = new Plugin();
+		$plugin->routes(Router::createRouteBuilder('test'));
+		$this->markTestIncomplete();
 	}
 
 	/**
 	 * @return void
 	 */
-	public function testBootstrap() {
+	public function testBootstrapBasic() {
 		$plugin = new Plugin();
 		$baseApplication = new Application('');
+		Configure::write('DataTables', [
+			'test1' => '123',
+			'testArray' => [
+				'test2' => 'abc',
+			],
+		]);
 		$plugin->bootstrap($baseApplication);
+		$this->assertEquals('123', Configure::read('DataTables.test1'));
+		$this->assertEquals('abc', Configure::read('DataTables.testArray.test2'));
+	}
 
-		$this->assertEquals(true, Configure::check('DataTables'));
+	/**
+	 * @return void
+	 */
+	public function testBootstrapApplicationConfigurationException() {
+		$plugin = new Plugin();
+		$baseApplication = new Application('');
+		Configure::write('DataTables', 'test');
+		$this->expectException(FatalErrorException::class);
+		$plugin->bootstrap($baseApplication);
 	}
 
 }
