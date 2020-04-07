@@ -12,17 +12,17 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\TableConfig;
+namespace DataTables\Table;
 
-interface TableConfigStorageEngineInterface {
+interface StorageEngineInterface {
 
 	/**
 	 * Create or replace if exists a TableConfig for a key.
 	 *
-	 * @param \DataTables\TableConfig\TableConfig $config TableConfig class.
+	 * @param \DataTables\Table\TableScheme $config TableConfig class.
 	 * @return bool True if the data was successfully saved, false on failure.
 	 */
-	public function save(TableConfig $config): bool;
+	public function save(TableScheme $config): bool;
 
 	/**
 	 * Check if exists a TableConfig for a key.
@@ -36,9 +36,9 @@ interface TableConfigStorageEngineInterface {
 	 * Read if a TableConfig for a key.
 	 *
 	 * @param string $key Table config name.
-	 * @return \DataTables\TableConfig\TableConfig|null TableConfig class if the data was successfully read, null on not found.
+	 * @return \DataTables\Table\TableScheme|null TableConfig class if the data was successfully read, null on not found.
 	 */
-	public function read(string $key): ?TableConfig;
+	public function read(string $key): ?TableScheme;
 
 	/**
 	 * Delete if exists a TableConfig for a key.

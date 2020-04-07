@@ -14,8 +14,8 @@
 namespace DataTables\Test\TestCase\TableConfig\Engine;
 
 use Cake\TestSuite\TestCase;
-use DataTables\TableConfig\Engine\CacheEngine;
-use DataTables\TableConfig\TableConfig;
+use DataTables\Table\StorageEngine\CacheStorageEngine;
+use DataTables\Table\TableScheme;
 
 class CacheEngineTest extends TestCase {
 
@@ -40,8 +40,8 @@ class CacheEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testSave() {
-		$cacheEngine = new CacheEngine();
-		$tableConfig = new TableConfig();
+		$cacheEngine = new CacheStorageEngine();
+		$tableConfig = new TableScheme();
 		$tableConfig->setConfigName($this->randomKeyName);
 		$this->assertEquals(true, $cacheEngine->save($tableConfig));
 	}
@@ -50,8 +50,8 @@ class CacheEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheck() {
-		$cacheEngine = new CacheEngine();
-	    $tableConfig = new TableConfig();
+		$cacheEngine = new CacheStorageEngine();
+	    $tableConfig = new TableScheme();
 	    $tableConfig->setConfigName($this->randomKeyName);
 		$cacheEngine->save($tableConfig);
 		$this->assertEquals(true, $cacheEngine->exists($this->randomKeyName));
@@ -61,19 +61,19 @@ class CacheEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testRead() {
-		$cacheEngine = new CacheEngine();
-	    $tableConfig = new TableConfig();
+		$cacheEngine = new CacheStorageEngine();
+	    $tableConfig = new TableScheme();
 	    $tableConfig->setConfigName($this->randomKeyName);
 		$cacheEngine->save($tableConfig);
-		$this->assertInstanceOf(TableConfig::class, $cacheEngine->read($this->randomKeyName));
+		$this->assertInstanceOf(TableScheme::class, $cacheEngine->read($this->randomKeyName));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testDelete() {
-		$cacheEngine = new CacheEngine();
-		$tableConfig = new TableConfig();
+		$cacheEngine = new CacheStorageEngine();
+		$tableConfig = new TableScheme();
 		$tableConfig->setConfigName($this->randomKeyName);
 		$cacheEngine->save($tableConfig);
 		$exist = $cacheEngine->exists($this->randomKeyName);

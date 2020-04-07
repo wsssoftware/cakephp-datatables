@@ -14,8 +14,8 @@
 namespace DataTables\Test\TestCase\TableConfig\Engine;
 
 use Cake\TestSuite\TestCase;
-use DataTables\TableConfig\Engine\SessionEngine;
-use DataTables\TableConfig\TableConfig;
+use DataTables\Table\StorageEngine\SessionEngine;
+use DataTables\Table\TableScheme;
 
 class SessionEngineTest extends TestCase {
 
@@ -41,7 +41,7 @@ class SessionEngineTest extends TestCase {
 	 */
 	public function testSave() {
 		$sessionEngine = new SessionEngine();
-		$tableConfig = new TableConfig();
+		$tableConfig = new TableScheme();
 		$tableConfig->setConfigName($this->randomKeyName);
 		$this->assertEquals(true, $sessionEngine->save($tableConfig));
 	}
@@ -51,7 +51,7 @@ class SessionEngineTest extends TestCase {
 	 */
 	public function testCheck() {
 		$sessionEngine = new SessionEngine();
-	    $tableConfig = new TableConfig();
+	    $tableConfig = new TableScheme();
 	    $tableConfig->setConfigName($this->randomKeyName);
 		$sessionEngine->save($tableConfig);
 		$this->assertEquals(true, $sessionEngine->exists($this->randomKeyName));
@@ -62,10 +62,10 @@ class SessionEngineTest extends TestCase {
 	 */
 	public function testRead() {
 		$sessionEngine = new SessionEngine();
-	    $tableConfig = new TableConfig();
+	    $tableConfig = new TableScheme();
 	    $tableConfig->setConfigName($this->randomKeyName);
 		$sessionEngine->save($tableConfig);
-		$this->assertInstanceOf(TableConfig::class, $sessionEngine->read($this->randomKeyName));
+		$this->assertInstanceOf(TableScheme::class, $sessionEngine->read($this->randomKeyName));
 	}
 
 	/**
@@ -73,7 +73,7 @@ class SessionEngineTest extends TestCase {
 	 */
 	public function testDelete() {
 		$sessionEngine = new SessionEngine();
-		$tableConfig = new TableConfig();
+		$tableConfig = new TableScheme();
 		$tableConfig->setConfigName($this->randomKeyName);
 		$sessionEngine->save($tableConfig);
 		$exist = $sessionEngine->exists($this->randomKeyName);

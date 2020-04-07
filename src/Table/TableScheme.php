@@ -11,9 +11,9 @@
  * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
  */
 
-namespace DataTables\TableConfig;
+namespace DataTables\Table;
 
-class TableConfig {
+class TableScheme {
 
 	/**
 	 * TableConfig name.
@@ -35,7 +35,7 @@ class TableConfig {
 	 * Set the TableConfig name.
 	 *
 	 * @param string $name The name of TableConfig.
-	 * @return \DataTables\TableConfig\TableConfig
+	 * @return \DataTables\Table\TableScheme
 	 */
 	public function setConfigName(string $name): self {
 		$this->_configName = $name;

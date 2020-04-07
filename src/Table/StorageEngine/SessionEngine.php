@@ -12,14 +12,14 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\TableConfig\Engine;
+namespace DataTables\Table\StorageEngine;
 
 use Cake\Http\Session;
 use Cake\Routing\Router;
-use DataTables\TableConfig\TableConfig;
-use DataTables\TableConfig\TableConfigStorageEngineInterface;
+use DataTables\Table\TableScheme;
+use DataTables\Table\StorageEngineInterface;
 
-class SessionEngine implements TableConfigStorageEngineInterface {
+class SessionEngine implements StorageEngineInterface {
 
 	/**
 	 * @var \Cake\Http\Session|null
@@ -37,7 +37,7 @@ class SessionEngine implements TableConfigStorageEngineInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function save(TableConfig $config): bool {
+	public function save(TableScheme $config): bool {
 		$this->session->write("DataTables.tableConfigs.{$config->getConfigName()}", $config);
 
 		return $this->session->check("DataTables.tableConfigs.{$config->getConfigName()}");
@@ -53,11 +53,11 @@ class SessionEngine implements TableConfigStorageEngineInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function read(string $key): ?TableConfig {
-		/** @var \DataTables\TableConfig\TableConfig|null $tableConfig */
+	public function read(string $key): ?TableScheme {
+		/** @var \DataTables\Table\TableScheme|null $tableConfig */
 		$tableConfig = $this->session->read("DataTables.tableConfigs.$key");
 
-		return ($tableConfig instanceof TableConfig) ? $tableConfig : null;
+		return ($tableConfig instanceof TableScheme) ? $tableConfig : null;
 	}
 
 	/**

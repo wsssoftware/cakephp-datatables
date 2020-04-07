@@ -12,14 +12,14 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\TableConfig\Engine;
+namespace DataTables\Table\StorageEngine;
 
 use Cake\Cache\Cache;
 use Cake\Cache\Engine\FileEngine;
-use DataTables\TableConfig\TableConfig;
-use DataTables\TableConfig\TableConfigStorageEngineInterface;
+use DataTables\Table\TableScheme;
+use DataTables\Table\StorageEngineInterface;
 
-class CacheEngine implements TableConfigStorageEngineInterface {
+class CacheStorageEngine implements StorageEngineInterface {
 
 	public function __construct() {
 		$DataTablesCacheConfig = [
@@ -38,7 +38,7 @@ class CacheEngine implements TableConfigStorageEngineInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function save(TableConfig $config): bool {
+	public function save(TableScheme $config): bool {
 		return Cache::write($config->getConfigName(), $config, '_data_tables_');
 	}
 
@@ -46,16 +46,16 @@ class CacheEngine implements TableConfigStorageEngineInterface {
 	 * @inheritDoc
 	 */
 	public function exists(string $key): bool {
-		return (Cache::read($key, '_data_tables_') instanceof TableConfig) ? true : false;
+		return (Cache::read($key, '_data_tables_') instanceof TableScheme) ? true : false;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function read(string $key): ?TableConfig {
+	public function read(string $key): ?TableScheme {
 		$tableConfig = Cache::read($key, '_data_tables_');
 
-		return ($tableConfig instanceof TableConfig) ? $tableConfig : null;
+		return ($tableConfig instanceof TableScheme) ? $tableConfig : null;
 	}
 
 	/**
