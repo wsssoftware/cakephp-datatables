@@ -10,11 +10,6 @@
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
  */
+?>
 
-namespace DataTables\Table;
-
-
-class AppTables extends Tables
-{
-
-}
+<h1>Tabela</h1>
