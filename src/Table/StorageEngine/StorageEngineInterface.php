@@ -12,7 +12,7 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Table;
+namespace DataTables\Table\StorageEngine;
 
 interface StorageEngineInterface {
 

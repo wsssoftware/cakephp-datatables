@@ -13,46 +13,46 @@
 
 namespace DataTables\Builder;
 
-
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use DataTables\Table\Columns;
 use DataTables\Table\JsOptions;
 use DataTables\Table\Tables;
 
-class Builder
-{
-    public function buildTables(string $tablesClass, string $config): Tables {
-        /** @var Tables $tables */
-        $tables = null;
-        $classWithNameSpace = null;
-        if(class_exists($tablesClass)) {
-            $classWithNameSpace = $tablesClass;
-        } elseif(file_exists(APP . 'DataTables' . DS . 'Tables' . DS . $tablesClass . 'Tables.php')) {
-            $classWithNameSpace = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
-        }
-        if(!empty($classWithNameSpace)) {
-            $tables = new $classWithNameSpace();
-        }
-        if(empty($tables)){
-            throw new FatalErrorException("Tables class '$tablesClass' not found.");
-        }
-        if(!method_exists($tables, $config . 'Config')) {
-            throw new FatalErrorException("Config method '{$config}Config' don't exist in '$classWithNameSpace'.");
-        }
+class Builder {
 
-        return $tables;
-    }
+	public function buildTables(string $tablesClass, string $config): Tables {
+		/** @var \DataTables\Table\Tables $tables */
+		$tables = null;
+		$classWithNameSpace = null;
+		if(class_exists($tablesClass)) {
+			$classWithNameSpace = $tablesClass;
+		} elseif(file_exists(APP . 'DataTables' . DS . 'Tables' . DS . $tablesClass . 'Tables.php')) {
+			$classWithNameSpace = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
+		}
+		if(!empty($classWithNameSpace)) {
+			$tables = new $classWithNameSpace();
+		}
+		if(empty($tables)){
+			throw new FatalErrorException("Tables class '$tablesClass' not found.");
+		}
+		if(!method_exists($tables, $config . 'Config')) {
+			throw new FatalErrorException("Config method '{$config}Config' don't exist in '$classWithNameSpace'.");
+		}
 
-    public function buildQuery(Tables $table) {
-        return $table->getOrmTable()->find();
-    }
+		return $tables;
+	}
 
-    public function buildColumns(Tables $table): Columns {
-        return new Columns();
-    }
+	public function buildQuery(Tables $table) {
+		return $table->getOrmTable()->find();
+	}
 
-    public function buildJsOptions(Tables $table): JsOptions {
-        return new JsOptions();
-    }
+	public function buildColumns(Tables $table): Columns {
+		return new Columns();
+	}
+
+	public function buildJsOptions(Tables $table): JsOptions {
+		return new JsOptions();
+	}
+
 }

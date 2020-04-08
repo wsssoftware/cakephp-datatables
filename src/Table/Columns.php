@@ -13,8 +13,5 @@
 
 namespace DataTables\Table;
 
-
-class Columns
-{
-
+class Columns {
 }

@@ -10,64 +10,60 @@
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DataTables\Table;
 
-
-use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use DataTables\Builder\Builder;
 
-abstract class Tables
-{
-    /**
-     * The database table name that will be used to load the DataTables ORM table.
-     *
-     * @var string
-     */
-    protected $_ormTableName;
+abstract class Tables {
 
-    /**
-     * @var Table
-     */
-    private $_ormTable;
+	/**
+	 * The database table name that will be used to load the DataTables ORM table.
+	 *
+	 * @var string
+	 */
+	protected $_ormTableName;
 
-    /**
-     * @var Builder
-     */
-    private static $_builder;
+	/**
+	 * @var \Cake\ORM\Table
+	 */
+	private $_ormTable;
 
-    public function __construct()
-    {
-        $className = get_called_class();
-        $classShortName = explode('\\', get_called_class());
-        $classShortName = array_pop($classShortName);
-        if (substr($classShortName, -6, 6) !== 'Tables') {
-            throw new FatalErrorException("The class '$className' must have the name ending with 'Tables'");
-        }
-        if (empty($this->_ormTableName)) {
-            $this->_ormTableName = substr_replace($classShortName, '', -6, 6);
-        }
-        $this->_ormTable = TableRegistry::getTableLocator()->get($this->_ormTableName);
-    }
+	/**
+	 * @var \DataTables\Builder\Builder
+	 */
+	private static $_builder;
 
-    public static function getBuilder(): Builder {
-        if(empty(self::$_builder)) {
-            self::$_builder = new Builder();
-        }
+	public function __construct() {
+		$className = get_called_class();
+		$classShortName = explode('\\', get_called_class());
+		$classShortName = array_pop($classShortName);
+		if (substr($classShortName, -6, 6) !== 'Tables') {
+			throw new FatalErrorException("The class '$className' must have the name ending with 'Tables'");
+		}
+		if (empty($this->_ormTableName)) {
+			$this->_ormTableName = substr_replace($classShortName, '', -6, 6);
+		}
+		$this->_ormTable = TableRegistry::getTableLocator()->get($this->_ormTableName);
+	}
 
-        return self::$_builder;
-    }
+	public static function getBuilder(): Builder {
+		if(empty(static::$_builder)) {
+			static::$_builder = new Builder();
+		}
 
-    /**
-     * @return Table
-     */
-    public function getOrmTable(): Table
-    {
-        return $this->_ormTable;
-    }
+		return static::$_builder;
+	}
+
+	/**
+	 * @return \Cake\ORM\Table
+	 */
+	public function getOrmTable(): Table {
+		return $this->_ormTable;
+	}
 
 }

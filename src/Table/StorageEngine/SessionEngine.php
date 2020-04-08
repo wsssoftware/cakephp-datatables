@@ -16,8 +16,8 @@ namespace DataTables\Table\StorageEngine;
 
 use Cake\Http\Session;
 use Cake\Routing\Router;
-use DataTables\Table\TableScheme;
 use DataTables\Table\StorageEngineInterface;
+use DataTables\Table\TableScheme;
 
 class SessionEngine implements StorageEngineInterface {
 

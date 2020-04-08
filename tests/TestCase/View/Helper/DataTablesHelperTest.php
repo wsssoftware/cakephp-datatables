@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\View\Helper;
 
@@ -10,36 +10,35 @@ use DataTables\View\Helper\DataTablesHelper;
 /**
  * DataTables\View\Helper\DataTablesHelper Test Case
  */
-class DataTablesHelperTest extends TestCase
-{
-    /**
-     * Test subject
-     *
-     * @var \DataTables\View\Helper\DataTablesHelper
-     */
-    protected $DataTables;
+class DataTablesHelperTest extends TestCase {
 
-    /**
-     * setUp method
-     *
-     * @return void
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $view = new View();
-        $this->DataTables = new DataTablesHelper($view);
-    }
+	/**
+	 * Test subject
+	 *
+	 * @var \DataTables\View\Helper\DataTablesHelper
+	 */
+	protected $DataTables;
 
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    public function tearDown(): void
-    {
-        unset($this->DataTables);
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
+	public function setUp(): void {
+		parent::setUp();
+		$view = new View();
+		$this->DataTables = new DataTablesHelper($view);
+	}
 
-        parent::tearDown();
-    }
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
+	public function tearDown(): void {
+		unset($this->DataTables);
+
+		parent::tearDown();
+	}
+
 }

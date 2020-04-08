@@ -16,8 +16,8 @@ namespace DataTables\Table\StorageEngine;
 
 use Cake\Cache\Cache;
 use Cake\Cache\Engine\FileEngine;
-use DataTables\Table\TableScheme;
 use DataTables\Table\StorageEngineInterface;
+use DataTables\Table\TableScheme;
 
 class CacheStorageEngine implements StorageEngineInterface {
 
