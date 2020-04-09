@@ -15,7 +15,8 @@ return [
 	'DataTables' => [
         'StorageEngine' => [
             'class' => \DataTables\StorageEngine\CacheStorageEngine::class,
-            'duration' => 43200
+            'duration' => 43200,
+            'disableWhenOnDebug' => true
         ]
 	],
 ];

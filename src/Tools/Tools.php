@@ -15,7 +15,10 @@ namespace DataTables\Tools;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
+use Cake\View\Cell;
+use Cake\View\View;
 use DataTables\StorageEngine\StorageEngineInterface;
+use DataTables\Table\BuiltConfig;
 use DataTables\Table\Columns;
 use DataTables\Table\JsOptions;
 use DataTables\Table\QueryBaseState;
@@ -46,6 +49,17 @@ class Tools
         return self::$instance;
     }
 
+    public function buildBuiltConfig(string $tablesClassWithNameSpace, string $configMethod, View $view, string $md5): BuiltConfig
+    {
+        $tables = Tools::getInstance()->buildTables($tablesClassWithNameSpace, $configMethod);
+        $queryBaseState = Tools::getInstance()->buildQueryBaseState($tables);
+        $columns = Tools::getInstance()->buildColumns($tables);
+        $jsOptions = Tools::getInstance()->buildJsOptions($tables);
+        $tables->{$configMethod . 'Config'}($queryBaseState, $columns, $jsOptions);
+        $renderedTable = $view->cell('DataTables.DataTables::table', [$columns])->render();
+        return new BuiltConfig($md5, $renderedTable, $queryBaseState, $columns, $jsOptions);
+    }
+
     public function buildTables(string $tablesClassWithNameSpace, string $configMethod): Tables
     {
         unset($exploded);
@@ -61,17 +75,17 @@ class Tools
         return $tables;
     }
 
-    public function buildQueryBaseState(Tables $table)
+    private function buildQueryBaseState(Tables $table)
     {
         return new QueryBaseState();
     }
 
-    public function buildColumns(Tables $table): Columns
+    private function buildColumns(Tables $table): Columns
     {
         return new Columns();
     }
 
-    public function buildJsOptions(Tables $table): JsOptions
+    private function buildJsOptions(Tables $table): JsOptions
     {
         return new JsOptions();
     }

@@ -46,7 +46,7 @@ class DataTablesHelper extends Helper
     {
         parent::initialize($config);
         if (Configure::read('debug') === true) {
-            $this->setConfig('cache', false);
+            $this->setConfig('cache', (bool)Configure::read('DataTables.StorageEngine.disableWhenOnDebug', true));
         }
     }
 
@@ -59,31 +59,25 @@ class DataTablesHelper extends Helper
      */
     public function renderTable(string $table): string
     {
-        $this->setConfig('cache', true);
+        $this->setConfig('cache', true); // TODO remove
 
         $exploded = explode('::', $table);
         if (count($exploded) !== 2) {
             throw new InvalidArgumentException('Table param must be a concatenation of Tables class and config. Eg.: Foo::method.');
         }
         $tablesClass = $exploded[0];
-        $tablesClassWithNameSpace = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
         $configMethod = $exploded[1];
+        $tablesClassWithNameSpace = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
         $md5 = Tools::getInstance()->getTablesMd5($tablesClassWithNameSpace);
         $cacheKey = Inflector::underscore(str_replace('::', '_', $table));
 
-        /** @var BuiltConfig $builtConfig */
         $builtConfig = null;
         if ($this->getConfig('cache')) {
+            /** @var BuiltConfig $builtConfig */
             $builtConfig = Tools::getInstance()->getStorageEngine()->read($cacheKey);
         }
-        if (empty($builtConfig)) {
-            $tables = Tools::getInstance()->buildTables($tablesClassWithNameSpace, $configMethod);
-            $queryBaseState = Tools::getInstance()->buildQueryBaseState($tables);
-            $columns = Tools::getInstance()->buildColumns($tables);
-            $jsOptions = Tools::getInstance()->buildJsOptions($tables);
-            $tables->{$configMethod . 'Config'}($queryBaseState, $columns, $jsOptions);
-            $renderedTable = $this->getView()->cell('DataTables.DataTables::table', [$columns])->render();
-            $builtConfig = new BuiltConfig($md5, $renderedTable, $queryBaseState, $columns, $jsOptions);
+        if (empty($builtConfig) && !$builtConfig instanceof BuiltConfig) {
+            $builtConfig = Tools::getInstance()->buildBuiltConfig($tablesClassWithNameSpace, $configMethod, $this->getView(), $md5);
         }
         if ($this->getConfig('cache') && !Tools::getInstance()->getStorageEngine()->save($cacheKey, $builtConfig)) {
             throw new FatalErrorException('Unable to save the BuiltConfig cache.');
