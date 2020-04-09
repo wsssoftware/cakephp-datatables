@@ -17,7 +17,7 @@ namespace DataTables\Table;
 use Cake\Error\FatalErrorException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use DataTables\Builder\Builder;
+use DataTables\Tools\Tools;
 
 abstract class Tables {
 
@@ -33,11 +33,6 @@ abstract class Tables {
 	 */
 	private $_ormTable;
 
-	/**
-	 * @var \DataTables\Builder\Builder
-	 */
-	private static $_builder;
-
 	public function __construct() {
 		$className = get_called_class();
 		$classShortName = explode('\\', get_called_class());
@@ -49,14 +44,6 @@ abstract class Tables {
 			$this->_ormTableName = substr_replace($classShortName, '', -6, 6);
 		}
 		$this->_ormTable = TableRegistry::getTableLocator()->get($this->_ormTableName);
-	}
-
-	public static function getBuilder(): Builder {
-		if(empty(static::$_builder)) {
-			static::$_builder = new Builder();
-		}
-
-		return static::$_builder;
 	}
 
 	/**

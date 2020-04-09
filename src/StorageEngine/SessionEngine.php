@@ -12,20 +12,22 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Table\StorageEngine;
+namespace DataTables\StorageEngine;
 
 use Cake\Http\Session;
 use Cake\Routing\Router;
-use DataTables\Table\StorageEngineInterface;
-use DataTables\Table\TableScheme;
+use DataTables\Table\BuiltConfig;
 
 class SessionEngine implements StorageEngineInterface {
 
 	/**
-	 * @var \Cake\Http\Session|null
+	 * @var Session|null
 	 */
 	private $session = null;
 
+    /**
+     * SessionEngine constructor.
+     */
 	public function __construct() {
 		if (!empty(Router::getRequest()) && !empty(Router::getRequest()->getSession())) {
 			$this->session = Router::getRequest()->getSession();
@@ -37,36 +39,36 @@ class SessionEngine implements StorageEngineInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function save(TableScheme $config): bool {
-		$this->session->write("DataTables.tableConfigs.{$config->getConfigName()}", $config);
+	public function save(string $key, BuiltConfig $builtConfig): bool {
+		$this->session->write("DataTables.builtConfigs.$key", $builtConfig);
 
-		return $this->session->check("DataTables.tableConfigs.{$config->getConfigName()}");
+		return $this->session->check("DataTables.builtConfigs.$key");
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function exists(string $key): bool {
-		return $this->session->check("DataTables.tableConfigs.$key");
+		return $this->session->check("DataTables.builtConfigs.$key");
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function read(string $key): ?TableScheme {
-		/** @var \DataTables\Table\TableScheme|null $tableConfig */
-		$tableConfig = $this->session->read("DataTables.tableConfigs.$key");
+	public function read(string $key): ?BuiltConfig {
+		/** @var BuiltConfig|null $tableConfig */
+		$tableConfig = $this->session->read("DataTables.builtConfigs.$key");
 
-		return ($tableConfig instanceof TableScheme) ? $tableConfig : null;
+		return ($tableConfig instanceof BuiltConfig) ? $tableConfig : null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function delete(string $key): bool {
-	    $this->session->delete("DataTables.tableConfigs.$key");
+	    $this->session->delete("DataTables.builtConfigs.$key");
 
-		return !$this->session->check("DataTables.tableConfigs.$key");
+		return !$this->session->check("DataTables.builtConfigs.$key");
 	}
 
 }

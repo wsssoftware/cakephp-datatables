@@ -11,11 +11,10 @@
  * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
  */
 
-return [
-	'DataTables' => [
-        'StorageEngine' => [
-            'class' => \DataTables\StorageEngine\CacheStorageEngine::class,
-            'duration' => 43200
-        ]
-	],
-];
+namespace DataTables\Table;
+
+
+class QueryBaseState
+{
+
+}

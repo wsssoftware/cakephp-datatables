@@ -12,22 +12,26 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Table\StorageEngine;
+namespace DataTables\StorageEngine;
+
 
 use Cake\Cache\Cache;
 use Cake\Cache\Engine\FileEngine;
-use DataTables\Table\StorageEngineInterface;
-use DataTables\Table\TableScheme;
+use Cake\Core\Configure;
+use DataTables\Table\BuiltConfig;
 
 class CacheStorageEngine implements StorageEngineInterface {
 
+    /**
+     * CacheStorageEngine constructor.
+     */
 	public function __construct() {
 		$DataTablesCacheConfig = [
 			'className' => FileEngine::class,
 			'prefix' => 'table_config_',
 			'path' => CACHE . 'persistent' . DS . 'data_tables' . DS,
 			'serialize' => true,
-			'duration' => '+1 years',
+			'duration' => '+' . Configure::read('DataTables.StorageEngine.duration') . ' minutes',
 			'url' => env('CACHE_CAKECORE_URL', null),
 		];
 		if (empty(Cache::getConfig('_data_tables_'))) {
@@ -38,24 +42,25 @@ class CacheStorageEngine implements StorageEngineInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function save(TableScheme $config): bool {
-		return Cache::write($config->getConfigName(), $config, '_data_tables_');
+	public function save(string $key, BuiltConfig $builtConfig): bool {
+		return Cache::write($key, $builtConfig, '_data_tables_');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function exists(string $key): bool {
-		return (Cache::read($key, '_data_tables_') instanceof TableScheme) ? true : false;
+		return (Cache::read($key, '_data_tables_') instanceof BuiltConfig) ? true : false;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function read(string $key): ?TableScheme {
-		$tableConfig = Cache::read($key, '_data_tables_');
+	public function read(string $key): ?BuiltConfig {
+        /** @var BuiltConfig $builtConfig */
+        $builtConfig = Cache::read($key, '_data_tables_');
 
-		return ($tableConfig instanceof TableScheme) ? $tableConfig : null;
+		return ($builtConfig instanceof BuiltConfig) ? $builtConfig : null;
 	}
 
 	/**
