@@ -1,14 +1,11 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 declare(strict_types = 1);
 
@@ -18,16 +15,20 @@ use Cake\View\Cell;
 use DataTables\Table\Columns;
 
 /**
- * DataTables cell
+ * Class DataTablesCell
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
 class DataTablesCell extends Cell {
 
-    /**
-     * Method that return the table html structure.
-     *
-     * @param Columns $columns Config that is a concatenation of Tables class and config method.
-     * @return void.
-     */
+	/**
+	 * Method that return the table html structure.
+	 *
+	 * @param \DataTables\Table\Columns $columns Config that is a concatenation of Tables class and config method.
+	 * @return void
+	 */
 	public function table(Columns $columns): void {
 
 	}

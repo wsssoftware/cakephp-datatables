@@ -1,14 +1,11 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 declare(strict_types = 1);
 
@@ -17,8 +14,14 @@ namespace DataTables\Table;
 use Cake\Error\FatalErrorException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use DataTables\Tools\Tools;
 
+/**
+ * Class Tables
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ */
 abstract class Tables {
 
 	/**

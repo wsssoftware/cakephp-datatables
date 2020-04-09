@@ -1,146 +1,140 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
+declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+/**
+ * Class BuiltConfig
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ */
+class BuiltConfig {
 
-use Cake\ORM\Query;
+	/**
+	 * @var string The DataTables tables class md5 used to check changes.
+	 */
+	private $_tablesClassMd5;
 
-class BuiltConfig
-{
+	/**
+	 * @var string The DataTables config table html.
+	 */
+	private $_tableHtml;
 
-    /**
-     * @var string The DataTables tables class md5 used to check changes.
-     */
-    private $_tablesClassMd5;
+	/**
+	 * @var \DataTables\Table\QueryBaseState The DataTables query state.
+	 */
+	private $_queryBaseState;
 
-    /**
-     * @var string The DataTables config table html.
-     */
-    private $_tableHtml;
+	/**
+	 * @var \DataTables\Table\Columns The DataTables table columns.
+	 */
+	private $_columns;
 
-    /**
-     * @var Query The DataTables query state.
-     */
-    private $_queryBaseState;
+	/**
+	 * @var \DataTables\Table\JsOptions The DataTables JS Options.
+	 */
+	private $_jsOptions;
 
-    /**
-     * @var Columns The DataTables table columns.
-     */
-    private $_columns;
+	/**
+	 * BuiltConfig constructor.
+	 *
+	 * @param string $tablesClassMd5 The DataTables tables class md5 used to check changes.
+	 * @param string $_tableHtml The DataTables config table html.
+	 * @param \DataTables\Table\QueryBaseState $queryBaseState The DataTables base query.
+	 * @param \DataTables\Table\Columns $_columns The DataTables table columns.
+	 * @param \DataTables\Table\JsOptions $jsOptions The DataTables JS Options.
+	 */
+	public function __construct(string $tablesClassMd5, string $_tableHtml, QueryBaseState $queryBaseState, Columns $_columns, JsOptions $jsOptions) {
+		$this->_tablesClassMd5 = $tablesClassMd5;
+		$this->_tableHtml = $_tableHtml;
+		$this->_queryBaseState = $queryBaseState;
+		$this->_columns = $_columns;
+		$this->_jsOptions = $jsOptions;
+	}
 
-    /**
-     * @var JsOptions The DataTables JS Options.
-     */
-    private $_jsOptions;
+	/**
+	 * @return string
+	 */
+	public function getTablesClassMd5(): string {
+		return $this->_tablesClassMd5;
+	}
 
-    /**
-     * BuiltConfig constructor.
-     *
-     * @param string $tablesClassMd5 The DataTables tables class md5 used to check changes.
-     * @param string $_tableHtml The DataTables config table html.
-     * @param QueryBaseState $queryBaseState The DataTables base query.
-     * @param Columns $_columns The DataTables table columns.
-     * @param JsOptions $jsOptions The DataTables JS Options.
-     */
-    public function __construct(string $tablesClassMd5, string $_tableHtml, QueryBaseState $queryBaseState, Columns $_columns, JsOptions $jsOptions)
-    {
-        $this->_tablesClassMd5 = $tablesClassMd5;
-        $this->_tableHtml = $_tableHtml;
-        $this->_queryBaseState = $queryBaseState;
-        $this->_columns = $_columns;
-        $this->_jsOptions = $jsOptions;
-    }
+	/**
+	 * @param string $tablesClassMd5
+	 * @return void
+	 */
+	public function setTablesClassMd5(string $tablesClassMd5): void {
+		$this->_tablesClassMd5 = $tablesClassMd5;
+	}
 
-    /**
-     * @return string
-     */
-    public function getTablesClassMd5(): string
-    {
-        return $this->_tablesClassMd5;
-    }
+	/**
+	 * @return string
+	 */
+	public function getTableHtml(): string {
+		return $this->_tableHtml;
+	}
 
-    /**
-     * @param string $tablesClassMd5
-     */
-    public function setTablesClassMd5(string $tablesClassMd5): void
-    {
-        $this->_tablesClassMd5 = $tablesClassMd5;
-    }
+	/**
+	 * @param string $tableHtml
+	 * @return void
+	 */
+	public function setTableHtml(string $tableHtml): void {
+		$this->_tableHtml = $tableHtml;
+	}
 
-    /**
-     * @return string
-     */
-    public function getTableHtml(): string
-    {
-        return $this->_tableHtml;
-    }
+	/**
+	 * @return \DataTables\Table\QueryBaseState
+	 */
+	public function getQueryBaseState(): QueryBaseState {
+		return $this->_queryBaseState;
+	}
 
-    /**
-     * @param string $tableHtml
-     */
-    public function setTableHtml(string $tableHtml): void
-    {
-        $this->_tableHtml = $tableHtml;
-    }
+	/**
+	 * @param \DataTables\Table\QueryBaseState $queryBaseState
+	 * @return void
+	 */
+	public function setQueryBaseState(QueryBaseState $queryBaseState): void {
+		$this->_queryBaseState = $queryBaseState;
+	}
 
-    /**
-     * @return QueryBaseState
-     */
-    public function getQueryBaseState(): QueryBaseState
-    {
-        return $this->_queryBaseState;
-    }
+	/**
+	 * @return \DataTables\Table\Columns
+	 */
+	public function getColumns(): Columns {
+		return $this->_columns;
+	}
 
-    /**
-     * @param QueryBaseState $queryBaseState
-     */
-    public function setQueryBaseState(QueryBaseState $queryBaseState): void
-    {
-        $this->_queryBaseState = $queryBaseState;
-    }
+	/**
+	 * @param \DataTables\Table\Columns $columns
+	 * @return void
+	 */
+	public function setColumns(Columns $columns): void {
+		$this->_columns = $columns;
+	}
 
-    /**
-     * @return Columns
-     */
-    public function getColumns(): Columns
-    {
-        return $this->_columns;
-    }
+	/**
+	 * @return \DataTables\Table\JsOptions
+	 */
+	public function getJsOptions(): JsOptions {
+		return $this->_jsOptions;
+	}
 
-    /**
-     * @param Columns $columns
-     */
-    public function setColumns(Columns $columns): void
-    {
-        $this->_columns = $columns;
-    }
-
-    /**
-     * @return JsOptions
-     */
-    public function getJsOptions(): JsOptions
-    {
-        return $this->_jsOptions;
-    }
-
-    /**
-     * @param JsOptions $jsOptions
-     */
-    public function setJsOptions(JsOptions $jsOptions): void
-    {
-        $this->_jsOptions = $jsOptions;
-    }
-
+	/**
+	 * @param \DataTables\Table\JsOptions $jsOptions
+	 * @return void
+	 */
+	public function setJsOptions(JsOptions $jsOptions): void {
+		$this->_jsOptions = $jsOptions;
+	}
 
 }

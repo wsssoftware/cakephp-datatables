@@ -1,14 +1,11 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase;
@@ -19,6 +16,13 @@ use DataTables\Plugin;
 use PHPUnit\Framework\TestCase;
 use TestApp\Application;
 
+/**
+ * Class PluginTest
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ */
 class PluginTest extends TestCase {
 
 	/**

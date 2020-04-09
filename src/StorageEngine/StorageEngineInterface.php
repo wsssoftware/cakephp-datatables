@@ -1,14 +1,11 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 declare(strict_types = 1);
 
@@ -16,15 +13,20 @@ namespace DataTables\StorageEngine;
 
 use DataTables\Table\BuiltConfig;
 
+/**
+ * Interface StorageEngineInterface
+ *
+ * @package DataTables\StorageEngine
+ */
 interface StorageEngineInterface {
 
-    /**
-     * Create or replace if exists a BuiltConfig for a key.
-     *
-     * @param string $key A unique key that represent this built.
-     * @param BuiltConfig $builtConfig A BuiltConfig instance.
-     * @return bool True if the data was successfully saved, false on failure.
-     */
+	/**
+	 * Create or replace if exists a BuiltConfig for a key.
+	 *
+	 * @param string $key A unique key that represent this built.
+	 * @param \DataTables\Table\BuiltConfig $builtConfig A BuiltConfig instance.
+	 * @return bool True if the data was successfully saved, false on failure.
+	 */
 	public function save(string $key, BuiltConfig $builtConfig): bool;
 
 	/**
@@ -39,7 +41,7 @@ interface StorageEngineInterface {
 	 * Read if a BuiltConfig for a key.
 	 *
 	 * @param string $key A unique key that represent this built.
-	 * @return BuiltConfig|null BuiltConfig class if the data was successfully read, null on not found.
+	 * @return \DataTables\Table\BuiltConfig|null BuiltConfig class if the data was successfully read, null on not found.
 	 */
 	public function read(string $key): ?BuiltConfig;
 

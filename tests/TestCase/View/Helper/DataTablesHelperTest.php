@@ -1,4 +1,12 @@
 <?php
+/**
+ * Copyright (c) Allan Carvalho 2020.
+ * Under Mit License
+ * php version 7.2
+ *
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ */
 declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\View\Helper;
@@ -8,7 +16,11 @@ use Cake\View\View;
 use DataTables\View\Helper\DataTablesHelper;
 
 /**
- * DataTables\View\Helper\DataTablesHelper Test Case
+ * Class DataTablesHelperTest
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
 class DataTablesHelperTest extends TestCase {
 
@@ -39,6 +51,15 @@ class DataTablesHelperTest extends TestCase {
 		unset($this->DataTables);
 
 		parent::tearDown();
+	}
+
+	/**
+	 * Test renderTable method
+	 *
+	 * @return void
+	 */
+	public function testRenderTable(): void {
+		$this->markTestIncomplete('Not implemented yet.');
 	}
 
 }

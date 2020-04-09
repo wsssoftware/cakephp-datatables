@@ -1,39 +1,38 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 declare(strict_types = 1);
 
 namespace DataTables\StorageEngine;
 
-use Cake\Http\Session;
 use Cake\Routing\Router;
 use DataTables\Table\BuiltConfig;
 
+/**
+ * Class SessionEngine
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ */
 class SessionEngine implements StorageEngineInterface {
 
 	/**
-	 * @var Session|null
+	 * @var \Cake\Http\Session|null
 	 */
 	private $session = null;
 
-    /**
-     * SessionEngine constructor.
-     */
+	/**
+	 * SessionEngine constructor.
+	 */
 	public function __construct() {
-		if (!empty(Router::getRequest()) && !empty(Router::getRequest()->getSession())) {
-			$this->session = Router::getRequest()->getSession();
-		} else {
-			$this->session = new Session();
-		}
+		$this->session = Router::getRequest()->getSession();
 	}
 
 	/**
@@ -56,7 +55,7 @@ class SessionEngine implements StorageEngineInterface {
 	 * @inheritDoc
 	 */
 	public function read(string $key): ?BuiltConfig {
-		/** @var BuiltConfig|null $tableConfig */
+		/** @var \DataTables\Table\BuiltConfig|null $tableConfig */
 		$tableConfig = $this->session->read("DataTables.builtConfigs.$key");
 
 		return ($tableConfig instanceof BuiltConfig) ? $tableConfig : null;

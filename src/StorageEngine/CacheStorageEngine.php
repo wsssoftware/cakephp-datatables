@@ -1,30 +1,33 @@
 <?php
 /**
- * Copyright (c) Allan Carvalho 2019.
+ * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
  *
- * @category CakePHP
- * @package  DataRenderer\Core
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-data-renderer/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * link     https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 declare(strict_types = 1);
 
 namespace DataTables\StorageEngine;
-
 
 use Cake\Cache\Cache;
 use Cake\Cache\Engine\FileEngine;
 use Cake\Core\Configure;
 use DataTables\Table\BuiltConfig;
 
+/**
+ * Class CacheStorageEngine
+ *
+ * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ */
 class CacheStorageEngine implements StorageEngineInterface {
 
-    /**
-     * CacheStorageEngine constructor.
-     */
+	/**
+	 * CacheStorageEngine constructor.
+	 */
 	public function __construct() {
 		$DataTablesCacheConfig = [
 			'className' => FileEngine::class,
@@ -57,9 +60,7 @@ class CacheStorageEngine implements StorageEngineInterface {
 	 * @inheritDoc
 	 */
 	public function read(string $key): ?BuiltConfig {
-        /** @var BuiltConfig $builtConfig */
-        $builtConfig = Cache::read($key, '_data_tables_');
-
+		$builtConfig = Cache::read($key, '_data_tables_');
 		return ($builtConfig instanceof BuiltConfig) ? $builtConfig : null;
 	}
 

@@ -44,7 +44,6 @@ class Plugin extends BasePlugin {
 		foreach ($applicationDataTablesConfigs as $config => $value) {
 			$this->mergeConfiguration('DataTables', (string)$config, $value);
 		}
-
 	}
 
 	/**
@@ -60,7 +59,7 @@ class Plugin extends BasePlugin {
 			foreach ($value as $childConfig => $childValue) {
 				$this->mergeConfiguration("$currentPath.$config", (string)$childConfig, $childValue);
 			}
-		} elseif (!empty($value)) {
+		} else {
 			Configure::write("$currentPath.$config", $value);
 		}
 	}
