@@ -15,7 +15,7 @@ use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Text;
 use Cake\View\View;
-use DataTables\Js\Options;
+use DataTables\Option\MainOption;
 use DataTables\StorageEngine\StorageEngineInterface;
 use DataTables\Table\BuiltConfig;
 use DataTables\Table\Columns;
@@ -115,10 +115,10 @@ class Tools {
 	 * Get the JsOptions class used in the DataTables table.
 	 *
 	 * @param \DataTables\Table\Tables $table Tables class instance.
-	 * @return \DataTables\Js\Options
+	 * @return \DataTables\Option\MainOption
 	 */
-	private function buildOptions(Tables $table): Options {
-		return new Options();
+	private function buildOptions(Tables $table): MainOption {
+		return new MainOption();
 	}
 
 	/**

@@ -9,7 +9,7 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Js;
+namespace DataTables\Option;
 
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Hash;
@@ -19,34 +19,26 @@ use InvalidArgumentException;
 /**
  * Class Options
  *
+ * @property \DataTables\Option\SearchOption $Search
  * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class Options {
+final class MainOption extends OptionAbstract {
 
 	/**
-	 * The options that was set and/or must be printed.
-	 *
 	 * @var array
+	 * @inheritDoc
 	 */
-	private $_mustPrint = [
-		'serverSide',
+	protected $_mustPrint = [
+		'serverSide' => true,
 	];
 
 	/**
-	 * Define if all options will be printed or not.
-	 *
-	 * @var bool
-	 */
-	private $_printAllOptions = false;
-
-	/**
-	 * DataTables Js configs
-	 *
 	 * @var array
+	 * @inheritDoc
 	 */
-	private $_config = [
+	protected $_config = [
 		'autoWidth' => true,
 		'deferRender' => false,
 		'info' => true,
@@ -54,7 +46,8 @@ class Options {
 		'ordering' => true,
 		'paging' => true,
 		'processing' => false,
-		'scrollX' => null,
+		'scrollX' => false,
+		'scrollY' => null,
 		'searching' => true,
 		'serverSide' => true,
 		'stateSave' => false,
@@ -68,33 +61,26 @@ class Options {
 		'orderClasses' => true,
 		'orderFixed' => null,
 		'orderMulti' => true,
+		'pageLength' => 10,
+		'pagingType' => 'simple_numbers',
+		'renderer' => null,
+		'retrieve' => false,
+		'rowId' => 'DT_RowId',
+		'scrollCollapse' => false,
+		'search' => null,
+		'searchCols' => null,
+		'searchDelay' => null,
+		'stateDuration' => 7200,
+		'stripeClasses' => null,
+		'tabIndex' => 0,
 	];
 
 	/**
 	 * Options constructor.
 	 */
 	public function __construct() {
-	}
-
-	/**
-	 * Get if all options will be printed or not.
-	 *
-	 * @return bool
-	 */
-	public function isPrintAllOptions(): bool {
-		return $this->_printAllOptions;
-	}
-
-	/**
-	 * Define if all options will be printed or not.
-	 *
-	 * @param bool $printAllOptions
-	 * @return $this
-	 */
-	public function setPrintAllOptions(bool $printAllOptions): self {
-		$this->_printAllOptions = $printAllOptions;
-
-		return $this;
+		$this->_config = Hash::insert($this->_config, 'search', new SearchOption($this));
+		$this->_mainOption = $this;
 	}
 
 	/**
@@ -120,7 +106,7 @@ class Options {
 	 */
 	public function setAutoWidth(bool $autoWidth): self {
 		$this->_config = Hash::insert($this->_config, 'autoWidth', $autoWidth);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'autoWidth', true);
+		$this->setMustPrint('autoWidth');
 
 		return $this;
 	}
@@ -170,7 +156,7 @@ class Options {
 	 */
 	public function setDeferRender(bool $deferRender): self {
 		$this->_config = Hash::insert($this->_config, 'deferRender', $deferRender);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'deferRender', true);
+		$this->setMustPrint('deferRender');
 
 		return $this;
 	}
@@ -204,7 +190,7 @@ class Options {
 	 */
 	public function setInfo(bool $info): self {
 		$this->_config = Hash::insert($this->_config, 'info', $info);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'info', true);
+		$this->setMustPrint('info');
 
 		return $this;
 	}
@@ -254,7 +240,7 @@ class Options {
 	 */
 	public function setLengthChange(bool $lengthChange): self {
 		$this->_config = Hash::insert($this->_config, 'lengthChange', $lengthChange);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'lengthChange', true);
+		$this->setMustPrint('lengthChange');
 
 		return $this;
 	}
@@ -292,7 +278,7 @@ class Options {
 	 */
 	public function setOrdering(bool $ordering): self {
 		$this->_config = Hash::insert($this->_config, 'ordering', $ordering);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'ordering', true);
+		$this->setMustPrint('ordering');
 
 		return $this;
 	}
@@ -324,7 +310,7 @@ class Options {
 	 */
 	public function setPaging(bool $paging): self {
 		$this->_config = Hash::insert($this->_config, 'paging', $paging);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'paging', true);
+		$this->setMustPrint('paging');
 
 		return $this;
 	}
@@ -354,7 +340,7 @@ class Options {
 	 */
 	public function setProcessing(bool $processing): self {
 		$this->_config = Hash::insert($this->_config, 'processing', $processing);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'processing', true);
+		$this->setMustPrint('processing');
 
 		return $this;
 	}
@@ -390,7 +376,7 @@ class Options {
 	 */
 	public function setScrollX(bool $scrollX): self {
 		$this->_config = Hash::insert($this->_config, 'scrollX', $scrollX);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'scrollX', true);
+		$this->setMustPrint('scrollX');
 
 		return $this;
 	}
@@ -428,7 +414,7 @@ class Options {
 	 */
 	public function setScrollY(?string $scrollY): self {
 		$this->_config = Hash::insert($this->_config, 'scrollY', $scrollY);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'scrollY', true);
+		$this->setMustPrint('scrollY');
 
 		return $this;
 	}
@@ -476,7 +462,7 @@ class Options {
 	 */
 	public function setSearching(bool $searching): self {
 		$this->_config = Hash::insert($this->_config, 'searching', $searching);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'searching', true);
+		$this->setMustPrint('searching');
 
 		return $this;
 	}
@@ -531,7 +517,7 @@ class Options {
 	public function setServerSide(bool $serverSide): self {
 		throw new FatalErrorException("By the plugin business rule, you can't change this option.");
 		//$this->_config = Hash::insert($this->_config, 'serverSide', $serverSide);
-		//$this->_mustPrint = Hash::insert($this->_mustPrint, 'serverSide', true);
+		//$this->setMustPrint('serverSide');
 		//
 		//return $this;
 	}
@@ -585,7 +571,7 @@ class Options {
 	 */
 	public function setStateSave(bool $stateSave): self {
 		$this->_config = Hash::insert($this->_config, 'stateSave', $stateSave);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'stateSave', true);
+		$this->setMustPrint('stateSave');
 
 		return $this;
 	}
@@ -663,7 +649,7 @@ class Options {
 		}
 
 		$this->_config = Hash::insert($this->_config, 'deferLoading', $deferLoading);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'deferLoading', true);
+		$this->setMustPrint('deferLoading');
 
 		return $this;
 	}
@@ -699,7 +685,7 @@ class Options {
 	 */
 	public function setDestroy(bool $destroy): self {
 		$this->_config = Hash::insert($this->_config, 'destroy', $destroy);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'destroy', true);
+		$this->setMustPrint('destroy');
 
 		return $this;
 	}
@@ -731,7 +717,7 @@ class Options {
 	 */
 	public function setDisplayStart(int $displayStart): self {
 		$this->_config = Hash::insert($this->_config, 'displayStart', $displayStart);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'displayStart', true);
+		$this->setMustPrint('displayStart');
 
 		return $this;
 	}
@@ -774,7 +760,7 @@ class Options {
 	 */
 	public function setDom(string $dom): self {
 		$this->_config = Hash::insert($this->_config, 'dom', $dom);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'dom', true);
+		$this->setMustPrint('dom');
 
 		return $this;
 	}
@@ -834,7 +820,7 @@ class Options {
 			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu, 'integer', 'integer', '$lengthMenu');
 		}
 		$this->_config = Hash::insert($this->_config, 'lengthMenu', $lengthMenu);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'lengthMenu', true);
+		$this->setMustPrint('lengthMenu');
 
 		return $this;
 	}
@@ -888,7 +874,7 @@ class Options {
 			}
 		}
 		$this->_config = Hash::insert($this->_config, 'order', $order);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'order', true);
+		$this->setMustPrint('order');
 
 		return $this;
 	}
@@ -944,7 +930,7 @@ class Options {
 	 */
 	public function setOrderCellsTop(bool $orderCellsTop): self {
 		$this->_config = Hash::insert($this->_config, 'orderCellsTop', $orderCellsTop);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderCellsTop', true);
+		$this->setMustPrint('orderCellsTop');
 
 		return $this;
 	}
@@ -988,7 +974,7 @@ class Options {
 	 */
 	public function setOrderClasses(bool $orderClasses): self {
 		$this->_config = Hash::insert($this->_config, 'orderClasses', $orderClasses);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderClasses', true);
+		$this->setMustPrint('orderClasses');
 
 		return $this;
 	}
@@ -1084,7 +1070,7 @@ class Options {
 			}
 		}
 		$this->_config = Hash::insert($this->_config, 'orderFixed', $orderFixed);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderFixed', true);
+		$this->setMustPrint('orderFixed');
 
 		return $this;
 	}
@@ -1124,7 +1110,538 @@ class Options {
 	 */
 	public function setOrderMulti(bool $orderMulti): self {
 		$this->_config = Hash::insert($this->_config, 'orderMulti', $orderMulti);
-		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderMulti', true);
+		$this->setMustPrint('orderMulti');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * Number of rows to display on a single page when using pagination.
+	 *
+	 * If lengthChange is feature enabled (it is by default) then the end user will be able to override the value set
+	 * here to a custom setting using a pop-up menu (see lengthMenu).
+	 *
+	 * @link https://datatables.net/reference/option/pageLength
+	 * @return int
+	 */
+	public function getPageLength(): int {
+		return Hash::get($this->_config, 'pageLength');
+	}
+
+	/**
+	 * Setter method.
+	 * Number of rows to display on a single page when using pagination.
+	 *
+	 * If lengthChange is feature enabled (it is by default) then the end user will be able to override the value set
+	 * here to a custom setting using a pop-up menu (see lengthMenu).
+	 *
+	 * @param int $pageLength
+	 * @return $this
+	 * @link https://datatables.net/reference/option/pageLength
+	 */
+	public function setPageLength(int $pageLength): self {
+		if ($pageLength <= 0) {
+			throw new InvalidArgumentException("\$pageLength must be a positive integer number. Found: $pageLength.");
+		}
+		$this->_config = Hash::insert($this->_config, 'pageLength', $pageLength);
+		$this->setMustPrint('pageLength');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * The pagination option of DataTables will display a pagination control below the table (by default, its position
+	 * can be changed using dom and CSS) with buttons that the end user can use to navigate the pages of the table.
+	 * Which buttons are shown in the pagination control are defined by the option given here.
+	 *
+	 * DataTables has six built-in paging button arrangements:
+	 *  - numbers - Page number buttons only (1.10.8)
+	 *  - simple - 'Previous' and 'Next' buttons only
+	 *  - simple_numbers - 'Previous' and 'Next' buttons, plus page numbers
+	 *  - full - 'First', 'Previous', 'Next' and 'Last' buttons
+	 *  - full_numbers - 'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers
+	 *  - first_last_numbers - 'First' and 'Last' buttons, plus page numbers
+	 *  - Further methods can be added using plug-ins.
+	 *
+	 * @link https://datatables.net/reference/option/pagingType
+	 * @return string
+	 */
+	public function getPagingType(): string {
+		return Hash::get($this->_config, 'pagingType');
+	}
+
+	/**
+	 * Setter method.
+	 * The pagination option of DataTables will display a pagination control below the table (by default, its position
+	 * can be changed using dom and CSS) with buttons that the end user can use to navigate the pages of the table.
+	 * Which buttons are shown in the pagination control are defined by the option given here.
+	 *
+	 * DataTables has six built-in paging button arrangements:
+	 *  - numbers - Page number buttons only (1.10.8)
+	 *  - simple - 'Previous' and 'Next' buttons only
+	 *  - simple_numbers - 'Previous' and 'Next' buttons, plus page numbers
+	 *  - full - 'First', 'Previous', 'Next' and 'Last' buttons
+	 *  - full_numbers - 'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers
+	 *  - first_last_numbers - 'First' and 'Last' buttons, plus page numbers
+	 *  - Further methods can be added using plug-ins.
+	 *
+	 * @param string $pagingType
+	 * @return $this
+	 * @link https://datatables.net/reference/option/pagingType
+	 */
+	public function setPagingType(string $pagingType): self {
+		$this->_config = Hash::insert($this->_config, 'pagingType', $pagingType);
+		$this->setMustPrint('pagingType');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * DataTables adds complex components to your HTML page, such as the pagination control. The business logic used to
+	 * calculate what information should be displayed (what buttons in the case of the pagination buttons) is core to
+	 * DataTables and generally doesn't vary how the buttons are actually displayed based on the styling requirements
+	 * of the page. For example the pagination buttons might be displayed as li elements in a ul list, or simply as a
+	 * collection of a buttons.
+	 *
+	 * This ability to use different renderers, while maintaining the same core business logic, is fundamental to how
+	 * DataTables provides integration options for CSS frameworks such as Bootstrap, Foundation and jQuery UI,
+	 * customising the HTML it uses to fit the requirements of each framework.
+	 *
+	 * This parameter controls which renderers will be used. The value given will be used if such a renderer exists,
+	 * otherwise the default renderer will be used. Additional renderers can be added by plug-ins.
+	 *
+	 * DataTables currently supports two different types of renderers:
+	 *  - header - header cell renderer
+	 *  - pageButton - pagination buttons
+	 *
+	 * This list will likely expand significantly in future versions of DataTables!
+	 *
+	 * @link https://datatables.net/reference/option/renderer
+	 * @return string|array
+	 */
+	public function getRenderer() {
+		return Hash::get($this->_config, 'renderer');
+	}
+
+	/**
+	 * Setter method.
+	 * DataTables adds complex components to your HTML page, such as the pagination control. The business logic used to
+	 * calculate what information should be displayed (what buttons in the case of the pagination buttons) is core to
+	 * DataTables and generally doesn't vary how the buttons are actually displayed based on the styling requirements
+	 * of the page. For example the pagination buttons might be displayed as li elements in a ul list, or simply as a
+	 * collection of a buttons.
+	 *
+	 * This ability to use different renderers, while maintaining the same core business logic, is fundamental to how
+	 * DataTables provides integration options for CSS frameworks such as Bootstrap, Foundation and jQuery UI,
+	 * customising the HTML it uses to fit the requirements of each framework.
+	 *
+	 * This parameter controls which renderers will be used. The value given will be used if such a renderer exists,
+	 * otherwise the default renderer will be used. Additional renderers can be added by plug-ins.
+	 *
+	 * DataTables currently supports two different types of renderers:
+	 *  - header - header cell renderer
+	 *  - pageButton - pagination buttons
+	 *
+	 * This list will likely expand significantly in future versions of DataTables!
+	 *
+	 * @param string|array $renderer
+	 * @return $this
+	 * @link https://datatables.net/reference/option/renderer
+	 */
+	public function setRenderer($renderer): self {
+		$rendererType = getType($renderer);
+		if (!in_array($rendererType, ['string', 'array'])) {
+			throw new InvalidArgumentException("\$renderer must be a string or array. Found: $rendererType.");
+		}
+		if (is_array($renderer)) {
+			Tools::getInstance()->checkKeysValueTypesOrFail($renderer, 'string', 'string', '$renderer');
+		}
+		$this->_config = Hash::insert($this->_config, 'renderer', $renderer);
+		$this->setMustPrint('renderer');
+
+		return $this;
+	}
+
+	/**
+	 * Checker method.
+	 * Retrieve the DataTables object for the given selector. Note that if the table has already been initialised, this
+	 * parameter will cause DataTables to simply return the object that has already been set up - it will not take
+	 * account of any changes you might have made to the initialisation object passed to DataTables (setting this
+	 *
+	 * The destroy option can be used to reinitialise a table with different options if required.
+	 *
+	 * @link https://datatables.net/reference/option/retrieve
+	 * @return bool
+	 */
+	public function isRetrieve(): bool {
+		return Hash::get($this->_config, 'retrieve');
+	}
+
+	/**
+	 * Setter method.
+	 * Retrieve the DataTables object for the given selector. Note that if the table has already been initialised, this
+	 * parameter will cause DataTables to simply return the object that has already been set up - it will not take
+	 * account of any changes you might have made to the initialisation object passed to DataTables (setting this
+	 *
+	 * The destroy option can be used to reinitialise a table with different options if required.
+	 *
+	 * @param bool $retrieve
+	 * @return $this
+	 * @link https://datatables.net/reference/option/retrieve
+	 */
+	public function setRetrieve(bool $retrieve): self {
+		$this->_config = Hash::insert($this->_config, 'retrieve', $retrieve);
+		$this->setMustPrint('retrieve');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * It can often be useful to have a id attribute on each tr element in a DataTable for row selection and data
+	 * source identification, particularly when using events.
+	 *
+	 * DataTables will attempt to automatically read an id value from the data source for each row using the property
+	 * defined by this option. By default it is DT_RowId but can be set to any other name. As with columns.data it can
+	 * also read from a nested JSON data source by using Javascript dotted object notation (e.g. DT_RowId: 'image.id').
+	 *
+	 * If no id value for the row is found, the id property will not be automatically set.
+	 *
+	 * Any row id values that are given in the data source should match the HTML specification for what values it can
+	 * take:
+	 *  - The value must be unique amongst all the IDs in the element's home subtree and must contain at least one
+	 *    character. The value must not contain any space characters.
+	 *
+	 * You may also wish to consider the CSS 2.1 specification of an identifier which is more restrictive than HTML5's
+	 * and will provide maximum compatibility with jQuery:
+	 *  - identifiers (including element names, classes, and IDs in selectors) can contain only the characters
+	 *    [a-zA-Z0-9] and ISO 10646 characters U+00A0 and higher, plus the hyphen (-) and the underscore (_); they
+	 *    cannot start with a digit, two hyphens, or a hyphen followed by a digit. Identifiers can also contain escaped
+	 *    characters and any ISO 10646 character as a numeric code.
+	 *
+	 * @link https://datatables.net/reference/option/rowId
+	 * @return string
+	 */
+	public function getRowId(): string {
+		return Hash::get($this->_config, 'rowId');
+	}
+
+	/**
+	 * Setter method.
+	 * It can often be useful to have a id attribute on each tr element in a DataTable for row selection and data
+	 * source identification, particularly when using events.
+	 *
+	 * DataTables will attempt to automatically read an id value from the data source for each row using the property
+	 * defined by this option. By default it is DT_RowId but can be set to any other name. As with columns.data it can
+	 * also read from a nested JSON data source by using Javascript dotted object notation (e.g. DT_RowId: 'image.id').
+	 *
+	 * If no id value for the row is found, the id property will not be automatically set.
+	 *
+	 * Any row id values that are given in the data source should match the HTML specification for what values it can
+	 * take:
+	 *  - The value must be unique amongst all the IDs in the element's home subtree and must contain at least one
+	 *    character. The value must not contain any space characters.
+	 *
+	 * You may also wish to consider the CSS 2.1 specification of an identifier which is more restrictive than HTML5's
+	 * and will provide maximum compatibility with jQuery:
+	 *  - identifiers (including element names, classes, and IDs in selectors) can contain only the characters
+	 *    [a-zA-Z0-9] and ISO 10646 characters U+00A0 and higher, plus the hyphen (-) and the underscore (_); they
+	 *    cannot start with a digit, two hyphens, or a hyphen followed by a digit. Identifiers can also contain escaped
+	 *    characters and any ISO 10646 character as a numeric code.
+	 *
+	 * @param string $rowId
+	 * @return $this
+	 * @link https://datatables.net/reference/option/rowId
+	 */
+	public function setRowId(string $rowId): self {
+		$this->_config = Hash::insert($this->_config, 'rowId', $rowId);
+		$this->setMustPrint('rowId');
+
+		return $this;
+	}
+
+	/**
+	 * Checker method.
+	 * When vertical (y) scrolling is enabled through the use of the scrollY option, DataTables will force the height
+	 * of the table's viewport to the given height at all times (useful for layout). However, this can look odd when
+	 * filtering data down to a small data set, and the footer is left "floating" further down. This parameter (when
+	 * enabled) will cause DataTables to collapse the table's viewport when the result set fits within the given Y
+	 * height.
+	 *
+	 * @link https://datatables.net/reference/option/scrollCollapse
+	 * @return bool
+	 */
+	public function isScrollCollapse(): bool {
+		return Hash::get($this->_config, 'scrollCollapse');
+	}
+
+	/**
+	 * Setter method.
+	 * When vertical (y) scrolling is enabled through the use of the scrollY option, DataTables will force the height
+	 * of the table's viewport to the given height at all times (useful for layout). However, this can look odd when
+	 * filtering data down to a small data set, and the footer is left "floating" further down. This parameter (when
+	 * enabled) will cause DataTables to collapse the table's viewport when the result set fits within the given Y
+	 * height.
+	 *
+	 * @param bool $scrollCollapse
+	 * @return $this
+	 * @link https://datatables.net/reference/option/scrollCollapse
+	 */
+	public function setScrollCollapse(bool $scrollCollapse): self {
+		$this->_config = Hash::insert($this->_config, 'scrollCollapse', $scrollCollapse);
+		$this->setMustPrint('scrollCollapse');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * Basically the same as the search option, but in this case for individual columns, rather than the global filter,
+	 * this option defined the filtering to apply to the table during initialisation.
+	 *
+	 * The array must be of the same size as the number of columns, and each element be an object with the parameters
+	 * search, regex (optional, default false) and smart (optional, default true). null is also accepted and the
+	 * default will be used. See the search documentation for more information on these parameters.
+	 *
+	 * @link https://datatables.net/reference/option/searchCols
+	 * @return array
+	 */
+	public function getSearchCols(): array {
+		return Hash::get($this->_config, 'searchCols');
+	}
+
+	/**
+	 * Setter method.
+	 * Basically the same as the search option, but in this case for individual columns, rather than the global filter,
+	 * this option defined the filtering to apply to the table during initialisation.
+	 *
+	 * The array must be of the same size as the number of columns, and each element be an object with the parameters
+	 * search, regex (optional, default false) and smart (optional, default true). null is also accepted and the
+	 * default will be used. See the search documentation for more information on these parameters.
+	 *
+	 * @param array $searchCols
+	 * @return $this
+	 * @link https://datatables.net/reference/option/searchCols
+	 */
+	public function setSearchCols(array $searchCols): self {
+		Tools::getInstance()->checkKeysValueTypesOrFail($searchCols, ['integer'], ['array', 'NULL'], '$searchCols');
+		foreach ($searchCols as $searchCol) {
+			if ($searchCol !== null) {
+				foreach ($searchCol as $key => $item) {
+					$itemType = getType($item);
+					switch ($key) {
+						case 'caseInsensitive':
+						case 'regex':
+						case 'smart':
+							if ($itemType !== 'boolean') {
+								throw new InvalidArgumentException("$key param must be a boolean. Found: $itemType.");
+							}
+	      break;
+						case 'search':
+							if ($itemType !== 'string') {
+								throw new InvalidArgumentException("$key param must be a string. Found: $itemType.");
+							}
+	      break;
+						default:
+	      throw new InvalidArgumentException("You can use only 'caseInsensitive', 'regex', 'search' or 'smart' param. Found: $key.");
+					}
+				}
+			}
+		}
+		$this->_config = Hash::insert($this->_config, 'searchCols', $searchCols);
+		$this->setMustPrint('searchCols');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * The built-in DataTables global search (by default at the top right of every DataTable) will instantly search the
+	 * table on every keypress when in client-side processing mode and reduce the search call frequency automatically
+	 * to 400mS when in server-side processing mode. This call frequency (throttling) can be controlled using the
+	 * searchDelay parameter for both client-side and server-side processing.
+	 *
+	 * Being able to control the call frequency has a number of uses:
+	 *  - Older browsers and slower computers can have their processing load reduced by reducing the search frequency
+	 *  - Fewer table redraws while searching can be less distracting for the user
+	 *  - Reduce the load on the server when using server-side processing by making fewer calls
+	 *  - Conversely, you can speed up the search when using server-side processing by reducing the default of 400mS to
+	 *    instant (0).
+	 *
+	 * As with many other parts of DataTables, it is up to yourself how you configure it to suit your needs!
+	 *
+	 * The value given for searchDelay is in milliseconds (mS).
+	 *
+	 * Please note that this option effects only the built in global search box that DataTables provides. It does not
+	 * effect the search() or column().search() methods at all. If you wish to be able to throttle calls to those API
+	 * methods use the utility method $.fn.dataTable.util.throttle().
+	 *
+	 * @link https://datatables.net/reference/option/searchDelay
+	 * @return int
+	 */
+	public function getSearchDelay(): int {
+		return Hash::get($this->_config, 'searchDelay');
+	}
+
+	/**
+	 * Setter method.
+	 * The built-in DataTables global search (by default at the top right of every DataTable) will instantly search the
+	 * table on every keypress when in client-side processing mode and reduce the search call frequency automatically
+	 * to 400mS when in server-side processing mode. This call frequency (throttling) can be controlled using the
+	 * searchDelay parameter for both client-side and server-side processing.
+	 *
+	 * Being able to control the call frequency has a number of uses:
+	 *  - Older browsers and slower computers can have their processing load reduced by reducing the search frequency
+	 *  - Fewer table redraws while searching can be less distracting for the user
+	 *  - Reduce the load on the server when using server-side processing by making fewer calls
+	 *  - Conversely, you can speed up the search when using server-side processing by reducing the default of 400mS to
+	 *    instant (0).
+	 *
+	 * As with many other parts of DataTables, it is up to yourself how you configure it to suit your needs!
+	 *
+	 * The value given for searchDelay is in milliseconds (mS).
+	 *
+	 * Please note that this option effects only the built in global search box that DataTables provides. It does not
+	 * effect the search() or column().search() methods at all. If you wish to be able to throttle calls to those API
+	 * methods use the utility method $.fn.dataTable.util.throttle().
+	 *
+	 * @param int $searchDelay
+	 * @return $this
+	 * @link https://datatables.net/reference/option/searchDelay
+	 */
+	public function setSearchDelay(int $searchDelay): self {
+		if ($searchDelay < 0) {
+			throw new InvalidArgumentException("\$searchDelay must be a positive integer number. Found: $searchDelay.");
+		}
+		$this->_config = Hash::insert($this->_config, 'searchDelay', $searchDelay);
+		$this->setMustPrint('searchDelay');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * Duration for which the saved state information is considered valid. After this period has elapsed the state will
+	 * be returned to the default.
+	 *
+	 * This option is also used to indicate to DataTables if localStorage or sessionStorage should be used for storing
+	 * the table's state. When set to -1 sessionStorage will be used, while for 0 or greater localStorage will be used.
+	 *
+	 * The difference between the two storage APIs is that sessionStorage retains data only for the current session
+	 * (i..e the current browser window). For more information on these two HTML APIs please refer to the Mozilla
+	 * Storage documentation.
+	 *
+	 * Please note that the value is given in seconds. The value 0 is a special value as it indicates that the state
+	 * can be stored and retrieved indefinitely with no time limit.
+	 *
+	 * @link https://datatables.net/reference/option/stateDuration
+	 * @return int
+	 */
+	public function getStateDuration(): int {
+		return Hash::get($this->_config, 'stateDuration');
+	}
+
+	/**
+	 * Setter method.
+	 * Duration for which the saved state information is considered valid. After this period has elapsed the state will
+	 * be returned to the default.
+	 *
+	 * This option is also used to indicate to DataTables if localStorage or sessionStorage should be used for storing
+	 * the table's state. When set to -1 sessionStorage will be used, while for 0 or greater localStorage will be used.
+	 *
+	 * The difference between the two storage APIs is that sessionStorage retains data only for the current session
+	 * (i..e the current browser window). For more information on these two HTML APIs please refer to the Mozilla
+	 * Storage documentation.
+	 *
+	 * Please note that the value is given in seconds. The value 0 is a special value as it indicates that the state
+	 * can be stored and retrieved indefinitely with no time limit.
+	 *
+	 * @param int $stateDuration
+	 * @return $this
+	 * @link https://datatables.net/reference/option/stateDuration
+	 */
+	public function setStateDuration(int $stateDuration): self {
+		if ($stateDuration <= 0) {
+			throw new InvalidArgumentException("\$stateDuration must be a positive integer number. Found: $stateDuration.");
+		}
+		$this->_config = Hash::insert($this->_config, 'stateDuration', $stateDuration);
+		$this->setMustPrint('stateDuration');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * An array of CSS classes that should be applied to displayed rows, in sequence. This array may be of any length,
+	 * and DataTables will apply each class sequentially, looping when required.
+	 *
+	 * Note that by default this option will take the values determined by the $.fn.dataTable.ext.classes.stripe*
+	 * options (these are odd and even by default).
+	 *
+	 * @link https://datatables.net/reference/option/stripeClasses
+	 * @return array
+	 */
+	public function getStripeClasses(): array {
+		return Hash::get($this->_config, 'stripeClasses');
+	}
+
+	/**
+	 * Setter method.
+	 * An array of CSS classes that should be applied to displayed rows, in sequence. This array may be of any length,
+	 * and DataTables will apply each class sequentially, looping when required.
+	 *
+	 * Note that by default this option will take the values determined by the $.fn.dataTable.ext.classes.stripe*
+	 * options (these are odd and even by default).
+	 *
+	 * @param array $stripeClasses
+	 * @return $this
+	 * @link https://datatables.net/reference/option/stripeClasses
+	 */
+	public function setStripeClasses(array $stripeClasses): self {
+		Tools::getInstance()->checkKeysValueTypesOrFail($stripeClasses, 'integer', 'string', '$stripeClasses');
+		$this->_config = Hash::insert($this->_config, 'stripeClasses', $stripeClasses);
+		$this->setMustPrint('stripeClasses');
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * By default DataTables allows keyboard navigation of the table (sorting, paging, and filtering) by adding a
+	 * tabindex attribute to the required elements. This allows the end user to tab through the controls and press the
+	 * enter key to activate them, allowing the table controls to be accessible without a mouse.
+	 *
+	 * The default tabindex is 0, meaning that the tab follows the flow of the document. You can overrule this using
+	 * this parameter if you wish. Use a value of -1 to disable built-in keyboard navigation, although this is not
+	 * recommended for accessibility reasons.
+	 *
+	 * @link https://datatables.net/reference/option/tabIndex
+	 * @return int
+	 */
+	public function getTabIndex(): int {
+		return Hash::get($this->_config, 'tabIndex');
+	}
+
+	/**
+	 * Setter method.
+	 * By default DataTables allows keyboard navigation of the table (sorting, paging, and filtering) by adding a
+	 * tabindex attribute to the required elements. This allows the end user to tab through the controls and press the
+	 * enter key to activate them, allowing the table controls to be accessible without a mouse.
+	 *
+	 * The default tabindex is 0, meaning that the tab follows the flow of the document. You can overrule this using
+	 * this parameter if you wish. Use a value of -1 to disable built-in keyboard navigation, although this is not
+	 * recommended for accessibility reasons.
+	 *
+	 * @param int $tabIndex
+	 * @return $this
+	 * @link https://datatables.net/reference/option/tabIndex
+	 */
+	public function setTabIndex(int $tabIndex): self {
+		$this->_config = Hash::insert($this->_config, 'tabIndex', $tabIndex);
+		$this->setMustPrint('tabIndex');
 
 		return $this;
 	}
