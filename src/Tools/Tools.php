@@ -13,13 +13,15 @@ namespace DataTables\Tools;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
+use Cake\Utility\Text;
 use Cake\View\View;
+use DataTables\Js\Options;
 use DataTables\StorageEngine\StorageEngineInterface;
 use DataTables\Table\BuiltConfig;
 use DataTables\Table\Columns;
-use DataTables\Table\JsOptions;
 use DataTables\Table\QueryBaseState;
 use DataTables\Table\Tables;
+use InvalidArgumentException;
 use ReflectionClass;
 
 /**
@@ -39,18 +41,6 @@ class Tools {
 	public static $instance;
 
 	/**
-	 * Return a instance of builder object.
-	 *
-	 * @return \DataTables\Tools\Tools
-	 */
-	public static function getInstance(): Tools {
-		if (static::$instance === null) {
-			static::$instance = new self();
-		}
-		return static::$instance;
-	}
-
-	/**
 	 * Built a BuiltConfig class
 	 *
 	 * @param string $tablesClassWithNameSpace Tables class with full namespace.
@@ -63,10 +53,10 @@ class Tools {
 		$tables = static::getInstance()->buildTables($tablesClassWithNameSpace, $configMethod);
 		$queryBaseState = static::getInstance()->buildQueryBaseState($tables);
 		$columns = static::getInstance()->buildColumns($tables);
-		$jsOptions = static::getInstance()->buildJsOptions($tables);
-		$tables->{$configMethod . 'Config'}($queryBaseState, $columns, $jsOptions);
+		$options = static::getInstance()->buildOptions($tables);
+		$tables->{$configMethod . 'Config'}($queryBaseState, $columns, $options);
 		$renderedTable = $view->cell('DataTables.DataTables::table', [$columns])->render();
-		return new BuiltConfig($md5, $renderedTable, $queryBaseState, $columns, $jsOptions);
+		return new BuiltConfig($md5, $renderedTable, $queryBaseState, $columns, $options);
 	}
 
 	/**
@@ -87,6 +77,18 @@ class Tools {
 		}
 
 		return $tables;
+	}
+
+	/**
+	 * Return a instance of builder object.
+	 *
+	 * @return \DataTables\Tools\Tools
+	 */
+	public static function getInstance(): Tools {
+		if (static::$instance === null) {
+			static::$instance = new self();
+		}
+		return static::$instance;
 	}
 
 	/**
@@ -113,10 +115,10 @@ class Tools {
 	 * Get the JsOptions class used in the DataTables table.
 	 *
 	 * @param \DataTables\Table\Tables $table Tables class instance.
-	 * @return \DataTables\Table\JsOptions
+	 * @return \DataTables\Js\Options
 	 */
-	private function buildJsOptions(Tables $table): JsOptions {
-		return new JsOptions();
+	private function buildOptions(Tables $table): Options {
+		return new Options();
 	}
 
 	/**
@@ -138,6 +140,42 @@ class Tools {
 	 */
 	public function getTablesMd5(string $tablesClassWithNameSpace): string {
 		return md5_file((new ReflectionClass($tablesClassWithNameSpace))->getFileName());
+	}
+
+	/**
+	 * Check if the array keys and values are correct.
+	 *
+	 * @param array $array
+	 * @param string|array $allowedKeyTypes A allowed types for array key.
+	 * @param string|array $allowedValueTypes A allowed types for array value.
+	 * @param string|null $inString A string to make the error more friendly.
+	 * @return void
+	 */
+	public function checkKeysValueTypesOrFail(array $array, $allowedKeyTypes = [], $allowedValueTypes = [], string $inString = null): void {
+		$allowedKeyTypesType = getType($allowedKeyTypes);
+		if (!in_array($allowedKeyTypesType, ['array', 'string'])) {
+			throw new FatalErrorException(sprintf('The $keyType type must be an array or string. Found : %s', $allowedKeyTypesType));
+		} elseif ($allowedKeyTypesType === 'string') {
+			$allowedKeyTypes = [$allowedKeyTypes];
+		}
+		$allowedValueTypesType = getType($allowedValueTypes);
+		if (!in_array($allowedValueTypesType, ['array', 'string'])) {
+			throw new FatalErrorException(sprintf('The $valueType type must be an array or string. Found : %s', $allowedValueTypesType));
+		} elseif ($allowedValueTypesType === 'string') {
+			$allowedValueTypes = [$allowedValueTypes];
+		}
+		foreach ($array as $key => $value) {
+			$keyType = getType($key);
+			$valueType = getType($value);
+			if (!in_array($keyType, $allowedKeyTypes)) {
+				$needleString = str_replace(' and ', ' or ', Text::toList($allowedKeyTypes));
+				throw new InvalidArgumentException("In $inString array, the keys always must be $needleString. key: $key.");
+			}
+			if (!in_array($valueType, $allowedValueTypes)) {
+				$needleString = str_replace(' and ', ' or ', Text::toList($allowedValueTypes));
+				throw new InvalidArgumentException("In $inString array, the record $key isn't $needleString. Found: '$valueType'.");
+			}
+		}
 	}
 
 }

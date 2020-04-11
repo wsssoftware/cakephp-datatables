@@ -11,6 +11,8 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use DataTables\Js\Options;
+
 /**
  * Class BuiltConfig
  *
@@ -41,9 +43,9 @@ class BuiltConfig {
 	private $_columns;
 
 	/**
-	 * @var \DataTables\Table\JsOptions The DataTables JS Options.
+	 * @var \DataTables\Js\Options The DataTables JS Options.
 	 */
-	private $_jsOptions;
+	private $_options;
 
 	/**
 	 * BuiltConfig constructor.
@@ -52,14 +54,14 @@ class BuiltConfig {
 	 * @param string $_tableHtml The DataTables config table html.
 	 * @param \DataTables\Table\QueryBaseState $queryBaseState The DataTables base query.
 	 * @param \DataTables\Table\Columns $_columns The DataTables table columns.
-	 * @param \DataTables\Table\JsOptions $jsOptions The DataTables JS Options.
+	 * @param \DataTables\Js\Options $options The DataTables JS Options.
 	 */
-	public function __construct(string $tablesClassMd5, string $_tableHtml, QueryBaseState $queryBaseState, Columns $_columns, JsOptions $jsOptions) {
+	public function __construct(string $tablesClassMd5, string $_tableHtml, QueryBaseState $queryBaseState, Columns $_columns, Options $options) {
 		$this->_tablesClassMd5 = $tablesClassMd5;
 		$this->_tableHtml = $_tableHtml;
 		$this->_queryBaseState = $queryBaseState;
 		$this->_columns = $_columns;
-		$this->_jsOptions = $jsOptions;
+		$this->_options = $options;
 	}
 
 	/**
@@ -123,18 +125,18 @@ class BuiltConfig {
 	}
 
 	/**
-	 * @return \DataTables\Table\JsOptions
+	 * @return \DataTables\Js\Options
 	 */
-	public function getJsOptions(): JsOptions {
-		return $this->_jsOptions;
+	public function getOptions(): Options {
+		return $this->_options;
 	}
 
 	/**
-	 * @param \DataTables\Table\JsOptions $jsOptions
+	 * @param \DataTables\Js\Options $options
 	 * @return void
 	 */
-	public function setJsOptions(JsOptions $jsOptions): void {
-		$this->_jsOptions = $jsOptions;
+	public function setOptions(Options $options): void {
+		$this->_options = $options;
 	}
 
 }
