@@ -63,6 +63,11 @@ class Options {
 		'displayStart' => 0,
 		'dom' => 'lfrtip',
 		'lengthMenu' => [10, 25, 50, 100],
+		'order' => [[0, 'asc']],
+		'orderCellsTop' => false,
+		'orderClasses' => true,
+		'orderFixed' => null,
+		'orderMulti' => true,
 	];
 
 	/**
@@ -84,10 +89,12 @@ class Options {
 	 * Define if all options will be printed or not.
 	 *
 	 * @param bool $printAllOptions
-	 * @return void
+	 * @return $this
 	 */
-	public function setPrintAllOptions(bool $printAllOptions): void {
+	public function setPrintAllOptions(bool $printAllOptions): self {
 		$this->_printAllOptions = $printAllOptions;
+
+		return $this;
 	}
 
 	/**
@@ -108,12 +115,14 @@ class Options {
 	 * amount of time to calculate the widths) if the tables widths are passed in using.
 	 *
 	 * @param bool $autoWidth
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/autoWidth
 	 */
-	public function setAutoWidth(bool $autoWidth): void {
+	public function setAutoWidth(bool $autoWidth): self {
 		$this->_config = Hash::insert($this->_config, 'autoWidth', $autoWidth);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'autoWidth', true);
+
+		return $this;
 	}
 
 	/**
@@ -156,12 +165,14 @@ class Options {
 	 * how to use jQuery delegated events to handle such a situation.
 	 *
 	 * @param bool $deferRender
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/deferRender
 	 */
-	public function setDeferRender(bool $deferRender): void {
+	public function setDeferRender(bool $deferRender): self {
 		$this->_config = Hash::insert($this->_config, 'deferRender', $deferRender);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'deferRender', true);
+
+		return $this;
 	}
 
 	/**
@@ -188,12 +199,14 @@ class Options {
 	 * using dom and CSS).
 	 *
 	 * @param bool $info
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/info
 	 */
-	public function setInfo(bool $info): void {
+	public function setInfo(bool $info): self {
 		$this->_config = Hash::insert($this->_config, 'info', $info);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'info', true);
+
+		return $this;
 	}
 
 	/**
@@ -236,12 +249,14 @@ class Options {
 	 * has no relevance when there is no pagination.
 	 *
 	 * @param bool $lengthChange
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/lengthChange
 	 */
-	public function setLengthChange(bool $lengthChange): void {
+	public function setLengthChange(bool $lengthChange): self {
 		$this->_config = Hash::insert($this->_config, 'lengthChange', $lengthChange);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'lengthChange', true);
+
+		return $this;
 	}
 
 	/**
@@ -272,12 +287,14 @@ class Options {
 	 * by DataTables at all.
 	 *
 	 * @param bool $ordering
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/ordering
 	 */
-	public function setOrdering(bool $ordering): void {
+	public function setOrdering(bool $ordering): self {
 		$this->_config = Hash::insert($this->_config, 'ordering', $ordering);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'ordering', true);
+
+		return $this;
 	}
 
 	/**
@@ -302,12 +319,14 @@ class Options {
 	 * may do so with this parameter.
 	 *
 	 * @param bool $paging
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/paging
 	 */
-	public function setPaging(bool $paging): void {
+	public function setPaging(bool $paging): self {
 		$this->_config = Hash::insert($this->_config, 'paging', $paging);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'paging', true);
+
+		return $this;
 	}
 
 	/**
@@ -330,12 +349,14 @@ class Options {
 	 * sort the entries.
 	 *
 	 * @param bool $processing
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/processing
 	 */
-	public function setProcessing(bool $processing): void {
+	public function setProcessing(bool $processing): self {
 		$this->_config = Hash::insert($this->_config, 'processing', $processing);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'processing', true);
+
+		return $this;
 	}
 
 	/**
@@ -364,12 +385,14 @@ class Options {
 	 * CSS unit, or a number (in which case it will be treated as a pixel measurement).
 	 *
 	 * @param bool $scrollX
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/scrollX
 	 */
-	public function setScrollX(bool $scrollX): void {
+	public function setScrollX(bool $scrollX): self {
 		$this->_config = Hash::insert($this->_config, 'scrollX', $scrollX);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'scrollX', true);
+
+		return $this;
 	}
 
 	/**
@@ -400,12 +423,14 @@ class Options {
 	 * and is applied to the table body (i.e. it does not take into account the header or footer height directly).
 	 *
 	 * @param string $scrollY
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/scrollY
 	 */
-	public function setScrollY(?string $scrollY): void {
+	public function setScrollY(?string $scrollY): self {
 		$this->_config = Hash::insert($this->_config, 'scrollY', $scrollY);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'scrollY', true);
+
+		return $this;
 	}
 
 	/**
@@ -446,12 +471,14 @@ class Options {
 	 * dom option.
 	 *
 	 * @param bool $searching
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/searching
 	 */
-	public function setSearching(bool $searching): void {
+	public function setSearching(bool $searching): self {
 		$this->_config = Hash::insert($this->_config, 'searching', $searching);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'searching', true);
+
+		return $this;
 	}
 
 	/**
@@ -498,13 +525,15 @@ class Options {
 	 * uses is detailed in the DataTables documentation.
 	 *
 	 * @param bool $serverSide
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/serverSide
 	 */
-	public function setServerSide(bool $serverSide): void {
+	public function setServerSide(bool $serverSide): self {
 		throw new FatalErrorException("By the plugin business rule, you can't change this option.");
 		//$this->_config = Hash::insert($this->_config, 'serverSide', $serverSide);
 		//$this->_mustPrint = Hash::insert($this->_mustPrint, 'serverSide', true);
+		//
+		//return $this;
 	}
 
 	/**
@@ -551,12 +580,14 @@ class Options {
 	 * state on the server through Ajax can be used through the stateSaveCallback and stateLoadCallback options.
 	 *
 	 * @param bool $stateSave
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/stateSave
 	 */
-	public function setStateSave(bool $stateSave): void {
+	public function setStateSave(bool $stateSave): self {
 		$this->_config = Hash::insert($this->_config, 'stateSave', $stateSave);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'stateSave', true);
+
+		return $this;
 	}
 
 	/**
@@ -615,10 +646,10 @@ class Options {
 	 *    rows are in the filtered result set, and the second how many in the full data set without filtering applied.
 	 *
 	 * @param int|array $deferLoading
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/deferLoading
 	 */
-	public function setDeferLoading($deferLoading): void {
+	public function setDeferLoading($deferLoading): self {
 		$type = getType($deferLoading);
 		if (!in_array($type, ['array', 'integer'])) {
 			throw new FatalErrorException("You must use only integer or array types on \$deferLoading. Found: '$type'.");
@@ -633,6 +664,8 @@ class Options {
 
 		$this->_config = Hash::insert($this->_config, 'deferLoading', $deferLoading);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'deferLoading', true);
+
+		return $this;
 	}
 
 	/**
@@ -661,12 +694,14 @@ class Options {
 	 * table, it is far more efficient to use the ajax.reload() method (or rows.add() etc).
 	 *
 	 * @param bool $destroy
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/destroy
 	 */
-	public function setDestroy(bool $destroy): void {
+	public function setDestroy(bool $destroy): self {
 		$this->_config = Hash::insert($this->_config, 'destroy', $destroy);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'destroy', true);
+
+		return $this;
 	}
 
 	/**
@@ -677,9 +712,9 @@ class Options {
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
 	 * @link https://datatables.net/reference/option/displayStart
-	 * @return bool
+	 * @return int
 	 */
-	public function getDisplayStart(): bool {
+	public function getDisplayStart(): int {
 		return Hash::get($this->_config, 'displayStart');
 	}
 
@@ -691,12 +726,14 @@ class Options {
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
 	 * @param int $displayStart
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/displayStart
 	 */
-	public function setDisplayStart(int $displayStart): void {
+	public function setDisplayStart(int $displayStart): self {
 		$this->_config = Hash::insert($this->_config, 'displayStart', $displayStart);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'displayStart', true);
+
+		return $this;
 	}
 
 	/**
@@ -718,9 +755,9 @@ class Options {
 	 *  - r - processing display element
 	 *
 	 * @link https://datatables.net/reference/option/dom
-	 * @return bool
+	 * @return string
 	 */
-	public function getDom(): bool {
+	public function getDom(): string {
 		return Hash::get($this->_config, 'dom');
 	}
 
@@ -732,12 +769,14 @@ class Options {
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
 	 * @param string $dom
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/dom
 	 */
-	public function setDom(string $dom): void {
+	public function setDom(string $dom): self {
 		$this->_config = Hash::insert($this->_config, 'dom', $dom);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'dom', true);
+
+		return $this;
 	}
 
 	/**
@@ -759,9 +798,9 @@ class Options {
 	 *  - r - processing display element
 	 *
 	 * @link https://datatables.net/reference/option/lengthMenu
-	 * @return bool
+	 * @return array
 	 */
-	public function getLengthMenu(): bool {
+	public function getLengthMenu(): array {
 		return Hash::get($this->_config, 'lengthMenu');
 	}
 
@@ -781,10 +820,10 @@ class Options {
 	 * pageLength is also provided.
 	 *
 	 * @param array $lengthMenu
-	 * @return void
+	 * @return $this
 	 * @link https://datatables.net/reference/option/lengthMenu
 	 */
-	public function setLengthMenu(array $lengthMenu): void {
+	public function setLengthMenu(array $lengthMenu): self {
 		if (count($lengthMenu) === 2 && is_array($lengthMenu[array_key_first($lengthMenu)]) && is_array($lengthMenu[array_key_last($lengthMenu)])) {
 			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_first($lengthMenu)], 'integer', 'integer', '$lengthMenu[options]');
 			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_last($lengthMenu)], 'integer', ['integer', 'string'], '$lengthMenu[optionsLabel]');
@@ -796,6 +835,298 @@ class Options {
 		}
 		$this->_config = Hash::insert($this->_config, 'lengthMenu', $lengthMenu);
 		$this->_mustPrint = Hash::insert($this->_mustPrint, 'lengthMenu', true);
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * If ordering is enabled (ordering), then DataTables will perform a first pass order during initialisation. Using
+	 * this parameter you can define which column(s) the order is performed upon, and the ordering direction. The order
+	 * must be an array of arrays, each inner array comprised of two elements:
+	 *  - Column index to order upon
+	 *  - Direction so order to apply (asc for ascending order or desc for descending order).
+	 *
+	 * This 2D array structure allows a multi-column order to be defined as the initial state should it be required.
+	 *
+	 * @link https://datatables.net/reference/option/order
+	 * @return array
+	 */
+	public function getOrder(): array {
+		return Hash::get($this->_config, 'order');
+	}
+
+	/**
+	 * Setter method.
+	 * If ordering is enabled (ordering), then DataTables will perform a first pass order during initialisation. Using
+	 * this parameter you can define which column(s) the order is performed upon, and the ordering direction. The order
+	 * must be an array of arrays, each inner array comprised of two elements:
+	 *  - Column index to order upon
+	 *  - Direction so order to apply (asc for ascending order or desc for descending order).
+	 *
+	 * This 2D array structure allows a multi-column order to be defined as the initial state should it be required.
+	 *
+	 * @param array $order
+	 * @return $this
+	 * @link https://datatables.net/reference/option/order
+	 */
+	public function setOrder(array $order): self {
+		Tools::getInstance()->checkKeysValueTypesOrFail($order, 'integer', 'array', '$order');
+		foreach ($order as $item) {
+			$itemSize = count($item);
+			if ($itemSize !== 2) {
+				throw new InvalidArgumentException('In \$order you must pass the index and after the order (asc or desc). Eg.: [0, \'asc\'].');
+			}
+			Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$order');
+			$param1 = $item[array_key_first($item)];
+			$param2 = $item[array_key_last($item)];
+			if (getType($param1) !== 'integer' || $param1 < 0) {
+				throw new InvalidArgumentException("In \$order the index param must be a integer great or equals 0. Found: $param1.");
+			}
+			if (!in_array($param2, ['asc', 'desc'])) {
+				throw new InvalidArgumentException("In \$order the order param must be asc or desc. Found: $param2.");
+			}
+		}
+		$this->_config = Hash::insert($this->_config, 'order', $order);
+		$this->_mustPrint = Hash::insert($this->_mustPrint, 'order', true);
+
+		return $this;
+	}
+
+	/**
+	 * Checker method.
+	 * Allows control over whether DataTables should use the top (true) unique cell that is found for a single column,
+	 * or the bottom (false - default) to attach the default order listener. This is useful when using complex headers.
+	 *
+	 * Consider for example the following HTML header:
+	 * <thead>
+	 *     <tr>
+	 *         <td rowspan="2">1</td>
+	 *         <td>2.1</td>
+	 *     </tr>
+	 *     <tr>
+	 *         <td>2.2</td>
+	 *     </tr>
+	 * </thead>
+	 *
+	 * In this case, when orderCellsTop is false (default) the cells 1 and 2.2 will have the order event listener
+	 * applied to them. If orderCellsTop is true then 1 and 2.1 will have the order event listeners applied to them.
+	 *
+	 * @link https://datatables.net/reference/option/orderCellsTop
+	 * @return bool
+	 */
+	public function isOrderCellsTop(): bool {
+		return Hash::get($this->_config, 'orderCellsTop');
+	}
+
+	/**
+	 * Setter method.
+	 * Allows control over whether DataTables should use the top (true) unique cell that is found for a single column,
+	 * or the bottom (false - default) to attach the default order listener. This is useful when using complex headers.
+	 *
+	 * Consider for example the following HTML header:
+	 * <thead>
+	 *     <tr>
+	 *         <td rowspan="2">1</td>
+	 *         <td>2.1</td>
+	 *     </tr>
+	 *     <tr>
+	 *         <td>2.2</td>
+	 *     </tr>
+	 * </thead>
+	 *
+	 * In this case, when orderCellsTop is false (default) the cells 1 and 2.2 will have the order event listener
+	 * applied to them. If orderCellsTop is true then 1 and 2.1 will have the order event listeners applied to them.
+	 *
+	 * @param bool $orderCellsTop
+	 * @return $this
+	 * @link https://datatables.net/reference/option/orderCellsTop
+	 */
+	public function setOrderCellsTop(bool $orderCellsTop): self {
+		$this->_config = Hash::insert($this->_config, 'orderCellsTop', $orderCellsTop);
+		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderCellsTop', true);
+
+		return $this;
+	}
+
+	/**
+	 * Checker method.
+	 * DataTables highlight the columns which are used to order the content in the table's body by adding a class to
+	 * the cells in that column, which in turn has CSS applied to those classes to highlight those cells.
+	 *
+	 * This is done by the addition of the classes sorting_1, sorting_2 and sorting_3 to the columns which are
+	 * currently being ordered on. The integer value indicates the level of sorting when mutli-column sorting. If more
+	 * than 3 columns are being ordered upon, the sorting_3 class is repeated.
+	 *
+	 * Please note that this feature can affect performance, particularly in old browsers and when there are a lot of
+	 * rows to be displayed as it is manipulating a large number of DOM elements. As such, this option is available as
+	 * a feature switch to allow this feature to be disabled with working with old browsers or large data sets.
+	 *
+	 * @link https://datatables.net/reference/option/orderClasses
+	 * @return bool
+	 */
+	public function isOrderClasses(): bool {
+		return Hash::get($this->_config, 'orderClasses');
+	}
+
+	/**
+	 * Setter method.
+	 * DataTables highlight the columns which are used to order the content in the table's body by adding a class to
+	 * the cells in that column, which in turn has CSS applied to those classes to highlight those cells.
+	 *
+	 * This is done by the addition of the classes sorting_1, sorting_2 and sorting_3 to the columns which are
+	 * currently being ordered on. The integer value indicates the level of sorting when mutli-column sorting. If more
+	 * than 3 columns are being ordered upon, the sorting_3 class is repeated.
+	 *
+	 * Please note that this feature can affect performance, particularly in old browsers and when there are a lot of
+	 * rows to be displayed as it is manipulating a large number of DOM elements. As such, this option is available as
+	 * a feature switch to allow this feature to be disabled with working with old browsers or large data sets.
+	 *
+	 * @param bool $orderClasses
+	 * @return $this
+	 * @link https://datatables.net/reference/option/orderClasses
+	 */
+	public function setOrderClasses(bool $orderClasses): self {
+		$this->_config = Hash::insert($this->_config, 'orderClasses', $orderClasses);
+		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderClasses', true);
+
+		return $this;
+	}
+
+	/**
+	 * Getter method.
+	 * The option works in tandem with the order option which provides an initial ordering state for the table which
+	 * can then be modified by the user clicking on column headings, while the ordering specified by this option will
+	 * always be applied to the table, regardless of user interaction.
+	 *
+	 * This fixed ordering can be applied before (pre) or after (post) the user's own ordering criteria using the two
+	 * different forms of this option (array or object) described below.
+	 *
+	 * The values that are used to describe the ordering conditions for the table are given as two element arrays:
+	 *  - Column index to order upon
+	 *  - Direction so order to apply (asc for ascending order or desc for descending order).
+	 *
+	 * It is also possible to give a set of nested arrays (i.e. arrays in arrays) to allow multi-column ordering to be
+	 * assigned.
+	 *
+	 * This option can be useful if you have a column (visible or hidden) which must always be sorted upon first - a
+	 * priority order or index column for example, or for grouping similar rows together.
+	 *
+	 * @link https://datatables.net/reference/option/orderFixed
+	 * @return array
+	 */
+	public function getOrderFixed(): array {
+		return Hash::get($this->_config, 'orderFixed');
+	}
+
+	/**
+	 * Setter method.
+	 * The option works in tandem with the order option which provides an initial ordering state for the table which
+	 * can then be modified by the user clicking on column headings, while the ordering specified by this option will
+	 * always be applied to the table, regardless of user interaction.
+	 *
+	 * This fixed ordering can be applied before (pre) or after (post) the user's own ordering criteria using the two
+	 * different forms of this option (array or object) described below.
+	 *
+	 * The values that are used to describe the ordering conditions for the table are given as two element arrays:
+	 *  - Column index to order upon
+	 *  - Direction so order to apply (asc for ascending order or desc for descending order).
+	 *
+	 * It is also possible to give a set of nested arrays (i.e. arrays in arrays) to allow multi-column ordering to be
+	 * assigned.
+	 *
+	 * This option can be useful if you have a column (visible or hidden) which must always be sorted upon first - a
+	 * priority order or index column for example, or for grouping similar rows together.
+	 *
+	 * @param array $orderFixed
+	 * @return $this
+	 * @link https://datatables.net/reference/option/orderFixed
+	 */
+	public function setOrderFixed(array $orderFixed): self {
+		if (getType(array_key_first($orderFixed)) === 'string' && in_array(array_key_first($orderFixed), ['pre', 'post'])) {
+			foreach ($orderFixed as $key => $objectItem) {
+				if (!in_array($key, ['pre', 'post'])) {
+					throw new InvalidArgumentException("You must use only 'pre' or 'post' key for objects type. Found: $key.");
+				}
+				Tools::getInstance()->checkKeysValueTypesOrFail($objectItem, 'integer', 'array', "\$orderFixed[$key]");
+				foreach ($objectItem as $item) {
+					$itemSize = count($item);
+					if ($itemSize !== 2) {
+						throw new InvalidArgumentException("In \$orderFixed[$key][ ] you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
+					}
+					Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], "\$orderFixed[$key][ ]");
+					$param1 = $item[array_key_first($item)];
+					$param2 = $item[array_key_last($item)];
+					if (getType($param1) !== 'integer' || $param1 < 0) {
+						throw new InvalidArgumentException("In \$orderFixed[$key][ ] the index param must be a integer great or equals 0. Found: $param1.");
+					}
+					if (!in_array($param2, ['asc', 'desc'])) {
+						throw new InvalidArgumentException("In \$orderFixed[$key][ ] the order param must be asc or desc. Found: $param2.");
+					}
+				}
+			}
+		} else {
+			Tools::getInstance()->checkKeysValueTypesOrFail($orderFixed, 'integer', 'array', '$orderFixed');
+			foreach ($orderFixed as $item) {
+				$itemSize = count($item);
+				if ($itemSize !== 2) {
+					throw new InvalidArgumentException("In \$orderFixed you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
+				}
+				Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$orderFixed');
+				$param1 = $item[array_key_first($item)];
+				$param2 = $item[array_key_last($item)];
+				if (getType($param1) !== 'integer' || $param1 < 0) {
+					throw new InvalidArgumentException("In \$orderFixed the index param must be a integer great or equals 0. Found: $param1.");
+				}
+				if (!in_array($param2, ['asc', 'desc'])) {
+					throw new InvalidArgumentException("In \$orderFixed the order param must be asc or desc. Found: $param2.");
+				}
+			}
+		}
+		$this->_config = Hash::insert($this->_config, 'orderFixed', $orderFixed);
+		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderFixed', true);
+
+		return $this;
+	}
+
+	/**
+	 * Checker method.
+	 * When ordering is enabled (ordering), by default DataTables allows users to sort multiple columns by shift
+	 * clicking upon the header cell for each column. Although this can be quite useful for users, it can also increase
+	 * the complexity of the order, potentiality increasing the processing time of ordering the data. Therefore, this
+	 * option is provided to allow this shift-click multiple column ability.
+	 *
+	 * Note that disabling this ability does not impede your ability as a developer to do multiple column ordering
+	 * using columns.orderData, order or order(), it just disallows the user from performing their own multi-column
+	 * order.
+	 *
+	 * @link https://datatables.net/reference/option/orderMulti
+	 * @return bool
+	 */
+	public function isOrderMulti(): bool {
+		return Hash::get($this->_config, 'orderMulti');
+	}
+
+	/**
+	 * Setter method.
+	 * When ordering is enabled (ordering), by default DataTables allows users to sort multiple columns by shift
+	 * clicking upon the header cell for each column. Although this can be quite useful for users, it can also increase
+	 * the complexity of the order, potentiality increasing the processing time of ordering the data. Therefore, this
+	 * option is provided to allow this shift-click multiple column ability.
+	 *
+	 * Note that disabling this ability does not impede your ability as a developer to do multiple column ordering
+	 * using columns.orderData, order or order(), it just disallows the user from performing their own multi-column
+	 * order.
+	 *
+	 * @param bool $orderMulti
+	 * @return $this
+	 * @link https://datatables.net/reference/option/orderMulti
+	 */
+	public function setOrderMulti(bool $orderMulti): self {
+		$this->_config = Hash::insert($this->_config, 'orderMulti', $orderMulti);
+		$this->_mustPrint = Hash::insert($this->_mustPrint, 'orderMulti', true);
+
+		return $this;
 	}
 
 }
