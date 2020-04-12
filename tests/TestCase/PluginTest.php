@@ -10,6 +10,7 @@
 
 namespace DataTables\Test\TestCase;
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use DataTables\Plugin;
@@ -40,6 +41,7 @@ class PluginTest extends TestCase {
 		$plugin->bootstrap($baseApplication);
 		$this->assertEquals('123', Configure::read('DataTables.test1'));
 		$this->assertEquals('abc', Configure::read('DataTables.testArray.test2'));
+		$this->assertNotEmpty(Cache::getConfig('_data_tables_built_configs_'));
 	}
 
 	/**

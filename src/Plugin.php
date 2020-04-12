@@ -22,6 +22,7 @@ use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Error\FatalErrorException;
+use Cake\Utility\Hash;
 
 /**
  * Plugin for DataTables
@@ -42,10 +43,12 @@ class Plugin extends BasePlugin {
 		if (!is_array($applicationDataTablesConfigs)) {
 			throw new FatalErrorException('DataTables config key must contain an array');
 		}
+		$applicationDataTablesConfigs = Configure::read('DataTables', []);
 		Configure::load('DataTables.app', 'default', true);
-		foreach ($applicationDataTablesConfigs as $config => $value) {
-			$this->mergeConfiguration('DataTables', (string)$config, $value);
-		}
+		$pluginDataTablesConfigs = Configure::read('DataTables', []);
+		Configure::write('DataTables', Hash::merge($pluginDataTablesConfigs, $applicationDataTablesConfigs));
+		unset($applicationDataTablesConfigs);
+		unset($pluginDataTablesConfigs);
 		if (empty(Cache::getConfig('_data_tables_built_configs_'))) {
 			Cache::setConfig('_data_tables_built_configs_', [
 				'className' => FileEngine::class,
@@ -55,24 +58,6 @@ class Plugin extends BasePlugin {
 				'duration' => '+' . Configure::read('DataTables.StorageEngine.duration') . ' minutes',
 				'url' => env('CACHE_CAKECORE_URL', null),
 			]);
-		}
-	}
-
-	/**
-	 * Merge item by item between plugin and application configuration
-	 *
-	 * @param string $currentPath Current Path to save in configuration
-	 * @param string $config Configuration key
-	 * @param mixed $value Configuration value
-	 * @return void
-	 */
-	private function mergeConfiguration(string $currentPath, string $config, $value) {
-		if (is_array($value)) {
-			foreach ($value as $childConfig => $childValue) {
-				$this->mergeConfiguration("$currentPath.$config", (string)$childConfig, $childValue);
-			}
-		} else {
-			Configure::write("$currentPath.$config", $value);
 		}
 	}
 
