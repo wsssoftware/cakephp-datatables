@@ -90,13 +90,15 @@ class FeaturesOptionTest extends TestCase {
 		$this->MainOption->Features->setSearching(!$searching);
 		$this->assertEquals(!$searching, $this->MainOption->Features->isSearching());
 
-		$this->assertEquals(true, $this->MainOption->Features->isServerSide());
-		$this->expectException(FatalErrorException::class);
-		$this->MainOption->Features->setServerSide(false);
-
 		$stateSave = $this->MainOption->Features->isStateSave();
 		$this->MainOption->Features->setStateSave(!$stateSave);
 		$this->assertEquals(!$stateSave, $this->MainOption->Features->isStateSave());
+
+		$this->assertEquals(true, $this->MainOption->Features->isServerSide());
+		$this->MainOption->Features->setServerSide(true);
+		$this->assertEquals(true, $this->MainOption->Features->isServerSide());
+		$this->expectException(FatalErrorException::class);
+		$this->MainOption->Features->setServerSide(false);
 	}
 
 }

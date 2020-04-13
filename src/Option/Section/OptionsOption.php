@@ -338,8 +338,7 @@ class OptionsOption extends ChildOptionAbstract {
 	public function setOrder(array $order): MainOption {
 		Tools::getInstance()->checkKeysValueTypesOrFail($order, 'integer', 'array', '$order');
 		foreach ($order as $item) {
-			$itemSize = count($item);
-			if ($itemSize !== 2) {
+			if (count($item) !== 2) {
 				throw new InvalidArgumentException('In \$order you must pass the index and after the order (asc or desc). Eg.: [0, \'asc\'].');
 			}
 			Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$order');
@@ -530,8 +529,7 @@ class OptionsOption extends ChildOptionAbstract {
 		} else {
 			Tools::getInstance()->checkKeysValueTypesOrFail($orderFixed, 'integer', 'array', '$orderFixed');
 			foreach ($orderFixed as $item) {
-				$itemSize = count($item);
-				if ($itemSize !== 2) {
+				if (count($item) !== 2) {
 					throw new InvalidArgumentException("In \$orderFixed you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
 				}
 				Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$orderFixed');
