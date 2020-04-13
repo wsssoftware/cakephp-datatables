@@ -12,9 +12,10 @@ declare(strict_types = 1);
 namespace DataTables\Option\Section;
 
 use Cake\Error\FatalErrorException;
+use Cake\Utility\Text;
 use DataTables\Option\ChildOptionAbstract;
 use DataTables\Option\MainOption;
-use DataTables\Tools\Tools;
+use DataTables\Tools\Validator;
 use InvalidArgumentException;
 
 /**
@@ -25,6 +26,15 @@ use InvalidArgumentException;
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
 class OptionsOption extends ChildOptionAbstract {
+
+	const ALLOWED_PAGING_TYPES = [
+		'numbers',
+		'simple',
+		'simple_numbers',
+		'full',
+		'full_numbers',
+		'first_last_numbers',
+	];
 
 	/**
 	 * @var array
@@ -125,15 +135,10 @@ class OptionsOption extends ChildOptionAbstract {
 			throw new FatalErrorException("You must use only integer or array types on \$deferLoading. Found: '$type'.");
 		}
 		if ($type === 'array') {
-			$count = count($deferLoading);
-			if ($count !== 2) {
-				throw new InvalidArgumentException("\$deferLoading array must have two integers records. Found: '$count'.");
-			}
-			Tools::getInstance()->checkKeysValueTypesOrFail($deferLoading, 'integer', 'integer', '$deferLoading');
+		    Validator::getInstance()->checkArraySizeOrFail($deferLoading, 2);
+			Validator::getInstance()->checkKeysValueTypesOrFail($deferLoading, 'integer', 'integer', '$deferLoading');
 		}
-
 		$this->_setConfig('deferLoading', $deferLoading);
-
 		return $this->getMainOption();
 	}
 
@@ -168,7 +173,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setDestroy(bool $destroy): MainOption {
 		$this->_setConfig('destroy', $destroy);
-
 		return $this->getMainOption();
 	}
 
@@ -199,7 +203,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setDisplayStart(int $displayStart): MainOption {
 		$this->_setConfig('displayStart', $displayStart);
-
 		return $this->getMainOption();
 	}
 
@@ -241,7 +244,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setDom(string $dom): MainOption {
 		$this->_setConfig('dom', $dom);
-
 		return $this->getMainOption();
 	}
 
@@ -291,16 +293,15 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setLengthMenu(array $lengthMenu): MainOption {
 		if (count($lengthMenu) === 2 && is_array($lengthMenu[array_key_first($lengthMenu)]) && is_array($lengthMenu[array_key_last($lengthMenu)])) {
-			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_first($lengthMenu)], 'integer', 'integer', '$lengthMenu[options]');
-			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_last($lengthMenu)], 'integer', ['integer', 'string'], '$lengthMenu[optionsLabel]');
+			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_first($lengthMenu)], 'integer', 'integer', '$lengthMenu[options]');
+			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_last($lengthMenu)], 'integer', ['integer', 'string'], '$lengthMenu[optionsLabel]');
 			if (count($lengthMenu[array_key_first($lengthMenu)]) !== count($lengthMenu[array_key_last($lengthMenu)])) {
 				throw new FatalErrorException('$lengthMenu[options] and $lengthMenu[optionsLabel] must have the same size.');
 			}
 		} else {
-			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu, 'integer', 'integer', '$lengthMenu');
+			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu, 'integer', 'integer', '$lengthMenu');
 		}
 		$this->_setConfig('lengthMenu', $lengthMenu);
-
 		return $this->getMainOption();
 	}
 
@@ -336,23 +337,20 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/order
 	 */
 	public function setOrder(array $order): MainOption {
-		Tools::getInstance()->checkKeysValueTypesOrFail($order, 'integer', 'array', '$order');
+		Validator::getInstance()->checkKeysValueTypesOrFail($order, 'integer', 'array', '$order');
 		foreach ($order as $item) {
-			if (count($item) !== 2) {
-				throw new InvalidArgumentException('In \$order you must pass the index and after the order (asc or desc). Eg.: [0, \'asc\'].');
-			}
-			Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$order');
+		    Validator::getInstance()->checkArraySizeOrFail($item, 2, 'In setOrder($order) you must pass the index and order (asc or desc). Eg.: [0, \'asc\'].');
+			Validator::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$order');
 			$param1 = $item[array_key_first($item)];
 			$param2 = $item[array_key_last($item)];
 			if (getType($param1) !== 'integer' || $param1 < 0) {
-				throw new InvalidArgumentException("In \$order the index param must be a integer great or equals 0. Found: $param1.");
+				throw new InvalidArgumentException("In setOrder(\$order) the index param must be a integer great or equals 0. Found: $param1.");
 			}
 			if (!in_array($param2, ['asc', 'desc'])) {
-				throw new InvalidArgumentException("In \$order the order param must be asc or desc. Found: $param2.");
+				throw new InvalidArgumentException("In setOrder(\$order) the order param must be asc or desc. Found: $param2.");
 			}
 		}
 		$this->_setConfig('order', $order);
-
 		return $this->getMainOption();
 	}
 
@@ -407,7 +405,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setOrderCellsTop(bool $orderCellsTop): MainOption {
 		$this->_setConfig('orderCellsTop', $orderCellsTop);
-
 		return $this->getMainOption();
 	}
 
@@ -450,7 +447,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setOrderClasses(bool $orderClasses): MainOption {
 		$this->_setConfig('orderClasses', $orderClasses);
-
 		return $this->getMainOption();
 	}
 
@@ -505,47 +501,59 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setOrderFixed(array $orderFixed): MainOption {
 		if (getType(array_key_first($orderFixed)) === 'string' && in_array(array_key_first($orderFixed), ['pre', 'post'])) {
-			foreach ($orderFixed as $key => $objectItem) {
-				if (!in_array($key, ['pre', 'post'])) {
-					throw new InvalidArgumentException("You must use only 'pre' or 'post' key for objects type. Found: $key.");
-				}
-				Tools::getInstance()->checkKeysValueTypesOrFail($objectItem, 'integer', 'array', "\$orderFixed[$key]");
-				foreach ($objectItem as $item) {
-					$itemSize = count($item);
-					if ($itemSize !== 2) {
-						throw new InvalidArgumentException("In \$orderFixed[$key][ ] you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
-					}
-					Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], "\$orderFixed[$key][ ]");
-					$param1 = $item[array_key_first($item)];
-					$param2 = $item[array_key_last($item)];
-					if (getType($param1) !== 'integer' || $param1 < 0) {
-						throw new InvalidArgumentException("In \$orderFixed[$key][ ] the index param must be a integer great or equals 0. Found: $param1.");
-					}
-					if (!in_array($param2, ['asc', 'desc'])) {
-						throw new InvalidArgumentException("In \$orderFixed[$key][ ] the order param must be asc or desc. Found: $param2.");
-					}
-				}
-			}
+			$this->checkOrderFixedPreAndPost($orderFixed);
 		} else {
-			Tools::getInstance()->checkKeysValueTypesOrFail($orderFixed, 'integer', 'array', '$orderFixed');
-			foreach ($orderFixed as $item) {
-				if (count($item) !== 2) {
-					throw new InvalidArgumentException("In \$orderFixed you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
-				}
-				Tools::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$orderFixed');
+			$this->checkOrderDefault($orderFixed);
+		}
+		$this->_setConfig('orderFixed', $orderFixed);
+		return $this->getMainOption();
+	}
+
+	/**
+	 * Check if orderFixed with pre and post params are right.
+	 *
+	 * @param array $orderFixed
+	 * @return void
+	 */
+	private function checkOrderFixedPreAndPost(array $orderFixed) {
+		foreach ($orderFixed as $key => $objectItem) {
+			if (!in_array($key, ['pre', 'post'])) {
+				throw new InvalidArgumentException("You must use only 'pre' or 'post' key for objects type. Found: $key.");
+			}
+			Validator::getInstance()->checkKeysValueTypesOrFail($objectItem, 'integer', 'array', "\$orderFixed[$key]");
+			foreach ($objectItem as $item) {
+			    Validator::getInstance()->checkArraySizeOrFail($item, 2, "In \$orderFixed[$key][ ] you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
 				$param1 = $item[array_key_first($item)];
 				$param2 = $item[array_key_last($item)];
 				if (getType($param1) !== 'integer' || $param1 < 0) {
-					throw new InvalidArgumentException("In \$orderFixed the index param must be a integer great or equals 0. Found: $param1.");
+					throw new InvalidArgumentException("In \$orderFixed[$key][ ] the index param must be a integer great or equals 0. Found: $param1.");
 				}
 				if (!in_array($param2, ['asc', 'desc'])) {
-					throw new InvalidArgumentException("In \$orderFixed the order param must be asc or desc. Found: $param2.");
+					throw new InvalidArgumentException("In \$orderFixed[$key][ ] the order param must be asc or desc. Found: $param2.");
 				}
 			}
 		}
-		$this->_setConfig('orderFixed', $orderFixed);
+	}
 
-		return $this->getMainOption();
+	/**
+	 * Check if orderFixed with default params are right.
+	 *
+	 * @param array $orderFixed
+	 * @return void
+	 */
+	private function checkOrderDefault(array $orderFixed) {
+		Validator::getInstance()->checkKeysValueTypesOrFail($orderFixed, 'integer', 'array', '$orderFixed');
+		foreach ($orderFixed as $item) {
+			Validator::getInstance()->checkArraySizeOrFail($item, 2, "In \$orderFixed you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
+			$param1 = $item[array_key_first($item)];
+			$param2 = $item[array_key_last($item)];
+			if (getType($param1) !== 'integer' || $param1 < 0) {
+				throw new InvalidArgumentException("In \$orderFixed the index param must be a integer great or equals 0. Found: $param1.");
+			}
+			if (!in_array($param2, ['asc', 'desc'])) {
+				throw new InvalidArgumentException("In \$orderFixed the order param must be asc or desc. Found: $param2.");
+			}
+		}
 	}
 
 	/**
@@ -583,7 +591,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setOrderMulti(bool $orderMulti): MainOption {
 		$this->_setConfig('orderMulti', $orderMulti);
-
 		return $this->getMainOption();
 	}
 
@@ -617,7 +624,6 @@ class OptionsOption extends ChildOptionAbstract {
 			throw new InvalidArgumentException("\$pageLength must be a positive integer number. Found: $pageLength.");
 		}
 		$this->_setConfig('pageLength', $pageLength);
-
 		return $this->getMainOption();
 	}
 
@@ -663,8 +669,11 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/pagingType
 	 */
 	public function setPagingType(string $pagingType): MainOption {
+	    if (!in_array($pagingType, static::ALLOWED_PAGING_TYPES)) {
+	        $allowedString = str_replace(' and ', ' or ', Text::toList(static::ALLOWED_PAGING_TYPES));
+			throw new InvalidArgumentException("You must use one of $allowedString. Found: $pagingType.");
+		}
 		$this->_setConfig('pagingType', $pagingType);
-
 		return $this->getMainOption();
 	}
 
@@ -727,10 +736,14 @@ class OptionsOption extends ChildOptionAbstract {
 			throw new InvalidArgumentException("\$renderer must be a string or array. Found: $rendererType.");
 		}
 		if (is_array($renderer)) {
-			Tools::getInstance()->checkKeysValueTypesOrFail($renderer, 'string', 'string', '$renderer');
+			Validator::getInstance()->checkKeysValueTypesOrFail($renderer, 'string', 'string', '$renderer');
+			foreach ($renderer as $key => $item) {
+				if (!in_array($key, ['header', 'pageButton'])) {
+					throw new InvalidArgumentException("You can user only 'header' and/or 'pageButton'. Found: $key.");
+				}
+			}
 		}
 		$this->_setConfig('renderer', $renderer);
-
 		return $this->getMainOption();
 	}
 
@@ -763,7 +776,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setRetrieve(bool $retrieve): MainOption {
 		$this->_setConfig('retrieve', $retrieve);
-
 		return $this->getMainOption();
 	}
 
@@ -826,7 +838,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setRowId(string $rowId): MainOption {
 		$this->_setConfig('rowId', $rowId);
-
 		return $this->getMainOption();
 	}
 
@@ -859,7 +870,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setScrollCollapse(bool $scrollCollapse): MainOption {
 		$this->_setConfig('scrollCollapse', $scrollCollapse);
-
 		return $this->getMainOption();
 	}
 
@@ -884,7 +894,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setSearchCaseInsensitive(bool $caseInsensitive): MainOption {
 		$this->_setConfig('search.caseInsensitive', $caseInsensitive);
-
 		return $this->getMainOption();
 	}
 
@@ -919,7 +928,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setSearchRegex(bool $regex): MainOption {
 		$this->_setConfig('search.regex', $regex);
-
 		return $this->getMainOption();
 	}
 
@@ -944,7 +952,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setSearchSearch(string $search): MainOption {
 		$this->_setConfig('search.search', $search);
-
 		return $this->getMainOption();
 	}
 
@@ -981,7 +988,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setSearchSmart(bool $smart): MainOption {
 		$this->_setConfig('search.smart', $smart);
-
 		return $this->getMainOption();
 	}
 
@@ -1015,32 +1021,22 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/searchCols
 	 */
 	public function setSearchCols(array $searchCols): MainOption {
-		Tools::getInstance()->checkKeysValueTypesOrFail($searchCols, ['integer'], ['array', 'NULL'], '$searchCols');
+		Validator::getInstance()->checkKeysValueTypesOrFail($searchCols, ['integer'], ['array', 'NULL'], '$searchCols');
 		foreach ($searchCols as $searchCol) {
 			if ($searchCol !== null) {
 				foreach ($searchCol as $key => $item) {
 					$itemType = getType($item);
-					switch ($key) {
-						case 'caseInsensitive':
-						case 'regex':
-						case 'smart':
-							if ($itemType !== 'boolean') {
-								throw new InvalidArgumentException("$key param must be a boolean. Found: $itemType.");
-							}
-	      break;
-						case 'search':
-							if ($itemType !== 'string') {
-								throw new InvalidArgumentException("$key param must be a string. Found: $itemType.");
-							}
-	      break;
-						default:
-	      throw new InvalidArgumentException("You can use only 'caseInsensitive', 'regex', 'search' or 'smart' param. Found: $key.");
+					if (!in_array($key, ['caseInsensitive', 'regex', 'search', 'smart'])) {
+						throw new InvalidArgumentException("You can use only 'caseInsensitive', 'regex', 'search' or 'smart' param. Found: $key.");
+					} elseif (in_array($key, ['caseInsensitive', 'regex', 'smart']) && $itemType !== 'boolean') {
+						throw new InvalidArgumentException("$key param must be a boolean. Found: $itemType.");
+					} elseif ($key === 'search' && $itemType !== 'string') {
+						throw new InvalidArgumentException("$key param must be a string. Found: $itemType.");
 					}
 				}
 			}
 		}
 		$this->_setConfig('searchCols', $searchCols);
-
 		return $this->getMainOption();
 	}
 
@@ -1104,7 +1100,6 @@ class OptionsOption extends ChildOptionAbstract {
 			throw new InvalidArgumentException("\$searchDelay must be a positive integer number. Found: $searchDelay.");
 		}
 		$this->_setConfig('searchDelay', $searchDelay);
-
 		return $this->getMainOption();
 	}
 
@@ -1154,7 +1149,6 @@ class OptionsOption extends ChildOptionAbstract {
 			throw new InvalidArgumentException("\$stateDuration must be a positive integer number. Found: $stateDuration.");
 		}
 		$this->_setConfig('stateDuration', $stateDuration);
-
 		return $this->getMainOption();
 	}
 
@@ -1186,9 +1180,8 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/stripeClasses
 	 */
 	public function setStripeClasses(array $stripeClasses): MainOption {
-		Tools::getInstance()->checkKeysValueTypesOrFail($stripeClasses, 'integer', 'string', '$stripeClasses');
+		Validator::getInstance()->checkKeysValueTypesOrFail($stripeClasses, 'integer', 'string', '$stripeClasses');
 		$this->_setConfig('stripeClasses', $stripeClasses);
-
 		return $this->getMainOption();
 	}
 
@@ -1225,7 +1218,6 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setTabIndex(int $tabIndex): MainOption {
 		$this->_setConfig('tabIndex', $tabIndex);
-
 		return $this->getMainOption();
 	}
 

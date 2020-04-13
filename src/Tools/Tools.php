@@ -13,7 +13,6 @@ namespace DataTables\Tools;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
-use Cake\Utility\Text;
 use Cake\View\View;
 use DataTables\Option\MainOption;
 use DataTables\StorageEngine\StorageEngineInterface;
@@ -21,7 +20,6 @@ use DataTables\Table\BuiltConfig;
 use DataTables\Table\Columns;
 use DataTables\Table\QueryBaseState;
 use DataTables\Table\Tables;
-use InvalidArgumentException;
 use ReflectionClass;
 
 /**
@@ -34,11 +32,23 @@ use ReflectionClass;
 class Tools {
 
 	/**
-	 * Storage a instance of builder object.
+	 * Storage a instance of object.
 	 *
 	 * @var self
 	 */
 	public static $instance;
+
+	/**
+	 * Return a instance of builder object.
+	 *
+	 * @return \DataTables\Tools\Tools
+	 */
+	public static function getInstance(): Tools {
+		if (static::$instance === null) {
+			static::$instance = new self();
+		}
+		return static::$instance;
+	}
 
 	/**
 	 * Built a BuiltConfig class
@@ -77,18 +87,6 @@ class Tools {
 		}
 
 		return $tables;
-	}
-
-	/**
-	 * Return a instance of builder object.
-	 *
-	 * @return \DataTables\Tools\Tools
-	 */
-	public static function getInstance(): Tools {
-		if (static::$instance === null) {
-			static::$instance = new self();
-		}
-		return static::$instance;
 	}
 
 	/**
@@ -140,42 +138,6 @@ class Tools {
 	 */
 	public function getTablesMd5(string $tablesClassWithNameSpace): string {
 		return md5_file((new ReflectionClass($tablesClassWithNameSpace))->getFileName());
-	}
-
-	/**
-	 * Check if the array keys and values are correct.
-	 *
-	 * @param array $array
-	 * @param string|array $allowedKeyTypes A allowed types for array key.
-	 * @param string|array $allowedValueTypes A allowed types for array value.
-	 * @param string|null $inString A string to make the error more friendly.
-	 * @return void
-	 */
-	public function checkKeysValueTypesOrFail(array $array, $allowedKeyTypes = [], $allowedValueTypes = [], string $inString = null): void {
-		$allowedKeyTypesType = getType($allowedKeyTypes);
-		if (!in_array($allowedKeyTypesType, ['array', 'string'])) {
-			throw new FatalErrorException(sprintf('The $keyType type must be an array or string. Found : %s', $allowedKeyTypesType));
-		} elseif ($allowedKeyTypesType === 'string') {
-			$allowedKeyTypes = [$allowedKeyTypes];
-		}
-		$allowedValueTypesType = getType($allowedValueTypes);
-		if (!in_array($allowedValueTypesType, ['array', 'string'])) {
-			throw new FatalErrorException(sprintf('The $valueType type must be an array or string. Found : %s', $allowedValueTypesType));
-		} elseif ($allowedValueTypesType === 'string') {
-			$allowedValueTypes = [$allowedValueTypes];
-		}
-		foreach ($array as $key => $value) {
-			$keyType = getType($key);
-			$valueType = getType($value);
-			if (!in_array($keyType, $allowedKeyTypes)) {
-				$needleString = str_replace(' and ', ' or ', Text::toList($allowedKeyTypes));
-				throw new InvalidArgumentException("In $inString array, the keys always must be $needleString. key: $key.");
-			}
-			if (!in_array($valueType, $allowedValueTypes)) {
-				$needleString = str_replace(' and ', ' or ', Text::toList($allowedValueTypes));
-				throw new InvalidArgumentException("In $inString array, the record $key isn't $needleString. Found: '$valueType'.");
-			}
-		}
 	}
 
 }
