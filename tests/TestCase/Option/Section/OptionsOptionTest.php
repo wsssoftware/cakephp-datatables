@@ -89,6 +89,30 @@ class OptionsOptionTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testSetOrderFixedDefaultWrongArrayFormat1() {
+		$this->expectException(InvalidArgumentException::class);
+		$this->MainOption->Options->setOrderFixed(['abc' => []]);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSetOrderFixedDefaultWrongArrayFormat2() {
+		$this->expectException(InvalidArgumentException::class);
+		$this->MainOption->Options->setOrderFixed(['pre' => ['abc' => 'desc']]);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSetOrderFixedDefaultWrongArrayFormat3() {
+		$this->expectException(InvalidArgumentException::class);
+		$this->MainOption->Options->setOrderFixed(['pre' => [0 => 'abc']]);
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testSetOrderFixedDefaultWrongSize() {
 		$this->expectException(InvalidArgumentException::class);
 		$this->MainOption->Options->setOrderFixed([['abc1', 'abc2', 'abc3']]);

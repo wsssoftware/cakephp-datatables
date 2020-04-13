@@ -15,6 +15,7 @@ use Cake\Error\FatalErrorException;
 use Cake\Utility\Text;
 use DataTables\Option\ChildOptionAbstract;
 use DataTables\Option\MainOption;
+use DataTables\Tools\Functions;
 use DataTables\Tools\Validator;
 use InvalidArgumentException;
 
@@ -292,10 +293,10 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/lengthMenu
 	 */
 	public function setLengthMenu(array $lengthMenu): MainOption {
-		if (count($lengthMenu) === 2 && is_array($lengthMenu[array_key_first($lengthMenu)]) && is_array($lengthMenu[array_key_last($lengthMenu)])) {
-			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_first($lengthMenu)], 'integer', 'integer', '$lengthMenu[options]');
-			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[array_key_last($lengthMenu)], 'integer', ['integer', 'string'], '$lengthMenu[optionsLabel]');
-			if (count($lengthMenu[array_key_first($lengthMenu)]) !== count($lengthMenu[array_key_last($lengthMenu)])) {
+		if (count($lengthMenu) === 2 && is_array($lengthMenu[Functions::getInstance()->arrayKeyFirst($lengthMenu)]) && is_array($lengthMenu[Functions::getInstance()->arrayKeyLast($lengthMenu)])) {
+			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[Functions::getInstance()->arrayKeyFirst($lengthMenu)], 'integer', 'integer', '$lengthMenu[options]');
+			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[Functions::getInstance()->arrayKeyLast($lengthMenu)], 'integer', ['integer', 'string'], '$lengthMenu[optionsLabel]');
+			if (count($lengthMenu[Functions::getInstance()->arrayKeyFirst($lengthMenu)]) !== count($lengthMenu[Functions::getInstance()->arrayKeyLast($lengthMenu)])) {
 				throw new FatalErrorException('$lengthMenu[options] and $lengthMenu[optionsLabel] must have the same size.');
 			}
 		} else {
@@ -341,8 +342,8 @@ class OptionsOption extends ChildOptionAbstract {
 		foreach ($order as $item) {
 		    Validator::getInstance()->checkArraySizeOrFail($item, 2, 'In setOrder($order) you must pass the index and order (asc or desc). Eg.: [0, \'asc\'].');
 			Validator::getInstance()->checkKeysValueTypesOrFail($item, 'integer', ['integer', 'string'], '$order');
-			$param1 = $item[array_key_first($item)];
-			$param2 = $item[array_key_last($item)];
+			$param1 = $item[Functions::getInstance()->arrayKeyFirst($item)];
+			$param2 = $item[Functions::getInstance()->arrayKeyLast($item)];
 			if (getType($param1) !== 'integer' || $param1 < 0) {
 				throw new InvalidArgumentException("In setOrder(\$order) the index param must be a integer great or equals 0. Found: $param1.");
 			}
@@ -500,7 +501,7 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/orderFixed
 	 */
 	public function setOrderFixed(array $orderFixed): MainOption {
-		if (getType(array_key_first($orderFixed)) === 'string' && in_array(array_key_first($orderFixed), ['pre', 'post'])) {
+		if (getType(Functions::getInstance()->arrayKeyFirst($orderFixed)) === 'string' && in_array(Functions::getInstance()->arrayKeyFirst($orderFixed), ['pre', 'post'])) {
 			$this->checkOrderFixedPreAndPost($orderFixed);
 		} else {
 			$this->checkOrderDefault($orderFixed);
@@ -523,8 +524,8 @@ class OptionsOption extends ChildOptionAbstract {
 			Validator::getInstance()->checkKeysValueTypesOrFail($objectItem, 'integer', 'array', "\$orderFixed[$key]");
 			foreach ($objectItem as $item) {
 			    Validator::getInstance()->checkArraySizeOrFail($item, 2, "In \$orderFixed[$key][ ] you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
-				$param1 = $item[array_key_first($item)];
-				$param2 = $item[array_key_last($item)];
+				$param1 = $item[Functions::getInstance()->arrayKeyFirst($item)];
+				$param2 = $item[Functions::getInstance()->arrayKeyLast($item)];
 				if (getType($param1) !== 'integer' || $param1 < 0) {
 					throw new InvalidArgumentException("In \$orderFixed[$key][ ] the index param must be a integer great or equals 0. Found: $param1.");
 				}
@@ -545,8 +546,8 @@ class OptionsOption extends ChildOptionAbstract {
 		Validator::getInstance()->checkKeysValueTypesOrFail($orderFixed, 'integer', 'array', '$orderFixed');
 		foreach ($orderFixed as $item) {
 			Validator::getInstance()->checkArraySizeOrFail($item, 2, "In \$orderFixed you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
-			$param1 = $item[array_key_first($item)];
-			$param2 = $item[array_key_last($item)];
+			$param1 = $item[Functions::getInstance()->arrayKeyFirst($item)];
+			$param2 = $item[Functions::getInstance()->arrayKeyLast($item)];
 			if (getType($param1) !== 'integer' || $param1 < 0) {
 				throw new InvalidArgumentException("In \$orderFixed the index param must be a integer great or equals 0. Found: $param1.");
 			}

@@ -13,8 +13,8 @@ namespace DataTables\Test\TestCase;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
+use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
-use PHPUnit\Framework\TestCase;
 use TestApp\Application;
 
 /**

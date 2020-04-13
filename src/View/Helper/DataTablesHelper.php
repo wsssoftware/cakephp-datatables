@@ -16,7 +16,7 @@ use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
 use DataTables\Table\BuiltConfig;
-use DataTables\Tools\Tools;
+use DataTables\Tools\Builder;
 use InvalidArgumentException;
 
 /**
@@ -63,18 +63,18 @@ class DataTablesHelper extends Helper {
 		$tablesClass = $exploded[0];
 		$configMethod = $exploded[1];
 		$tablesClassWithNameSpace = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
-		$md5 = Tools::getInstance()->getTablesMd5($tablesClassWithNameSpace);
+		$md5 = Builder::getInstance()->getTablesMd5($tablesClassWithNameSpace);
 		$cacheKey = Inflector::underscore(str_replace('::', '_', $table));
 
 		$builtConfig = null;
 		if ($this->getConfig('cache')) {
 			/** @var \DataTables\Table\BuiltConfig $builtConfig */
-			$builtConfig = Tools::getInstance()->getStorageEngine()->read($cacheKey);
+			$builtConfig = Builder::getInstance()->getStorageEngine()->read($cacheKey);
 		}
 		if (empty($builtConfig) && !$builtConfig instanceof BuiltConfig) {
-			$builtConfig = Tools::getInstance()->buildBuiltConfig($tablesClassWithNameSpace, $configMethod, $this->getView(), $md5);
+			$builtConfig = Builder::getInstance()->buildBuiltConfig($tablesClassWithNameSpace, $configMethod, $this->getView(), $md5);
 		}
-		if ($this->getConfig('cache') && !Tools::getInstance()->getStorageEngine()->save($cacheKey, $builtConfig)) {
+		if ($this->getConfig('cache') && !Builder::getInstance()->getStorageEngine()->save($cacheKey, $builtConfig)) {
 			throw new FatalErrorException('Unable to save the BuiltConfig cache.');
 		}
 

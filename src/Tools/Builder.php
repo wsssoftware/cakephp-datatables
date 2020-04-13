@@ -29,7 +29,7 @@ use ReflectionClass;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class Tools {
+class Builder {
 
 	/**
 	 * Storage a instance of object.
@@ -41,9 +41,9 @@ class Tools {
 	/**
 	 * Return a instance of builder object.
 	 *
-	 * @return \DataTables\Tools\Tools
+	 * @return \DataTables\Tools\Builder
 	 */
-	public static function getInstance(): Tools {
+	public static function getInstance(): Builder {
 		if (static::$instance === null) {
 			static::$instance = new self();
 		}
