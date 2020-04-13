@@ -106,7 +106,7 @@ class Builder {
 	 * @return \DataTables\Table\Columns
 	 */
 	private function buildColumns(Tables $table): Columns {
-		return new Columns();
+		return new Columns($table);
 	}
 
 	/**

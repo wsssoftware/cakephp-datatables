@@ -20,7 +20,7 @@ use DataTables\Option\MainOption;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class BuiltConfig {
+final class BuiltConfig {
 
 	/**
 	 * @var string The DataTables tables class md5 used to check changes.

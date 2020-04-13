@@ -22,7 +22,7 @@ use DataTables\Option\MainOption;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class FeaturesOption extends ChildOptionAbstract {
+final class FeaturesOption extends ChildOptionAbstract {
 
 	/**
 	 * @var array

@@ -99,7 +99,7 @@ class OptionsOptionTest extends TestCase {
 	 */
 	public function testSetOrderFixedDefaultWrongArrayFormat2() {
 		$this->expectException(InvalidArgumentException::class);
-		$this->MainOption->Options->setOrderFixed(['pre' => ['abc' => 'desc']]);
+		$this->MainOption->Options->setOrderFixed(['spre' => ['abc' => 'desc']]);
 	}
 
 	/**

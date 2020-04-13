@@ -13,6 +13,7 @@ namespace DataTables\Option;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use DataTables\Option\Section\ColumnsOption;
 use DataTables\Option\Section\FeaturesOption;
 use DataTables\Option\Section\OptionsOption;
 
@@ -21,6 +22,7 @@ use DataTables\Option\Section\OptionsOption;
  *
  * @property \DataTables\Option\Section\FeaturesOption $Features
  * @property \DataTables\Option\Section\OptionsOption $Options
+ * @property \DataTables\Option\Section\ColumnsOption $Columns
  * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
@@ -53,6 +55,7 @@ final class MainOption extends OptionAbstract {
 		parent::__construct();
 		$this->Features = new FeaturesOption($this);
 		$this->Options = new OptionsOption($this);
+		$this->Columns = new ColumnsOption($this);
 	}
 
 	/**

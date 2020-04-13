@@ -26,7 +26,7 @@ use InvalidArgumentException;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class OptionsOption extends ChildOptionAbstract {
+final class OptionsOption extends ChildOptionAbstract {
 
 	const ALLOWED_PAGING_TYPES = [
 		'numbers',
@@ -502,38 +502,17 @@ class OptionsOption extends ChildOptionAbstract {
 	 */
 	public function setOrderFixed(array $orderFixed): MainOption {
 		if (getType(Functions::getInstance()->arrayKeyFirst($orderFixed)) === 'string' && in_array(Functions::getInstance()->arrayKeyFirst($orderFixed), ['pre', 'post'])) {
-			$this->checkOrderFixedPreAndPost($orderFixed);
+			foreach ($orderFixed as $key => $objectItem) {
+				if (!in_array($key, ['pre', 'post'])) {
+					throw new InvalidArgumentException("You must use only 'pre' or 'post' key for objects type. Found: $key.");
+				}
+				$this->checkOrderDefault($objectItem);
+			}
 		} else {
 			$this->checkOrderDefault($orderFixed);
 		}
 		$this->_setConfig('orderFixed', $orderFixed);
 		return $this->getMainOption();
-	}
-
-	/**
-	 * Check if orderFixed with pre and post params are right.
-	 *
-	 * @param array $orderFixed
-	 * @return void
-	 */
-	private function checkOrderFixedPreAndPost(array $orderFixed) {
-		foreach ($orderFixed as $key => $objectItem) {
-			if (!in_array($key, ['pre', 'post'])) {
-				throw new InvalidArgumentException("You must use only 'pre' or 'post' key for objects type. Found: $key.");
-			}
-			Validator::getInstance()->checkKeysValueTypesOrFail($objectItem, 'integer', 'array', "\$orderFixed[$key]");
-			foreach ($objectItem as $item) {
-			    Validator::getInstance()->checkArraySizeOrFail($item, 2, "In \$orderFixed[$key][ ] you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
-				$param1 = $item[Functions::getInstance()->arrayKeyFirst($item)];
-				$param2 = $item[Functions::getInstance()->arrayKeyLast($item)];
-				if (getType($param1) !== 'integer' || $param1 < 0) {
-					throw new InvalidArgumentException("In \$orderFixed[$key][ ] the index param must be a integer great or equals 0. Found: $param1.");
-				}
-				if (!in_array($param2, ['asc', 'desc'])) {
-					throw new InvalidArgumentException("In \$orderFixed[$key][ ] the order param must be asc or desc. Found: $param2.");
-				}
-			}
-		}
 	}
 
 	/**
@@ -543,7 +522,7 @@ class OptionsOption extends ChildOptionAbstract {
 	 * @return void
 	 */
 	private function checkOrderDefault(array $orderFixed) {
-		Validator::getInstance()->checkKeysValueTypesOrFail($orderFixed, 'integer', 'array', '$orderFixed');
+		Validator::getInstance()->checkKeysValueTypesOrFail($orderFixed, ['integer', 'string'], 'array', '$orderFixed');
 		foreach ($orderFixed as $item) {
 			Validator::getInstance()->checkArraySizeOrFail($item, 2, "In \$orderFixed you must pass the index and after the order (asc or desc). Eg.: [0, 'asc'].");
 			$param1 = $item[Functions::getInstance()->arrayKeyFirst($item)];

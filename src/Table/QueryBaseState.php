@@ -18,7 +18,7 @@ namespace DataTables\Table;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class QueryBaseState {
+final class QueryBaseState {
 
 	/**
 	 * @var array
