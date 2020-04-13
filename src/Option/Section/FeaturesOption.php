@@ -12,8 +12,8 @@ declare(strict_types = 1);
 namespace DataTables\Option\Section;
 
 use Cake\Error\FatalErrorException;
+use DataTables\Option\ChildOptionAbstract;
 use DataTables\Option\MainOption;
-use DataTables\Option\OptionAbstract;
 
 /**
  * Class FeaturesOption
@@ -22,13 +22,13 @@ use DataTables\Option\OptionAbstract;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class FeaturesOption extends OptionAbstract {
+class FeaturesOption extends ChildOptionAbstract {
 
 	/**
 	 * @var array
 	 * @inheritDoc
 	 */
-	protected $_levelMustPrint = [
+	protected $_mustPrint = [
 		'serverSide' => true,
 	];
 
@@ -36,7 +36,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @var array
 	 * @inheritDoc
 	 */
-	protected $_levelConfig = [
+	protected $_config = [
 		'autoWidth' => true,
 		'deferRender' => false,
 		'info' => true,
@@ -60,7 +60,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isAutoWidth(): bool {
-		return (bool)$this->getConfig('autoWidth');
+		return (bool)$this->_getConfig('autoWidth');
 	}
 
 	/**
@@ -73,9 +73,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/autoWidth
 	 */
 	public function setAutoWidth(bool $autoWidth): MainOption {
-		$this->setConfig('autoWidth', $autoWidth);
+		$this->_setConfig('autoWidth', $autoWidth);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -98,7 +98,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isDeferRender(): bool {
-		return (bool)$this->getConfig('deferRender');
+		return (bool)$this->_getConfig('deferRender');
 	}
 
 	/**
@@ -122,9 +122,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/deferRender
 	 */
 	public function setDeferRender(bool $deferRender): MainOption {
-		$this->setConfig('deferRender', $deferRender);
+		$this->_setConfig('deferRender', $deferRender);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -139,7 +139,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isInfo(): bool {
-		return (bool)$this->getConfig('info');
+		return (bool)$this->_getConfig('info');
 	}
 
 	/**
@@ -155,9 +155,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/info
 	 */
 	public function setInfo(bool $info): MainOption {
-		$this->setConfig('info', $info);
+		$this->_setConfig('info', $info);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -180,7 +180,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isLengthChange(): bool {
-		return (bool)$this->getConfig('lengthChange');
+		return (bool)$this->_getConfig('lengthChange');
 	}
 
 	/**
@@ -204,9 +204,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/lengthChange
 	 */
 	public function setLengthChange(bool $lengthChange): MainOption {
-		$this->setConfig('lengthChange', $lengthChange);
+		$this->_setConfig('lengthChange', $lengthChange);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -223,7 +223,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isOrdering(): bool {
-		return (bool)$this->getConfig('ordering');
+		return (bool)$this->_getConfig('ordering');
 	}
 
 	/**
@@ -241,9 +241,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/ordering
 	 */
 	public function setOrdering(bool $ordering): MainOption {
-		$this->setConfig('ordering', $ordering);
+		$this->_setConfig('ordering', $ordering);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -257,7 +257,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isPaging(): bool {
-		return (bool)$this->getConfig('paging');
+		return (bool)$this->_getConfig('paging');
 	}
 
 	/**
@@ -272,9 +272,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/paging
 	 */
 	public function setPaging(bool $paging): MainOption {
-		$this->setConfig('paging', $paging);
+		$this->_setConfig('paging', $paging);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -287,7 +287,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isProcessing(): bool {
-		return (bool)$this->getConfig('processing');
+		return (bool)$this->_getConfig('processing');
 	}
 
 	/**
@@ -301,9 +301,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/processing
 	 */
 	public function setProcessing(bool $processing): MainOption {
-		$this->setConfig('processing', $processing);
+		$this->_setConfig('processing', $processing);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -319,7 +319,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isScrollX(): bool {
-		return (bool)$this->getConfig('scrollX');
+		return (bool)$this->_getConfig('scrollX');
 	}
 
 	/**
@@ -336,9 +336,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/scrollX
 	 */
 	public function setScrollX(bool $scrollX): MainOption {
-		$this->setConfig('scrollX', $scrollX);
+		$this->_setConfig('scrollX', $scrollX);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -355,7 +355,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return string
 	 */
 	public function getScrollY(): ?string {
-		return (string)$this->getConfig('scrollY');
+		return (string)$this->_getConfig('scrollY');
 	}
 
 	/**
@@ -373,9 +373,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/scrollY
 	 */
 	public function setScrollY(?string $scrollY): MainOption {
-		$this->setConfig('scrollY', $scrollY);
+		$this->_setConfig('scrollY', $scrollY);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -397,7 +397,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isSearching(): bool {
-		return (bool)$this->getConfig('searching');
+		return (bool)$this->_getConfig('searching');
 	}
 
 	/**
@@ -420,9 +420,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/searching
 	 */
 	public function setSearching(bool $searching): MainOption {
-		$this->setConfig('searching', $searching);
+		$this->_setConfig('searching', $searching);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -447,7 +447,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isServerSide(): bool {
-		return (bool)$this->getConfig('serverSide');
+		return (bool)$this->_getConfig('serverSide');
 	}
 
 	/**
@@ -476,10 +476,9 @@ class FeaturesOption extends OptionAbstract {
 		if ($serverSide === false) {
 			throw new FatalErrorException("By the plugin business rule, you can't change this option.");
 		}
-		$this->setConfig('serverSide', $serverSide);
-		$this->setMustPrint('serverSide');
+		$this->_setConfig('serverSide', $serverSide);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -504,7 +503,7 @@ class FeaturesOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isStateSave(): bool {
-		return (bool)$this->getConfig('stateSave');
+		return (bool)$this->_getConfig('stateSave');
 	}
 
 	/**
@@ -530,9 +529,9 @@ class FeaturesOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/stateSave
 	 */
 	public function setStateSave(bool $stateSave): MainOption {
-		$this->setConfig('stateSave', $stateSave);
+		$this->_setConfig('stateSave', $stateSave);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 }

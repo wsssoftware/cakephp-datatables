@@ -13,7 +13,6 @@ namespace DataTables\Test\Option;
 use Cake\TestSuite\TestCase;
 use const JSON_ERROR_NONE;
 use DataTables\Option\MainOption;
-use DataTables\Option\OptionInterface;
 use Exception;
 
 /**
@@ -63,15 +62,6 @@ class MainOptionTest extends TestCase {
 		$this->assertEquals(true, $this->MainOption->isPrintAllOptions());
 		$this->MainOption->setPrintAllOptions(false);
 		$this->assertEquals(false, $this->MainOption->isPrintAllOptions());
-	}
-
-	/**
-	 * Check if getParentOption is working
-	 *
-	 * @return void
-	 */
-	public function testParentOption() {
-		$this->assertInstanceOf(OptionInterface::class, $this->MainOption->getParentOption());
 	}
 
 	/**

@@ -12,8 +12,8 @@ declare(strict_types = 1);
 namespace DataTables\Option\Section;
 
 use Cake\Error\FatalErrorException;
+use DataTables\Option\ChildOptionAbstract;
 use DataTables\Option\MainOption;
-use DataTables\Option\OptionAbstract;
 use DataTables\Tools\Tools;
 use InvalidArgumentException;
 
@@ -24,13 +24,13 @@ use InvalidArgumentException;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class OptionsOption extends OptionAbstract {
+class OptionsOption extends ChildOptionAbstract {
 
 	/**
 	 * @var array
 	 * @inheritDoc
 	 */
-	protected $_levelConfig = [
+	protected $_config = [
 		'deferLoading' => null,
 		'destroy' => false,
 		'displayStart' => 0,
@@ -88,7 +88,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return int|array
 	 */
 	public function getDeferLoading() {
-		return $this->getConfig('deferLoading');
+		return $this->_getConfig('deferLoading');
 	}
 
 	/**
@@ -132,9 +132,9 @@ class OptionsOption extends OptionAbstract {
 			Tools::getInstance()->checkKeysValueTypesOrFail($deferLoading, 'integer', 'integer', '$deferLoading');
 		}
 
-		$this->setConfig('deferLoading', $deferLoading);
+		$this->_setConfig('deferLoading', $deferLoading);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -150,7 +150,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isDestroy(): bool {
-		return (bool)$this->getConfig('destroy');
+		return (bool)$this->_getConfig('destroy');
 	}
 
 	/**
@@ -167,9 +167,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/destroy
 	 */
 	public function setDestroy(bool $destroy): MainOption {
-		$this->setConfig('destroy', $destroy);
+		$this->_setConfig('destroy', $destroy);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -183,7 +183,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return int
 	 */
 	public function getDisplayStart(): int {
-		return (int)$this->getConfig('displayStart');
+		return (int)$this->_getConfig('displayStart');
 	}
 
 	/**
@@ -198,9 +198,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/displayStart
 	 */
 	public function setDisplayStart(int $displayStart): MainOption {
-		$this->setConfig('displayStart', $displayStart);
+		$this->_setConfig('displayStart', $displayStart);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -225,7 +225,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return string
 	 */
 	public function getDom(): string {
-		return (string)$this->getConfig('dom');
+		return (string)$this->_getConfig('dom');
 	}
 
 	/**
@@ -240,9 +240,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/dom
 	 */
 	public function setDom(string $dom): MainOption {
-		$this->setConfig('dom', $dom);
+		$this->_setConfig('dom', $dom);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -267,7 +267,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getLengthMenu(): array {
-		return $this->getConfig('lengthMenu');
+		return $this->_getConfig('lengthMenu');
 	}
 
 	/**
@@ -299,9 +299,9 @@ class OptionsOption extends OptionAbstract {
 		} else {
 			Tools::getInstance()->checkKeysValueTypesOrFail($lengthMenu, 'integer', 'integer', '$lengthMenu');
 		}
-		$this->setConfig('lengthMenu', $lengthMenu);
+		$this->_setConfig('lengthMenu', $lengthMenu);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -318,7 +318,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getOrder(): array {
-		return $this->getConfig('order');
+		return $this->_getConfig('order');
 	}
 
 	/**
@@ -352,9 +352,9 @@ class OptionsOption extends OptionAbstract {
 				throw new InvalidArgumentException("In \$order the order param must be asc or desc. Found: $param2.");
 			}
 		}
-		$this->setConfig('order', $order);
+		$this->_setConfig('order', $order);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -380,7 +380,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isOrderCellsTop(): bool {
-		return (bool)$this->getConfig('orderCellsTop');
+		return (bool)$this->_getConfig('orderCellsTop');
 	}
 
 	/**
@@ -407,9 +407,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/orderCellsTop
 	 */
 	public function setOrderCellsTop(bool $orderCellsTop): MainOption {
-		$this->setConfig('orderCellsTop', $orderCellsTop);
+		$this->_setConfig('orderCellsTop', $orderCellsTop);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -429,7 +429,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isOrderClasses(): bool {
-		return (bool)$this->getConfig('orderClasses');
+		return (bool)$this->_getConfig('orderClasses');
 	}
 
 	/**
@@ -450,9 +450,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/orderClasses
 	 */
 	public function setOrderClasses(bool $orderClasses): MainOption {
-		$this->setConfig('orderClasses', $orderClasses);
+		$this->_setConfig('orderClasses', $orderClasses);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -478,7 +478,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getOrderFixed(): array {
-		return $this->getConfig('orderFixed');
+		return $this->_getConfig('orderFixed');
 	}
 
 	/**
@@ -545,9 +545,9 @@ class OptionsOption extends OptionAbstract {
 				}
 			}
 		}
-		$this->setConfig('orderFixed', $orderFixed);
+		$this->_setConfig('orderFixed', $orderFixed);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -565,7 +565,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isOrderMulti(): bool {
-		return (bool)$this->getConfig('orderMulti');
+		return (bool)$this->_getConfig('orderMulti');
 	}
 
 	/**
@@ -584,9 +584,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/orderMulti
 	 */
 	public function setOrderMulti(bool $orderMulti): MainOption {
-		$this->setConfig('orderMulti', $orderMulti);
+		$this->_setConfig('orderMulti', $orderMulti);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -600,7 +600,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return int
 	 */
 	public function getPageLength(): int {
-		return (int)$this->getConfig('pageLength');
+		return (int)$this->_getConfig('pageLength');
 	}
 
 	/**
@@ -618,9 +618,9 @@ class OptionsOption extends OptionAbstract {
 		if ($pageLength <= 0) {
 			throw new InvalidArgumentException("\$pageLength must be a positive integer number. Found: $pageLength.");
 		}
-		$this->setConfig('pageLength', $pageLength);
+		$this->_setConfig('pageLength', $pageLength);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -642,7 +642,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return string
 	 */
 	public function getPagingType(): string {
-		return (string)$this->getConfig('pagingType');
+		return (string)$this->_getConfig('pagingType');
 	}
 
 	/**
@@ -665,9 +665,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/pagingType
 	 */
 	public function setPagingType(string $pagingType): MainOption {
-		$this->setConfig('pagingType', $pagingType);
+		$this->_setConfig('pagingType', $pagingType);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -695,7 +695,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return string|array
 	 */
 	public function getRenderer() {
-		return $this->getConfig('renderer');
+		return $this->_getConfig('renderer');
 	}
 
 	/**
@@ -731,9 +731,9 @@ class OptionsOption extends OptionAbstract {
 		if (is_array($renderer)) {
 			Tools::getInstance()->checkKeysValueTypesOrFail($renderer, 'string', 'string', '$renderer');
 		}
-		$this->setConfig('renderer', $renderer);
+		$this->_setConfig('renderer', $renderer);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -748,7 +748,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isRetrieve(): bool {
-		return (bool)$this->getConfig('retrieve');
+		return (bool)$this->_getConfig('retrieve');
 	}
 
 	/**
@@ -764,9 +764,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/retrieve
 	 */
 	public function setRetrieve(bool $retrieve): MainOption {
-		$this->setConfig('retrieve', $retrieve);
+		$this->_setConfig('retrieve', $retrieve);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -796,7 +796,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return string
 	 */
 	public function getRowId(): string {
-		return (string)$this->getConfig('rowId');
+		return (string)$this->_getConfig('rowId');
 	}
 
 	/**
@@ -827,9 +827,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/rowId
 	 */
 	public function setRowId(string $rowId): MainOption {
-		$this->setConfig('rowId', $rowId);
+		$this->_setConfig('rowId', $rowId);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -844,7 +844,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isScrollCollapse(): bool {
-		return (bool)$this->getConfig('scrollCollapse');
+		return (bool)$this->_getConfig('scrollCollapse');
 	}
 
 	/**
@@ -860,9 +860,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/scrollCollapse
 	 */
 	public function setScrollCollapse(bool $scrollCollapse): MainOption {
-		$this->setConfig('scrollCollapse', $scrollCollapse);
+		$this->_setConfig('scrollCollapse', $scrollCollapse);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -873,7 +873,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isSearchCaseInsensitive(): bool {
-		return (bool)$this->getConfig('search.caseInsensitive');
+		return (bool)$this->_getConfig('search.caseInsensitive');
 	}
 
 	/**
@@ -885,9 +885,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/search.caseInsensitive
 	 */
 	public function setSearchCaseInsensitive(bool $caseInsensitive): MainOption {
-		$this->setConfig('search.caseInsensitive', $caseInsensitive);
+		$this->_setConfig('search.caseInsensitive', $caseInsensitive);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -903,7 +903,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isSearchRegex(): bool {
-		return (bool)$this->getConfig('search.regex');
+		return (bool)$this->_getConfig('search.regex');
 	}
 
 	/**
@@ -920,9 +920,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/search.regex
 	 */
 	public function setSearchRegex(bool $regex): MainOption {
-		$this->setConfig('search.regex', $regex);
+		$this->_setConfig('search.regex', $regex);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -933,7 +933,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return string
 	 */
 	public function getSearchSearch(): string {
-		return (string)$this->getConfig('search.search');
+		return (string)$this->_getConfig('search.search');
 	}
 
 	/**
@@ -945,9 +945,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/search.search
 	 */
 	public function setSearchSearch(string $search): MainOption {
-		$this->setConfig('search.search', $search);
+		$this->_setConfig('search.search', $search);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -964,7 +964,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return bool
 	 */
 	public function isSearchSmart(): bool {
-		return (bool)$this->getConfig('search.smart');
+		return (bool)$this->_getConfig('search.smart');
 	}
 
 	/**
@@ -982,9 +982,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/search.smart
 	 */
 	public function setSearchSmart(bool $smart): MainOption {
-		$this->setConfig('search.smart', $smart);
+		$this->_setConfig('search.smart', $smart);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -1000,7 +1000,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getSearchCols(): array {
-		return $this->getConfig('searchCols');
+		return $this->_getConfig('searchCols');
 	}
 
 	/**
@@ -1041,9 +1041,9 @@ class OptionsOption extends OptionAbstract {
 				}
 			}
 		}
-		$this->setConfig('searchCols', $searchCols);
+		$this->_setConfig('searchCols', $searchCols);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -1072,7 +1072,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return int
 	 */
 	public function getSearchDelay(): int {
-		return (int)$this->getConfig('searchDelay');
+		return (int)$this->_getConfig('searchDelay');
 	}
 
 	/**
@@ -1105,9 +1105,9 @@ class OptionsOption extends OptionAbstract {
 		if ($searchDelay < 0) {
 			throw new InvalidArgumentException("\$searchDelay must be a positive integer number. Found: $searchDelay.");
 		}
-		$this->setConfig('searchDelay', $searchDelay);
+		$this->_setConfig('searchDelay', $searchDelay);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -1129,7 +1129,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return int
 	 */
 	public function getStateDuration(): int {
-		return (int)$this->getConfig('stateDuration');
+		return (int)$this->_getConfig('stateDuration');
 	}
 
 	/**
@@ -1155,9 +1155,9 @@ class OptionsOption extends OptionAbstract {
 		if ($stateDuration <= 0) {
 			throw new InvalidArgumentException("\$stateDuration must be a positive integer number. Found: $stateDuration.");
 		}
-		$this->setConfig('stateDuration', $stateDuration);
+		$this->_setConfig('stateDuration', $stateDuration);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -1172,7 +1172,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getStripeClasses(): array {
-		return $this->getConfig('stripeClasses');
+		return $this->_getConfig('stripeClasses');
 	}
 
 	/**
@@ -1189,9 +1189,9 @@ class OptionsOption extends OptionAbstract {
 	 */
 	public function setStripeClasses(array $stripeClasses): MainOption {
 		Tools::getInstance()->checkKeysValueTypesOrFail($stripeClasses, 'integer', 'string', '$stripeClasses');
-		$this->setConfig('stripeClasses', $stripeClasses);
+		$this->_setConfig('stripeClasses', $stripeClasses);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 	/**
@@ -1208,7 +1208,7 @@ class OptionsOption extends OptionAbstract {
 	 * @return int
 	 */
 	public function getTabIndex(): int {
-		return (int)$this->getConfig('tabIndex');
+		return (int)$this->_getConfig('tabIndex');
 	}
 
 	/**
@@ -1226,9 +1226,9 @@ class OptionsOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/tabIndex
 	 */
 	public function setTabIndex(int $tabIndex): MainOption {
-		$this->setConfig('tabIndex', $tabIndex);
+		$this->_setConfig('tabIndex', $tabIndex);
 
-		return $this->getParentOption();
+		return $this->getMainOption();
 	}
 
 }
