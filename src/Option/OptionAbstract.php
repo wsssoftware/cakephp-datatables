@@ -47,7 +47,7 @@ abstract class OptionAbstract {
 	 *
 	 * @param string|null $field The field that you intent to see or null for all.
 	 * @param string|array|null $default A default value for called config.
-	 * @return mixed A value if exists or null.
+	 * @return mixed|void A value if exists or null.
 	 */
 	protected function _getConfig(?string $field = null, $default = null) {
 		if ($this instanceof MainOption) {
@@ -60,8 +60,6 @@ abstract class OptionAbstract {
 								if ($this instanceof ChildOptionAbstract) {
 			return $this->getMainOption()->getConfig($field, $default);
 		}
-
-		return null;
 	}
 
 	/**

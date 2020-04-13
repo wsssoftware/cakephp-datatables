@@ -80,6 +80,10 @@ class MainOptionTest extends TestCase {
 
 		$this->MainOption->setMustPrint('abc', false);
 		$this->assertEquals(false, $this->MainOption->getMustPrint('abc'));
+
+		$this->assertEquals('array', getType($this->MainOption->getMustPrint()));
+
+		$this->assertNotEmpty($this->MainOption->getConfig());
 	}
 
 	/**
