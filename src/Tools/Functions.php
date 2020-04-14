@@ -46,11 +46,8 @@ class Functions {
 	 * @return int|string|null
 	 */
 	public function arrayKeyFirst(array $array){
-		if (count($array)) {
-			reset($array);
-			return key($array);
-		}
-		return null;
+		reset($array);
+		return key($array);
 	}
 
 	/**
@@ -60,11 +57,8 @@ class Functions {
 	 * @return int|string|null
 	 */
 	public function arrayKeyLast(array $array){
-		if (count($array)) {
-			end($array);
-			return key($array);
-		}
-		return null;
+		end($array);
+		return key($array);
 	}
 
 }

@@ -48,16 +48,22 @@ final class Columns {
 	}
 
 	/**
+	 * Return all configured columns.
+	 *
+	 * @return array
+	 */
+	public function getColumns(): array {
+		return $this->_columns;
+	}
+
+	/**
 	 * Add a database column to DataTables table.
 	 *
 	 * @param string $dataBaseField
 	 * @return \DataTables\Table\Column
 	 */
-	public function addDataBaseColumn(string $dataBaseField): Column {
-		$dataBaseField = $this->normalizeDataTableField($dataBaseField);
-
-		$column = new Column($dataBaseField, true);
-
+	public function addDatabaseColumn(string $dataBaseField): Column {
+		$column = $this->normalizeDataTableField($dataBaseField);
 		return $this->saveColumn($column);
 	}
 
@@ -67,7 +73,7 @@ final class Columns {
 	 * @param string $label
 	 * @return \DataTables\Table\Column
 	 */
-	public function addNonDataBaseColumn(string $label): Column {
+	public function addNonDatabaseColumn(string $label): Column {
 		$column = new Column($label, false);
 		return $this->saveColumn($column);
 	}
@@ -79,10 +85,12 @@ final class Columns {
 	 * @return \DataTables\Table\Column
 	 */
 	private function saveColumn(Column $column): Column {
-		if (!empty($this->_columns[$column->getName()])) {
-			throw new FatalErrorException("Column '{$column->getName()}' already exist.");
+		foreach ($this->_columns as $key => $savedColumn) {
+			if ($savedColumn->getName() === $column->getName()) {
+				throw new FatalErrorException("Column '{$column->getName()}' already exist in index $key.");
+			}
 		}
-		$this->_columns[$column->getName()] = $column;
+		$this->_columns[] = $column;
 		return $column;
 	}
 
@@ -90,9 +98,9 @@ final class Columns {
 	 * Check if class, tables, fields and associations exists, and after normalize the name.
 	 *
 	 * @param string $dataBaseField
-	 * @return string
+	 * @return \DataTables\Table\Column
 	 */
-	private function normalizeDataTableField(string $dataBaseField): string {
+	private function normalizeDataTableField(string $dataBaseField): Column {
 		$ormTable = $this->_tables->getOrmTable();
 		$explodedDataBaseField = explode('.', $dataBaseField);
 		if (count($explodedDataBaseField) === 2) {
@@ -104,12 +112,13 @@ final class Columns {
 		} else {
 			throw new InvalidArgumentException("$dataBaseField is a invalid \$dataBaseField.");
 		}
-		$dataBaseField = "$table.$column";
 
-		if ($table === Inflector::camelize($ormTable->getAlias()) && !$ormTable->getSchema()->hasColumn($column)) {
-			throw new InvalidArgumentException("The field '$column' not exists in '$table'");
-		}
-		if ($table !== Inflector::camelize($ormTable->getAlias())) {
+		if ($table === Inflector::camelize($ormTable->getAlias())) {
+			if (!$ormTable->getSchema()->hasColumn($column)) {
+				throw new InvalidArgumentException("The field '$column' not exists in '$table'");
+			}
+			$columnSchema = $this->_tables->getOrmTable()->getSchema()->getColumn($column);
+		} else {
 			if (!$ormTable->hasAssociation($table)) {
 				throw new InvalidArgumentException("The table '$table' isn't associated with '" . $ormTable->getAlias() . "'.");
 			}
@@ -118,9 +127,11 @@ final class Columns {
 			if (!$association->getSchema()->hasColumn($column)) {
 				throw new InvalidArgumentException("The field '$column' not exists in '{$association->getAlias()}'");
 			}
+			$columnSchema = $association->getSchema()->getColumn($column);
 		}
+		$column = new Column("$table.$column", true, $columnSchema);
 
-		return $dataBaseField;
+		return $column;
 	}
 
 }

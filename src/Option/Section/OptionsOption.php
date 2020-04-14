@@ -501,7 +501,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/orderFixed
 	 */
 	public function setOrderFixed(array $orderFixed): MainOption {
-		if (getType(Functions::getInstance()->arrayKeyFirst($orderFixed)) === 'string' && in_array(Functions::getInstance()->arrayKeyFirst($orderFixed), ['pre', 'post'])) {
+		if (getType(Functions::getInstance()->arrayKeyFirst($orderFixed)) === 'string') {
 			foreach ($orderFixed as $key => $objectItem) {
 				if (!in_array($key, ['pre', 'post'])) {
 					throw new InvalidArgumentException("You must use only 'pre' or 'post' key for objects type. Found: $key.");
