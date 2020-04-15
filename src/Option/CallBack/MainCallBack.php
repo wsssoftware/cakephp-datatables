@@ -15,6 +15,7 @@ use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
 use DataTables\Tools\Validator;
+use InvalidArgumentException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -25,7 +26,7 @@ use Twig\Loader\FilesystemLoader;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-abstract class MainCallBack {
+final class MainCallBack {
 
 	/**
 	 * @var string
@@ -63,56 +64,91 @@ abstract class MainCallBack {
 	protected $_twigLoader;
 
 	/**
+	 * Storage a instance of object.
+	 *
+	 * @var self[]
+	 */
+	public static $instance;
+
+	/**
 	 * MainCallBack constructor.
 	 *
+	 * @param string $callbackName
 	 * @param string $tablesName
 	 * @param string $config
 	 */
-	public function __construct(string $tablesName, string $config) {
+	public function __construct(string $callbackName, string $tablesName, string $config) {
 		$basePath = Configure::read('DataTables.resources.templates');
 		if (substr($basePath, -1, 1) !== DS) {
 			$basePath .= DS;
 		}
-		$this->_callbackName = $this->_callbackNamePrefix . $this->_callbackName . $this->_ext;
-		$this->_appTemplateFolder = $basePath . Inflector::camelize($tablesName) . DS . Inflector::underscore($config) . DS;
+		$this->_callbackName = $this->_callbackNamePrefix . $callbackName . $this->_ext;
+		$this->_appTemplateFolder = $basePath . $tablesName . DS . $config . DS;
 		$this->_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'twig' . DS . 'js' . DS . 'functions' . DS;
 		$this->_twigLoader = new FilesystemLoader();
 		$this->_twig = new Environment($this->_twigLoader);
 		if (Configure::read('debug') === true) {
 			$this->_twig->setCache(false);
 		} else {
-		    $this->_twig->setCache(Configure::read('DataTables.resources.callbacksCacheFolder'));
+			$this->_twig->setCache(Configure::read('DataTables.resources.callbacksCacheFolder'));
 		}
 	}
 
 	/**
-	 * @param string $body
+	 * Return a instance of builder object.
+	 *
+	 * @param string $callBack
+	 * @param string $tablesName
+	 * @param string $config
+	 * @return \DataTables\Option\CallBack\MainCallBack
+	 */
+	public static function getInstance(string $callBack, string $tablesName, string $config): MainCallBack {
+		$callBack = Inflector::underscore($callBack);
+		$tablesName = Inflector::camelize($tablesName);
+		$config = Inflector::underscore($config);
+		$md5 = md5($callBack . $tablesName . $config);
+		if (empty(static::$instance[$md5])) {
+			static::$instance[$md5] = new self($callBack, $tablesName, $config);
+		}
+		return static::$instance[$md5];
+	}
+
+	/**
+	 * Destroy all instances if exist.
+	 *
+	 * @return void
+	 */
+	public static function destroyAllInstances(): void {
+		static::$instance = [];
+	}
+
+	/**
+	 * Render callback js functions with application template file or body.
+	 *
+	 * @param string|array $bodyOrParams To use application template file, leave blank or pass an array with params
+	 *                                   that will be used in file. To use the body mode, pass an string that will
+	 *                                   putted inside the function.
 	 * @return string
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @link https://twig.symfony.com/doc/3.x/api.html
 	 */
-	public function renderWithBody(string $body) {
+	public function render($bodyOrParams = []) {
+		$bodyParamsType = getType($bodyOrParams);
+		if ($bodyParamsType === 'array') {
+			$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_callbackName);
+			Validator::getInstance()->checkKeysValueTypesOrFail($bodyOrParams, 'string', '*');
+			$this->_twigLoader->setPaths($this->_appTemplateFolder);
+			$body = $this->_twig->render($this->_callbackName, $bodyOrParams);
+		} elseif ($bodyParamsType === 'string') {
+			$body = $bodyOrParams;
+		} else {
+			throw new InvalidArgumentException("$bodyOrParams must be 'string' or 'array'. Found: $bodyParamsType.");
+		}
 		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_callbackName);
-	    $this->_twigLoader->setPaths($this->_pluginTemplateFolder);
+		$this->_twigLoader->setPaths($this->_pluginTemplateFolder);
 		return $this->_twig->render($this->_callbackName, compact('body'));
-	}
-
-	/**
-	 * @param array $params
-	 * @return string
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
-	 */
-	public function renderWithFile(array $params = []) {
-		$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_callbackName);
-		Validator::getInstance()->checkKeysValueTypesOrFail($params, 'string', '*');
-		$this->_twigLoader->setPaths($this->_appTemplateFolder);
-		if (!is_file($this->_appTemplateFolder . $this->_callbackName)) {
-			throw new FatalErrorException("File '" . $this->_appTemplateFolder . $this->_callbackName . "' not found.");
-		}
-		return $this->renderWithBody($this->_twig->render($this->_callbackName, $params));
 	}
 
 	/**

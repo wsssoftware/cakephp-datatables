@@ -41,7 +41,6 @@ require_once $root . '/vendor/autoload.php';
 require_once $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
 
 class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
-
 if (file_exists($root . '/config/bootstrap.php')) {
 	require $root . '/config/bootstrap.php';
 	return;

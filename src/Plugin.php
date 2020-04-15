@@ -29,6 +29,13 @@ use Cake\Utility\Hash;
 class Plugin extends BasePlugin {
 
 	/**
+	 * @return void
+	 */
+	public function initialize(): void {
+		parent::initialize();
+	}
+
+	/**
 	 * Load all the plugin configuration and bootstrap logic.
 	 *
 	 * The host application is provided as an argument. This allows you to load

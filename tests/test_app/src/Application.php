@@ -5,6 +5,7 @@ namespace TestApp;
 use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use DataTables\Plugin;
 
 class Application extends BaseApplication {
 
@@ -22,6 +23,7 @@ class Application extends BaseApplication {
 	 * @return void
 	 */
 	public function bootstrap(): void {
+		$this->addPlugin(Plugin::class);
 		parent::bootstrap();
 	}
 

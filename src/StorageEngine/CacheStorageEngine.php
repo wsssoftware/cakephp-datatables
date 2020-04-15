@@ -24,6 +24,23 @@ use DataTables\Table\BuiltConfig;
 class CacheStorageEngine implements StorageEngineInterface {
 
 	/**
+	 * @var string
+	 */
+	private $_cacheConfigName = '_data_tables_built_configs_';
+
+	/**
+	 * CacheStorageEngine constructor.
+	 *
+	 * @param string|null $cacheConfigName
+	 */
+	public function __construct(?string $cacheConfigName = null) {
+		if (!empty($cacheConfigName)) {
+			$this->_cacheConfigName = $cacheConfigName;
+		}
+		Cache::getConfigOrFail($this->_cacheConfigName);
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function save(string $key, BuiltConfig $builtConfig): bool {
@@ -34,7 +51,7 @@ class CacheStorageEngine implements StorageEngineInterface {
 	 * @inheritDoc
 	 */
 	public function exists(string $key): bool {
-		return (Cache::read($key, '_data_tables_built_configs_') instanceof BuiltConfig) ? true : false;
+		return Cache::read($key, '_data_tables_built_configs_') instanceof BuiltConfig;
 	}
 
 	/**

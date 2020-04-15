@@ -50,16 +50,13 @@ abstract class OptionAbstract {
 	 * @return mixed|void A value if exists or null.
 	 */
 	protected function _getConfig(?string $field = null, $default = null) {
-		if ($this instanceof MainOption) {
-			if (!empty($field)) {
-				return Hash::get($this->_config, $field, $default);
-			}
-
-			return $this->_config;
-		}
-								if ($this instanceof ChildOptionAbstract) {
+		if ($this instanceof ChildOptionAbstract) {
 			return $this->getMainOption()->getConfig($field, $default);
 		}
+		if (!empty($field)) {
+			return Hash::get($this->_config, $field, $default);
+		}
+		return $this->_config;
 	}
 
 	/**

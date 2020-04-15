@@ -7,23 +7,32 @@
  * link     https://github.com/allanmcarvalho/cakephp-data-renderer
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
-declare(strict_types = 1);
 
-namespace DataTables\Option\CallBack;
+namespace DataTables\Test\Tools;
+
+use Cake\TestSuite\TestCase;
+use DataTables\Tools\Js;
 
 /**
- * Class CreatedCellCallBack
+ * Class JsTest
  *
  * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class CreatedCellCallBack extends MainCallBack {
+class JsTest extends TestCase {
 
 	/**
-	 * @var string
-	 * @inheritDoc
+	 * @return void
 	 */
-	protected $_callbackName = 'created_cell';
+	public function testMinify() {
+		$js = 'function {
+            var abc = 123;
+        }';
+		$lenBefore = 47;
+		$lenAfter = 21;
+		$this->assertEquals($lenBefore, strlen($js));
+		$this->assertEquals($lenAfter, strlen(Js::minify($js)));
+	}
 
 }
