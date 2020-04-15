@@ -44,6 +44,15 @@ define('DATA_TABLES_APP', DATA_TABLES_ROOT . DS . DATA_TABLES_APP_DIR . DS);
 define('DATA_TABLES_CONFIG', DATA_TABLES_ROOT . DS . 'config' . DS);
 
 /*
+ * File path to the templates directory.
+ *
+ * To derive your templates from your webserver change this to:
+ *
+ * `define('WWW_ROOT', rtrim($_SERVER['DOCUMENT_ROOT'], DS) . DS);`
+ */
+define('DATA_TABLES_TEMPLATES', DATA_TABLES_ROOT . DS . 'templates' . DS);
+
+/*
  * File path to the webroot directory.
  *
  * To derive your webroot from your webserver change this to:

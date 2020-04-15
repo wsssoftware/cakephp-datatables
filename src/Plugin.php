@@ -17,7 +17,6 @@ namespace DataTables;
 require __DIR__ . DS . '..' . DS . 'config' . DS . 'paths.php';
 
 use Cake\Cache\Cache;
-use Cake\Cache\Engine\FileEngine;
 use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
@@ -50,14 +49,7 @@ class Plugin extends BasePlugin {
 		unset($applicationDataTablesConfigs);
 		unset($pluginDataTablesConfigs);
 		if (empty(Cache::getConfig('_data_tables_built_configs_'))) {
-			Cache::setConfig('_data_tables_built_configs_', [
-				'className' => FileEngine::class,
-				'prefix' => 'built_config_',
-				'path' => CACHE . DS . 'data_tables' . DS . 'built_configs' . DS,
-				'serialize' => true,
-				'duration' => '+' . Configure::read('DataTables.StorageEngine.duration') . ' minutes',
-				'url' => env('CACHE_CAKECORE_URL', null),
-			]);
+			Cache::setConfig('_data_tables_built_configs_', Configure::read('DataTables.StorageEngine.cacheStorageEngineConfig'));
 		}
 	}
 

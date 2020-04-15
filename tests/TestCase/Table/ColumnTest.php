@@ -93,4 +93,24 @@ class ColumnTest extends TestCase {
 		$col->setCellType('abc');
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testClassName() {
+		$col = $this->Columns->addDatabaseColumn('Users.id');
+		static::assertEquals(null, $col->getClassName());
+		$col->setClassName('abc');
+		static::assertEquals('abc', $col->getClassName());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testContentPadding() {
+		$col = $this->Columns->addDatabaseColumn('Users.id');
+		static::assertEquals(null, $col->getContentPadding());
+		$col->setContentPadding('abcdfghi');
+		static::assertEquals('abcdfghi', $col->getContentPadding());
+	}
+
 }

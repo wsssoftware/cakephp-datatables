@@ -68,11 +68,11 @@ class Validator {
 		foreach ($array as $key => $value) {
 			$keyType = getType($key);
 			$valueType = getType($value);
-			if (!in_array($keyType, $allowedKeyTypes)) {
+			if (!in_array($keyType, $allowedKeyTypes) && $allowedKeyTypes !== ['*']) {
 				$needleString = str_replace(' and ', ' or ', Text::toList($allowedKeyTypes));
 				throw new InvalidArgumentException("In $inString array, the keys always must be $needleString. key: $key.");
 			}
-			if (!in_array($valueType, $allowedValueTypes)) {
+			if (!in_array($valueType, $allowedValueTypes) && $allowedValueTypes !== ['*']) {
 				$needleString = str_replace(' and ', ' or ', Text::toList($allowedValueTypes));
 				throw new InvalidArgumentException("In $inString array, the record $key isn't $needleString. Found: '$valueType'.");
 			}
