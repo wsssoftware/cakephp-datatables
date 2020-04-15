@@ -11,6 +11,8 @@ declare(strict_types = 1);
 
 namespace DataTables\Tools;
 
+use MatthiasMullie\Minify\JS as JsMinify;
+
 /**
  * Class Js
  *
@@ -27,7 +29,7 @@ class Js {
 	 * @return string Minified Js.
 	 */
 	public static function minify(string $content): string {
-		$minifyJs = new self();
+		$minifyJs = new JsMinify();
 		return $minifyJs->add($content)->minify();
 	}
 
