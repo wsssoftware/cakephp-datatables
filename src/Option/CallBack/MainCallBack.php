@@ -127,7 +127,7 @@ final class MainCallBack {
 	 *
 	 * @param string|array $bodyOrParams To use application template file, leave blank or pass an array with params
 	 *                                   that will be used in file. To use the body mode, pass an string that will
-	 *                                   putted inside the function.
+	 *                                   putted inside the js function.
 	 * @return string
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError

@@ -52,8 +52,11 @@ class Validator {
 	 * @param string|null $inString A string to make the error more friendly.
 	 * @return void
 	 */
-	public function checkKeysValueTypesOrFail(array $array, $allowedKeyTypes = [], $allowedValueTypes = [], string $inString = null): void {
-		$allowedKeyTypesType = getType($allowedKeyTypes);
+	public function checkKeysValueTypesOrFail(?array $array, $allowedKeyTypes = [], $allowedValueTypes = [], string $inString = null): void {
+		if (empty($array)) {
+		    return;
+		}
+	    $allowedKeyTypesType = getType($allowedKeyTypes);
 		if (!in_array($allowedKeyTypesType, ['array', 'string'])) {
 			throw new FatalErrorException(sprintf('The $keyType type must be an array or string. Found : %s', $allowedKeyTypesType));
 		} elseif ($allowedKeyTypesType === 'string') {

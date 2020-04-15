@@ -39,12 +39,20 @@ final class Columns {
 	private $_tables;
 
 	/**
+	 * Default application column configuration.
+	 *
+	 * @var \DataTables\Table\Column
+	 */
+	public $Default;
+
+	/**
 	 * Columns constructor.
 	 *
 	 * @param \DataTables\Table\Tables $tables
 	 */
 	public function __construct(Tables $tables) {
 		$this->_tables = $tables;
+		$this->Default = new Column('default', 'empty', false);
 	}
 
 	/**
@@ -60,10 +68,11 @@ final class Columns {
 	 * Add a database column to DataTables table.
 	 *
 	 * @param string $dataBaseField
+	 * @param string|null $title
 	 * @return \DataTables\Table\Column
 	 */
-	public function addDatabaseColumn(string $dataBaseField): Column {
-		$column = $this->normalizeDataTableField($dataBaseField);
+	public function addDatabaseColumn(string $dataBaseField, ?string $title = null): Column {
+		$column = $this->normalizeDataTableField($dataBaseField, $title);
 		return $this->saveColumn($column);
 	}
 
@@ -71,10 +80,11 @@ final class Columns {
 	 * Add a non database column to DataTables table.
 	 *
 	 * @param string $label
+	 * @param string|null $title
 	 * @return \DataTables\Table\Column
 	 */
-	public function addNonDatabaseColumn(string $label): Column {
-		$column = new Column($label, false);
+	public function addNonDatabaseColumn(string $label, ?string $title = null): Column {
+		$column = new Column($label, $title, false);
 		return $this->saveColumn($column);
 	}
 
@@ -90,6 +100,7 @@ final class Columns {
 				throw new FatalErrorException("Column '{$column->getName()}' already exist in index $key.");
 			}
 		}
+		$column->setDefault($this->Default);
 		$this->_columns[] = $column;
 		return $column;
 	}
@@ -98,9 +109,10 @@ final class Columns {
 	 * Check if class, tables, fields and associations exists, and after normalize the name.
 	 *
 	 * @param string $dataBaseField
+	 * @param string|null $title
 	 * @return \DataTables\Table\Column
 	 */
-	private function normalizeDataTableField(string $dataBaseField): Column {
+	private function normalizeDataTableField(string $dataBaseField, ?string $title): Column {
 		$ormTable = $this->_tables->getOrmTable();
 		$explodedDataBaseField = explode('.', $dataBaseField);
 		if (count($explodedDataBaseField) === 2) {
@@ -129,7 +141,7 @@ final class Columns {
 			}
 			$columnSchema = $association->getSchema()->getColumn($column);
 		}
-		$column = new Column("$table.$column", true, $columnSchema);
+		$column = new Column("$table.$column", $title, true, $columnSchema);
 
 		return $column;
 	}
