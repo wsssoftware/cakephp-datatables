@@ -44,6 +44,5 @@ class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppControll
 
 if (file_exists($root . '/config/bootstrap.php')) {
 	require $root . '/config/bootstrap.php';
-
 	return;
 }

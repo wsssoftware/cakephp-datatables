@@ -25,7 +25,7 @@ return [
 			],
 		],
 		'resources' => [
-			'callbacksFolder' => ROOT . DS . 'templates' . DS . 'DataTables' . DS . 'Callbacks' . DS,
+			'templates' => ROOT . DS . 'templates' . DS . 'data_tables' . DS,
 			'callbacksCacheFolder' => CACHE . DS . 'data_tables' . DS . 'twig' . DS,
 		],
 	],

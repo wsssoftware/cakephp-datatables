@@ -14,7 +14,6 @@ namespace DataTables\Option\CallBack;
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
-use const DATA_TABLES_TEMPLATES;
 use DataTables\Tools\Validator;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -31,22 +30,22 @@ abstract class MainCallBack {
 	/**
 	 * @var string
 	 */
+	protected $_callbackNamePrefix = 'callback_';
+
+	/**
+	 * @var string
+	 */
 	protected $_callbackName;
 
 	/**
 	 * @var string
 	 */
-	protected $_callbackNameWithConfig;
-
-	/**
-	 * @var string
-	 */
-	protected $_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'twig' . DS . 'callbacks' . DS . 'functions' . DS;
-
-	/**
-	 * @var string
-	 */
 	protected $_appTemplateFolder;
+
+	/**
+	 * @var string
+	 */
+	protected $_pluginTemplateFolder;
 
 	/**
 	 * @var string
@@ -70,25 +69,19 @@ abstract class MainCallBack {
 	 * @param string $config
 	 */
 	public function __construct(string $tablesName, string $config) {
-		$basePath = Configure::read('DataTables.resources.callbacksFolder');
+		$basePath = Configure::read('DataTables.resources.templates');
 		if (substr($basePath, -1, 1) !== DS) {
 			$basePath .= DS;
 		}
-		$this->_appTemplateFolder = $basePath . Inflector::camelize($tablesName) . DS;
-		$this->_callbackNameWithConfig = Inflector::underscore($config . '_' . $this->_callbackName) . $this->_ext;
-		$fullFilePath = $this->_pluginTemplateFolder . $this->_callbackName . $this->_ext;
-		if (!is_file($fullFilePath)) {
-			throw new FatalErrorException("File '$fullFilePath' not found");
-		}
-		$this->_twigLoader = new FilesystemLoader([
-			$this->_pluginTemplateFolder,
-			$this->_appTemplateFolder,
-		]);
-		$this->_twig = new Environment($this->_twigLoader, [
-			'cache' => Configure::read('DataTables.resources.callbacksCacheFolder'),
-		]);
+		$this->_callbackName = $this->_callbackNamePrefix . $this->_callbackName . $this->_ext;
+		$this->_appTemplateFolder = $basePath . Inflector::camelize($tablesName) . DS . Inflector::underscore($config) . DS;
+		$this->_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'twig' . DS . 'js' . DS . 'functions' . DS;
+		$this->_twigLoader = new FilesystemLoader();
+		$this->_twig = new Environment($this->_twigLoader);
 		if (Configure::read('debug') === true) {
 			$this->_twig->setCache(false);
+		} else {
+		    $this->_twig->setCache(Configure::read('DataTables.resources.callbacksCacheFolder'));
 		}
 	}
 
@@ -100,7 +93,9 @@ abstract class MainCallBack {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function renderWithBody(string $body) {
-		return $this->_twig->render($this->_callbackName . $this->_ext, compact('body'));
+		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_callbackName);
+	    $this->_twigLoader->setPaths($this->_pluginTemplateFolder);
+		return $this->_twig->render($this->_callbackName, compact('body'));
 	}
 
 	/**
@@ -111,11 +106,25 @@ abstract class MainCallBack {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function renderWithFile(array $params = []) {
+		$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_callbackName);
 		Validator::getInstance()->checkKeysValueTypesOrFail($params, 'string', '*');
-		if (!is_file($this->_appTemplateFolder . $this->_callbackNameWithConfig)) {
-			throw new FatalErrorException("File '" . $this->_appTemplateFolder . $this->_callbackNameWithConfig . "' not found.");
+		$this->_twigLoader->setPaths($this->_appTemplateFolder);
+		if (!is_file($this->_appTemplateFolder . $this->_callbackName)) {
+			throw new FatalErrorException("File '" . $this->_appTemplateFolder . $this->_callbackName . "' not found.");
 		}
-		return $this->renderWithBody($this->_twig->render($this->_callbackNameWithConfig, $params));
+		return $this->renderWithBody($this->_twig->render($this->_callbackName, $params));
+	}
+
+	/**
+	 * Check if a file exists or fail.
+	 *
+	 * @param string $file
+	 * @return void
+	 */
+	private function checkIfFileExistsOfFail(string $file): void {
+		if (!is_file($file)) {
+			throw new FatalErrorException("File '$file' not found.");
+		}
 	}
 
 }
