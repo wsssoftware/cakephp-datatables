@@ -32,7 +32,7 @@ class JsTest extends TestCase {
 		$lenBefore = 47;
 		$lenAfter = 21;
 		$this->assertEquals($lenBefore, strlen($js));
-		$this->assertEquals($lenAfter, strlen(Js::minify($js)));
+		$this->assertEquals($lenAfter, strlen(Js::minifyFile($js)));
 	}
 
 }

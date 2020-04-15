@@ -14,7 +14,7 @@ declare(strict_types = 1);
 
 namespace DataTables;
 
-require __DIR__ . DS . '..' . DS . 'config' . DS . 'paths.php';
+require_once __DIR__ . DS . '..' . DS . 'config' . DS . 'paths.php';
 
 use Cake\Cache\Cache;
 use Cake\Core\BasePlugin;

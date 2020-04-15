@@ -30,6 +30,10 @@ $findRoot = function ($root) {
 $root = $findRoot(__FILE__);
 unset($findRoot);
 
+if (file_exists($root . DS . 'config' . DS . 'paths.php')) {
+	require_once $root . DS . 'config' . DS . 'paths.php';
+}
+
 chdir($root);
 require_once $root . '/vendor/autoload.php';
 

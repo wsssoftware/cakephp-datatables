@@ -28,7 +28,7 @@ class Js {
 	 * @param string $content Js to be minified.
 	 * @return string Minified Js.
 	 */
-	public static function minify(string $content): string {
+	public static function minifyFile(string $content): string {
 		$minifyJs = new JsMinify();
 		return $minifyJs->add($content)->minify();
 	}
