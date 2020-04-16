@@ -11,9 +11,7 @@ declare(strict_types = 1);
 
 namespace TestApp\DataTables\Tables;
 
-use DataTables\Option\MainOption;
-use DataTables\Table\Columns;
-use DataTables\Table\QueryBaseState;
+use DataTables\Table\ConfigBundle;
 use DataTables\Table\Tables;
 
 /**
@@ -31,12 +29,10 @@ class CategoriesTables extends Tables {
 	protected $_ormTableName = 'Categories';
 
 	/**
-	 * @param \DataTables\Table\QueryBaseState $queryBaseState
-	 * @param \DataTables\Table\Columns $columns
-	 * @param \DataTables\Option\MainOption $option
+	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 * @return void
 	 */
-	public function mainConfig(QueryBaseState $queryBaseState, Columns $columns, MainOption $option): void {
+	public function mainConfig(ConfigBundle $configBundle): void {
 
 	}
 

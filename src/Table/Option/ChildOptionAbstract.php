@@ -8,19 +8,19 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Option;
+namespace DataTables\Table\Option;
 
 abstract class ChildOptionAbstract extends OptionAbstract {
 
 	/**
-	 * @var \DataTables\Option\MainOption|null
+	 * @var \DataTables\Table\Option\MainOption|null
 	 */
 	protected $_mainOption = null;
 
 	/**
 	 * ChildOptionAbstract constructor.
 	 *
-	 * @param \DataTables\Option\MainOption $mainOption
+	 * @param \DataTables\Table\Option\MainOption $mainOption
 	 */
 	public function __construct(MainOption $mainOption) {
 		parent::__construct();
@@ -36,7 +36,7 @@ abstract class ChildOptionAbstract extends OptionAbstract {
 	/**
 	 * Return the MainOption class.
 	 *
-	 * @return \DataTables\Option\MainOption;
+	 * @return \DataTables\Table\Option\MainOption;
 	 */
 	protected function getMainOption(): MainOption {
 		return $this->_mainOption;

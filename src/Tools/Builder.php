@@ -13,14 +13,14 @@ namespace DataTables\Tools;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
-use Cake\View\View;
-use DataTables\Option\MainOption;
+use Cake\Utility\Inflector;
 use DataTables\StorageEngine\StorageEngineInterface;
-use DataTables\Table\BuiltConfig;
 use DataTables\Table\Columns;
+use DataTables\Table\ConfigBundle;
+use DataTables\Table\Option\MainOption;
 use DataTables\Table\QueryBaseState;
 use DataTables\Table\Tables;
-use ReflectionClass;
+use InvalidArgumentException;
 
 /**
  * Class Tools
@@ -51,22 +51,56 @@ class Builder {
 	}
 
 	/**
-	 * Built a BuiltConfig class
+	 * Get or build a ConfigBundle.
+	 *
+	 * @param string $tableAndConfig A Tables class plus config method that you want to render concatenated by '::'. Eg.: 'Foo::main'.
+	 * @param bool $cache If true will try to get from cache.
+	 * @return \DataTables\Table\ConfigBundle
+	 * @throws \ReflectionException
+	 */
+	public function getConfigBundle(string $tableAndConfig, bool $cache = true): ConfigBundle {
+		$exploded = explode('::', $tableAndConfig);
+		if (count($exploded) !== 2) {
+			throw new InvalidArgumentException('Table param must be a concatenation of Tables class and config. Eg.: Foo::method.');
+		}
+		$storageEngine = $this->getStorageEngine();
+		$tablesClass = $exploded[0];
+		$configMethod = $exploded[1];
+		$tablesClassWithNameSpace = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
+		$md5 = Functions::getInstance()->getClassAndVersionMd5($tablesClassWithNameSpace);
+		$cacheKey = Inflector::underscore(str_replace('::', '_', $tableAndConfig));
+
+		$configBundle = null;
+		if ($cache === true && $storageEngine->exists($cacheKey)) {
+			/** @var \DataTables\Table\ConfigBundle $configBundle */
+			$configBundle = $storageEngine->read($cacheKey);
+		}
+		if (empty($configBundle) && !$configBundle instanceof ConfigBundle) {
+			$configBundle = $this->buildConfigBundle($tablesClassWithNameSpace, $configMethod, $md5);
+		}
+		if ($cache && !$storageEngine->save($cacheKey, $configBundle)) {
+			throw new FatalErrorException('Unable to save the ConfigBundle cache.');
+		}
+
+		return $configBundle;
+	}
+
+	/**
+	 * Build a ConfigBundle class
 	 *
 	 * @param string $tablesClassWithNameSpace Tables class with full namespace.
 	 * @param string $configMethod The method that will be called.
-	 * @param \Cake\View\View $view View class to generate the cell.
 	 * @param string $md5 Md5 verifier used in the cache.
-	 * @return \DataTables\Table\BuiltConfig
+	 * @return \DataTables\Table\ConfigBundle
 	 */
-	public function buildBuiltConfig(string $tablesClassWithNameSpace, string $configMethod, View $view, string $md5): BuiltConfig {
+	public function buildConfigBundle(string $tablesClassWithNameSpace, string $configMethod, string $md5): ConfigBundle {
 		$tables = static::getInstance()->buildTables($tablesClassWithNameSpace, $configMethod);
 		$queryBaseState = static::getInstance()->buildQueryBaseState($tables);
 		$columns = static::getInstance()->buildColumns($tables);
 		$options = static::getInstance()->buildOptions($tables);
-		$tables->{$configMethod . 'Config'}($queryBaseState, $columns, $options);
-		$renderedTable = $view->cell('DataTables.DataTables::table', [$columns])->render();
-		return new BuiltConfig($md5, $renderedTable, $queryBaseState, $columns, $options);
+		$configBundle = new ConfigBundle($md5, $queryBaseState, $columns, $options);
+		$tables->{$configMethod . 'Config'}($configBundle);
+		return $configBundle;
 	}
 
 	/**
@@ -113,7 +147,7 @@ class Builder {
 	 * Get the JsOptions class used in the DataTables table.
 	 *
 	 * @param \DataTables\Table\Tables $table Tables class instance.
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 */
 	private function buildOptions(Tables $table): MainOption {
 		return new MainOption();
@@ -127,17 +161,6 @@ class Builder {
 	public function getStorageEngine(): StorageEngineInterface {
 		$class = Configure::read('DataTables.StorageEngine.class');
 		return new $class();
-	}
-
-	/**
-	 * Return the Tables class md5
-	 *
-	 * @param string $tablesClassWithNameSpace Tables class name with namespace.
-	 * @return string Md5 string
-	 * @throws \ReflectionException
-	 */
-	public function getTablesMd5(string $tablesClassWithNameSpace): string {
-		return md5_file((new ReflectionClass($tablesClassWithNameSpace))->getFileName());
 	}
 
 }

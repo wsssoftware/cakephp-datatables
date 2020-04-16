@@ -41,7 +41,7 @@ class PluginTest extends TestCase {
 		$plugin->bootstrap($baseApplication);
 		$this->assertEquals('123', Configure::read('DataTables.test1'));
 		$this->assertEquals('abc', Configure::read('DataTables.testArray.test2'));
-		$this->assertNotEmpty(Cache::getConfig('_data_tables_built_configs_'));
+		$this->assertNotEmpty(Cache::getConfig('_data_tables_config_bundles_'));
 	}
 
 	/**

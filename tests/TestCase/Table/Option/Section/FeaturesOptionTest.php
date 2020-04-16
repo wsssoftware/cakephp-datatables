@@ -8,18 +8,18 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Test\Option\Section;
+namespace DataTables\Test\TestCase\Table\Option\Section;
 
 use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;
-use DataTables\Option\MainOption;
+use DataTables\Table\Option\MainOption;
 
 class FeaturesOptionTest extends TestCase {
 
 	/**
 	 * Test subject
 	 *
-	 * @var \DataTables\Option\MainOption
+	 * @var \DataTables\Table\Option\MainOption
 	 */
 	protected $MainOption;
 

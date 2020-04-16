@@ -9,20 +9,20 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Option;
+namespace DataTables\Table\Option;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
-use DataTables\Option\Section\ColumnsOption;
-use DataTables\Option\Section\FeaturesOption;
-use DataTables\Option\Section\OptionsOption;
+use DataTables\Table\Option\Section\ColumnsOption;
+use DataTables\Table\Option\Section\FeaturesOption;
+use DataTables\Table\Option\Section\OptionsOption;
 
 /**
  * Class Options
  *
- * @property \DataTables\Option\Section\FeaturesOption $Features
- * @property \DataTables\Option\Section\OptionsOption $Options
- * @property \DataTables\Option\Section\ColumnsOption $Columns
+ * @property \DataTables\Table\Option\Section\FeaturesOption $Features
+ * @property \DataTables\Table\Option\Section\OptionsOption $Options
+ * @property \DataTables\Table\Option\Section\ColumnsOption $Columns
  * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
@@ -86,7 +86,7 @@ final class MainOption extends OptionAbstract {
 	 *
 	 * @param string $field The field that will be changed.
 	 * @param bool $must True or false to set if it will printed or not.
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 */
 	public function setMustPrint(string $field, bool $must = true): MainOption {
 		$this->_mustPrint = Hash::insert($this->_mustPrint, $field, $must);

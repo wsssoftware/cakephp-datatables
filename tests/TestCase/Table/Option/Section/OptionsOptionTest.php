@@ -8,12 +8,12 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Test\Option\Section;
+namespace DataTables\Test\TestCase\Table\Option\Section;
 
 use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;
-use DataTables\Option\MainOption;
-use DataTables\Option\Section\OptionsOption;
+use DataTables\Table\Option\MainOption;
+use DataTables\Table\Option\Section\OptionsOption;
 use InvalidArgumentException;
 
 /**
@@ -28,7 +28,7 @@ class OptionsOptionTest extends TestCase {
 	/**
 	 * Test subject
 	 *
-	 * @var \DataTables\Option\MainOption
+	 * @var \DataTables\Table\Option\MainOption
 	 */
 	protected $MainOption;
 

@@ -8,11 +8,11 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Test\Option;
+namespace DataTables\Test\TestCase\Table\Option;
 
 use Cake\TestSuite\TestCase;
 use const JSON_ERROR_NONE;
-use DataTables\Option\MainOption;
+use DataTables\Table\Option\MainOption;
 use Exception;
 
 /**
@@ -27,7 +27,7 @@ class MainOptionTest extends TestCase {
 	/**
 	 * Test subject
 	 *
-	 * @var \DataTables\Option\MainOption
+	 * @var \DataTables\Table\Option\MainOption
 	 */
 	protected $MainOption;
 

@@ -9,11 +9,11 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Option\Section;
+namespace DataTables\Table\Option\Section;
 
 use Cake\Error\FatalErrorException;
-use DataTables\Option\ChildOptionAbstract;
-use DataTables\Option\MainOption;
+use DataTables\Table\Option\ChildOptionAbstract;
+use DataTables\Table\Option\MainOption;
 
 /**
  * Class FeaturesOption
@@ -69,7 +69,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * amount of time to calculate the widths) if the tables widths are passed in using.
 	 *
 	 * @param bool $autoWidth
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/autoWidth
 	 */
 	public function setAutoWidth(bool $autoWidth): MainOption {
@@ -118,7 +118,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * how to use jQuery delegated events to handle such a situation.
 	 *
 	 * @param bool $deferRender
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/deferRender
 	 */
 	public function setDeferRender(bool $deferRender): MainOption {
@@ -151,7 +151,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * using dom and CSS).
 	 *
 	 * @param bool $info
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/info
 	 */
 	public function setInfo(bool $info): MainOption {
@@ -200,7 +200,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * has no relevance when there is no pagination.
 	 *
 	 * @param bool $lengthChange
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/lengthChange
 	 */
 	public function setLengthChange(bool $lengthChange): MainOption {
@@ -237,7 +237,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * by DataTables at all.
 	 *
 	 * @param bool $ordering
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/ordering
 	 */
 	public function setOrdering(bool $ordering): MainOption {
@@ -268,7 +268,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * may do so with this parameter.
 	 *
 	 * @param bool $paging
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/paging
 	 */
 	public function setPaging(bool $paging): MainOption {
@@ -297,7 +297,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * sort the entries.
 	 *
 	 * @param bool $processing
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/processing
 	 */
 	public function setProcessing(bool $processing): MainOption {
@@ -332,7 +332,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * CSS unit, or a number (in which case it will be treated as a pixel measurement).
 	 *
 	 * @param bool $scrollX
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/scrollX
 	 */
 	public function setScrollX(bool $scrollX): MainOption {
@@ -369,7 +369,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * and is applied to the table body (i.e. it does not take into account the header or footer height directly).
 	 *
 	 * @param string $scrollY
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/scrollY
 	 */
 	public function setScrollY(?string $scrollY): MainOption {
@@ -416,7 +416,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * dom option.
 	 *
 	 * @param bool $searching
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/searching
 	 */
 	public function setSearching(bool $searching): MainOption {
@@ -469,7 +469,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * uses is detailed in the DataTables documentation.
 	 *
 	 * @param bool $serverSide
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/serverSide
 	 */
 	public function setServerSide(bool $serverSide): MainOption {
@@ -525,7 +525,7 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * state on the server through Ajax can be used through the stateSaveCallback and stateLoadCallback options.
 	 *
 	 * @param bool $stateSave
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/stateSave
 	 */
 	public function setStateSave(bool $stateSave): MainOption {

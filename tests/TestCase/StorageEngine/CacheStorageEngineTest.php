@@ -8,14 +8,12 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Test\StorageEngine;
+namespace DataTables\Test\TestCase\StorageEngine;
 
-use Cake\Cache\Cache;
 use Cake\TestSuite\TestCase;
-use Cake\View\View;
 use DataTables\Plugin;
 use DataTables\StorageEngine\CacheStorageEngine;
-use DataTables\Table\BuiltConfig;
+use DataTables\Table\ConfigBundle;
 use DataTables\Tools\Builder;
 use InvalidArgumentException;
 use TestApp\Application;
@@ -70,7 +68,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testSave() {
-		$buildConfig = Builder::getInstance()->buildBuiltConfig(CategoriesTables::class, 'main', new View(), md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle(CategoriesTables::class, 'main', md5('abc'));
 		$this->assertTrue($this->Cache->save('abc', $buildConfig));
 	}
 
@@ -78,17 +76,17 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testRead() {
-		$buildConfig = Builder::getInstance()->buildBuiltConfig(CategoriesTables::class, 'main', new View(), md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle(CategoriesTables::class, 'main', md5('abc'));
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertEmpty($this->Cache->read('def'));
-		$this->assertInstanceOf(BuiltConfig::class, $this->Cache->read('abc'));
+		$this->assertInstanceOf(ConfigBundle::class, $this->Cache->read('abc'));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testDelete() {
-		$buildConfig = Builder::getInstance()->buildBuiltConfig(CategoriesTables::class, 'main', new View(), md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle(CategoriesTables::class, 'main', md5('abc'));
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertTrue($this->Cache->delete('abc'));
 	}
@@ -97,7 +95,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testExists() {
-		$buildConfig = Builder::getInstance()->buildBuiltConfig(CategoriesTables::class, 'main', new View(), md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle(CategoriesTables::class, 'main', md5('abc'));
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertFalse($this->Cache->exists('def'));
 		$this->assertTrue($this->Cache->exists('abc'));

@@ -8,13 +8,13 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Test\Option\CallBack;
+namespace DataTables\Test\TestCase\Table\Option\Callback;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;
-use DataTables\Option\CallBack\MainCallBack;
 use DataTables\Plugin;
+use DataTables\Table\Option\CallBack\MainCallBack;
 use InvalidArgumentException;
 use TestApp\Application;
 

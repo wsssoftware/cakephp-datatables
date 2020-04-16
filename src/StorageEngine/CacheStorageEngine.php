@@ -12,7 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\StorageEngine;
 
 use Cake\Cache\Cache;
-use DataTables\Table\BuiltConfig;
+use DataTables\Table\ConfigBundle;
 
 /**
  * Class CacheStorageEngine
@@ -26,7 +26,7 @@ class CacheStorageEngine implements StorageEngineInterface {
 	/**
 	 * @var string
 	 */
-	private $_cacheConfigName = '_data_tables_built_configs_';
+	private $_cacheConfigName = '_data_tables_config_bundles_';
 
 	/**
 	 * CacheStorageEngine constructor.
@@ -43,30 +43,30 @@ class CacheStorageEngine implements StorageEngineInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function save(string $key, BuiltConfig $builtConfig): bool {
-		return Cache::write($key, $builtConfig, '_data_tables_built_configs_');
+	public function save(string $key, ConfigBundle $configBundle): bool {
+		return Cache::write($key, $configBundle, '_data_tables_config_bundles_');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function exists(string $key): bool {
-		return Cache::read($key, '_data_tables_built_configs_') instanceof BuiltConfig;
+		return Cache::read($key, '_data_tables_config_bundles_') instanceof ConfigBundle;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function read(string $key): ?BuiltConfig {
-		$builtConfig = Cache::read($key, '_data_tables_built_configs_');
-		return ($builtConfig instanceof BuiltConfig) ? $builtConfig : null;
+	public function read(string $key): ?ConfigBundle {
+		$configBundle = Cache::read($key, '_data_tables_config_bundles_');
+		return ($configBundle instanceof ConfigBundle) ? $configBundle : null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function delete(string $key): bool {
-		return Cache::delete($key, '_data_tables_built_configs_');
+		return Cache::delete($key, '_data_tables_config_bundles_');
 	}
 
 }

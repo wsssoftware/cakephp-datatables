@@ -11,6 +11,8 @@ declare(strict_types = 1);
 
 namespace DataTables\Tools;
 
+use ReflectionClass;
+
 /**
  * Class Functions
  *
@@ -59,6 +61,44 @@ class Functions {
 	public function arrayKeyLast(array $array){
 		end($array);
 		return key($array);
+	}
+
+	/**
+	 * Return current package version.
+	 *
+	 * @return string
+	 */
+	public function getPluginCurrentVersion(): string {
+	    $version = '0';
+	    $packages = json_decode(file_get_contents(ROOT . DS . 'vendor' . DS . 'composer' . DS . 'installed.json'));
+		foreach ($packages as $package) {
+			if ($package->name === 'allanmcarvalho/cakephp-datatables') {
+				$version = $package->version;
+			}
+	    }
+		return $version;
+	}
+
+	/**
+	 * Return the class md5
+	 *
+	 * @param string $classWithNameSpace Class name with namespace.
+	 * @return string Md5 string
+	 * @throws \ReflectionException
+	 */
+	public function getClassMd5(string $classWithNameSpace): string {
+		return md5_file((new ReflectionClass($classWithNameSpace))->getFileName());
+	}
+
+	/**
+	 * @param string $classWithNameSpace
+	 * @throws \ReflectionException
+	 * @return string
+	 */
+	public function getClassAndVersionMd5(string $classWithNameSpace): string {
+		$classMd5 = $this->getClassMd5($classWithNameSpace);
+		$versionMd5 = md5($this->getPluginCurrentVersion());
+		return md5($classMd5 . $versionMd5);
 	}
 
 }

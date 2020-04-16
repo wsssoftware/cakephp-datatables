@@ -9,11 +9,11 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Option\Section;
+namespace DataTables\Table\Option\Section;
 
-use DataTables\Option\ChildOptionAbstract;
-use DataTables\Option\MainOption;
 use DataTables\Table\Columns;
+use DataTables\Table\Option\ChildOptionAbstract;
+use DataTables\Table\Option\MainOption;
 
 /**
  * Class ColumnsOption
@@ -44,7 +44,7 @@ final class ColumnsOption extends ChildOptionAbstract {
 	 * Set all columns and defColumns options using a Columns class.
 	 *
 	 * @param \DataTables\Table\Columns $columns
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/
 	 */
 	public function setColumns(Columns $columns): MainOption {

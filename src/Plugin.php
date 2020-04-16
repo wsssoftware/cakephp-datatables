@@ -55,8 +55,10 @@ class Plugin extends BasePlugin {
 		Configure::write('DataTables', Hash::merge($pluginDataTablesConfigs, $applicationDataTablesConfigs));
 		unset($applicationDataTablesConfigs);
 		unset($pluginDataTablesConfigs);
-		if (empty(Cache::getConfig('_data_tables_built_configs_'))) {
-			Cache::setConfig('_data_tables_built_configs_', Configure::read('DataTables.StorageEngine.cacheStorageEngineConfig'));
+		foreach (Configure::read('DataTables.Cache') as $cacheConfigName => $cacheConfig) {
+			if (empty(Cache::getConfig($cacheConfigName))) {
+				Cache::setConfig($cacheConfigName, $cacheConfig);
+			}
 		}
 	}
 

@@ -9,12 +9,12 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Option\Section;
+namespace DataTables\Table\Option\Section;
 
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Text;
-use DataTables\Option\ChildOptionAbstract;
-use DataTables\Option\MainOption;
+use DataTables\Table\Option\ChildOptionAbstract;
+use DataTables\Table\Option\MainOption;
 use DataTables\Tools\Functions;
 use DataTables\Tools\Validator;
 use InvalidArgumentException;
@@ -127,7 +127,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 *    rows are in the filtered result set, and the second how many in the full data set without filtering applied.
 	 *
 	 * @param int|array $deferLoading
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/deferLoading
 	 */
 	public function setDeferLoading($deferLoading): MainOption {
@@ -169,7 +169,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * table, it is far more efficient to use the ajax.reload() method (or rows.add() etc).
 	 *
 	 * @param bool $destroy
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/destroy
 	 */
 	public function setDestroy(bool $destroy): MainOption {
@@ -199,7 +199,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
 	 * @param int $displayStart
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/displayStart
 	 */
 	public function setDisplayStart(int $displayStart): MainOption {
@@ -240,7 +240,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
 	 * @param string $dom
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/dom
 	 */
 	public function setDom(string $dom): MainOption {
@@ -289,7 +289,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * pageLength is also provided.
 	 *
 	 * @param array $lengthMenu
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/lengthMenu
 	 */
 	public function setLengthMenu(array $lengthMenu): MainOption {
@@ -334,7 +334,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * This 2D array structure allows a multi-column order to be defined as the initial state should it be required.
 	 *
 	 * @param array $order
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/order
 	 */
 	public function setOrder(array $order): MainOption {
@@ -401,7 +401,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * applied to them. If orderCellsTop is true then 1 and 2.1 will have the order event listeners applied to them.
 	 *
 	 * @param bool $orderCellsTop
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/orderCellsTop
 	 */
 	public function setOrderCellsTop(bool $orderCellsTop): MainOption {
@@ -443,7 +443,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * a feature switch to allow this feature to be disabled with working with old browsers or large data sets.
 	 *
 	 * @param bool $orderClasses
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/orderClasses
 	 */
 	public function setOrderClasses(bool $orderClasses): MainOption {
@@ -497,7 +497,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * priority order or index column for example, or for grouping similar rows together.
 	 *
 	 * @param array $orderFixed
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/orderFixed
 	 */
 	public function setOrderFixed(array $orderFixed): MainOption {
@@ -566,7 +566,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * order.
 	 *
 	 * @param bool $orderMulti
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/orderMulti
 	 */
 	public function setOrderMulti(bool $orderMulti): MainOption {
@@ -596,7 +596,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * here to a custom setting using a pop-up menu (see lengthMenu).
 	 *
 	 * @param int $pageLength
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/pageLength
 	 */
 	public function setPageLength(int $pageLength): MainOption {
@@ -645,7 +645,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 *  - Further methods can be added using plug-ins.
 	 *
 	 * @param string $pagingType
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/pagingType
 	 */
 	public function setPagingType(string $pagingType): MainOption {
@@ -707,7 +707,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * This list will likely expand significantly in future versions of DataTables!
 	 *
 	 * @param string|array $renderer
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/renderer
 	 */
 	public function setRenderer($renderer): MainOption {
@@ -751,7 +751,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * The destroy option can be used to reinitialise a table with different options if required.
 	 *
 	 * @param bool $retrieve
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/retrieve
 	 */
 	public function setRetrieve(bool $retrieve): MainOption {
@@ -813,7 +813,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 *    characters and any ISO 10646 character as a numeric code.
 	 *
 	 * @param string $rowId
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/rowId
 	 */
 	public function setRowId(string $rowId): MainOption {
@@ -845,7 +845,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * height.
 	 *
 	 * @param bool $scrollCollapse
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/scrollCollapse
 	 */
 	public function setScrollCollapse(bool $scrollCollapse): MainOption {
@@ -869,7 +869,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * Flag to indicate if the filtering should be case insensitive or not.
 	 *
 	 * @param bool $caseInsensitive
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/search.caseInsensitive
 	 */
 	public function setSearchCaseInsensitive(bool $caseInsensitive): MainOption {
@@ -903,7 +903,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * (false) and therefore and special regex characters escaped.
 	 *
 	 * @param bool $regex
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/search.regex
 	 */
 	public function setSearchRegex(bool $regex): MainOption {
@@ -927,7 +927,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * Search term that should be applied to the table.
 	 *
 	 * @param string $search
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/search.search
 	 */
 	public function setSearchSearch(string $search): MainOption {
@@ -963,7 +963,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * option (search.regex). As such, this option is provided to disable this smart filtering ability.
 	 *
 	 * @param bool $smart
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/search.smart
 	 */
 	public function setSearchSmart(bool $smart): MainOption {
@@ -997,7 +997,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * default will be used. See the search documentation for more information on these parameters.
 	 *
 	 * @param array $searchCols
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/searchCols
 	 */
 	public function setSearchCols(array $searchCols): MainOption {
@@ -1072,7 +1072,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * methods use the utility method $.fn.dataTable.util.throttle().
 	 *
 	 * @param int $searchDelay
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/searchDelay
 	 */
 	public function setSearchDelay(int $searchDelay): MainOption {
@@ -1121,7 +1121,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * can be stored and retrieved indefinitely with no time limit.
 	 *
 	 * @param int $stateDuration
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/stateDuration
 	 */
 	public function setStateDuration(int $stateDuration): MainOption {
@@ -1156,7 +1156,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * options (these are odd and even by default).
 	 *
 	 * @param array $stripeClasses
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/stripeClasses
 	 */
 	public function setStripeClasses(array $stripeClasses): MainOption {
@@ -1193,7 +1193,7 @@ final class OptionsOption extends ChildOptionAbstract {
 	 * recommended for accessibility reasons.
 	 *
 	 * @param int $tabIndex
-	 * @return \DataTables\Option\MainOption
+	 * @return \DataTables\Table\Option\MainOption
 	 * @link https://datatables.net/reference/option/tabIndex
 	 */
 	public function setTabIndex(int $tabIndex): MainOption {

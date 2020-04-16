@@ -9,7 +9,7 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Option\CallBack;
+namespace DataTables\Table\Option\CallBack;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
@@ -90,7 +90,7 @@ final class MainCallBack {
 		if (Configure::read('debug') === true) {
 			$this->_twig->setCache(false);
 		} else {
-			$this->_twig->setCache(Configure::read('DataTables.resources.callbacksCacheFolder'));
+			$this->_twig->setCache(Configure::read('DataTables.resources.twigCacheFolder'));
 		}
 	}
 
@@ -100,7 +100,7 @@ final class MainCallBack {
 	 * @param string $callBack
 	 * @param string $tablesName
 	 * @param string $config
-	 * @return \DataTables\Option\CallBack\MainCallBack
+	 * @return \DataTables\Table\Option\CallBack\MainCallBack
 	 */
 	public static function getInstance(string $callBack, string $tablesName, string $config): MainCallBack {
 		$callBack = Inflector::underscore($callBack);

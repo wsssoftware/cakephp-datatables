@@ -8,7 +8,7 @@
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
-namespace DataTables\Test\Table;
+namespace DataTables\Test\TestCase\Table;
 
 use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;

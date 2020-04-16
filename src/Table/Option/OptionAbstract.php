@@ -9,7 +9,7 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Option;
+namespace DataTables\Table\Option;
 
 use Cake\Utility\Hash;
 
