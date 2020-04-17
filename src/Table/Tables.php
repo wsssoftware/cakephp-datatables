@@ -46,14 +46,13 @@ abstract class Tables {
 		if (empty($this->_ormTableName)) {
 			$this->_ormTableName = substr_replace($classShortName, '', -6, 6);
 		}
-		$this->_ormTable = TableRegistry::getTableLocator()->get($this->_ormTableName);
 	}
 
 	/**
 	 * @return \Cake\ORM\Table
 	 */
 	public function getOrmTable(): Table {
-		return $this->_ormTable;
+		return TableRegistry::getTableLocator()->get($this->_ormTableName);
 	}
 
 }

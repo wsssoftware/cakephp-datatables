@@ -11,6 +11,10 @@ declare(strict_types = 1);
 
 namespace DataTables\Tools;
 
+use Cake\Routing\Router;
+use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
+use InvalidArgumentException;
 use ReflectionClass;
 
 /**
@@ -61,6 +65,103 @@ class Functions {
 	public function arrayKeyLast(array $array){
 		end($array);
 		return key($array);
+	}
+
+	/**
+	 * Check if passed url is the same as current url.
+	 *
+	 * @param array $url
+	 * @return bool
+	 */
+	public function isSameAsCurrentUrl(array $url = []): bool {
+	    $currentUrlMd5 = $this->getUrlMd5(
+			Router::getRequest()->getParam('controller'),
+			Router::getRequest()->getParam('action'),
+			Router::getRequest()->getQuery(),
+			Router::getRequest()->getParam('prefix'),
+			Router::getRequest()->getParam('pass')
+		);
+	    $controller = Hash::get($url, 'controller', Router::getRequest()->getParam('controller'));
+	    $action = Hash::get($url, 'action', Router::getRequest()->getParam('action'));
+	    $query = Hash::get($url, '?', Router::getRequest()->getQuery());
+		$prefix = Hash::get($url, 'prefix', Router::getRequest()->getParam('prefix'));
+	    if (!is_array($query)) {
+			throw new InvalidArgumentException('Query param must be an array.');
+		}
+
+		$url = Hash::remove($url, 'controller');
+		$url = Hash::remove($url, 'action');
+		$url = Hash::remove($url, '?');
+		$url = Hash::remove($url, 'prefix');
+	    $urlMd5 = $this->getUrlMd5($controller, $action, $query, $prefix, $url);
+
+	    return $currentUrlMd5 === $urlMd5;
+	}
+
+	/**
+	 * Check if passed params are in current url.
+	 *
+	 * @param array $url
+	 * @return bool
+	 */
+	public function isInCurrentUrl(array $url = []): bool {
+	    $currentController = Router::getRequest()->getParam('controller');
+	    $currentAction = Router::getRequest()->getParam('action');
+	    $currentQuery = Router::getRequest()->getQuery();
+	    $currentPrefix = Router::getRequest()->getParam('prefix');
+	    $currentPass = Router::getRequest()->getParam('pass');
+		$controller = Hash::get($url, 'controller', $currentController);
+		$action = Hash::get($url, 'action', $currentAction);
+		$query = Hash::get($url, '?', []);
+		$prefix = Hash::get($url, 'prefix', $currentPrefix);
+		if (!is_array($query)) {
+			throw new InvalidArgumentException('Query param must be an array.');
+		}
+		$url = Hash::remove($url, 'controller');
+		$url = Hash::remove($url, 'action');
+		$url = Hash::remove($url, '?');
+		$url = Hash::remove($url, 'prefix');
+		$pass = $url;
+		if ($controller !== $currentController || $action !== $currentAction || $prefix !== $currentPrefix) {
+			return false;
+		}
+		foreach ($pass as $key => $passItem) {
+			if (empty($currentPass[$key]) || (!empty($currentPass[$key]) && $passItem !== $currentPass[$key])) {
+				return false;
+			}
+		}
+		foreach ($query as $key => $queryItem) {
+			if (empty($currentQuery[$key]) || (!empty($currentQuery[$key]) && $queryItem !== $currentQuery[$key])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Convert Url in md5 string
+	 *
+	 * @param string $controller
+	 * @param string $action
+	 * @param array $query
+	 * @param string|null $prefix
+	 * @param array $pass
+	 * @return string
+	 */
+	private function getUrlMd5(string $controller, string $action, array $query = [], ?string $prefix = null, array $pass = []): string {
+	    $md5Items = [];
+	    $md5Items[] = Inflector::camelize($controller);
+	    $md5Items[] = Inflector::camelize($action);
+	    $md5Items[] = !empty($prefix) ? Inflector::camelize($prefix) : '_EMPTY_';
+		ksort($pass);
+		foreach ($pass as $key => $passItem) {
+			$md5Items[] = Inflector::camelize("$key=$passItem");
+		}
+		ksort($query);
+		foreach ($query as $key => $queryItem) {
+			$md5Items[] = Inflector::camelize("$key=$queryItem");
+		}
+		return md5(implode('::', $md5Items));
 	}
 
 	/**
