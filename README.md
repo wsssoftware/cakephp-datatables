@@ -10,7 +10,7 @@
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-green.svg)](https://github.com/php-fig-rectified/fig-rectified-standards)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-%23149c83)](https://github.com/phpstan/phpstan)
 
-This branch is for use with **CakePHP 4.0+**. For details see [version map](https://github.com/allanmcarvalho/cakephp-datatables/wiki#cakephp-version-map).
+This branch is for use with **CakePHP 4.0+**. For details see [version map](https://github.com/wsssoftware/cakephp-datatables/wiki#cakephp-version-map).
 
 
 This is a very simple and minimalistic (Automagic) implementation of

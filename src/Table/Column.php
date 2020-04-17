@@ -2,10 +2,10 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link:     https://github.com/wsssoftware/cakephp-data-renderer
+ * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -20,9 +20,7 @@ use InvalidArgumentException;
 /**
  * Class Column
  *
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ * Created by allancarvalho in abril 17, 2020
  */
 final class Column {
 
@@ -62,7 +60,7 @@ final class Column {
 	/**
 	 * If the column is or not a database column.
 	 *
-	 * @var bool
+	 * @var boolean
 	 */
 	private $_database;
 
@@ -164,16 +162,22 @@ final class Column {
 	 * Set the attributes using a Column class.
 	 *
 	 * @param \DataTables\Table\Column $column
+	 *
 	 * @return void
 	 */
 	public function setDefault(Column $column): void {
-		$ignoredMethods = ['setDefault', 'setTitle', 'setDatabase', 'setName'];
+		$ignoredMethods = [
+			'setDefault',
+			'setTitle',
+			'setDatabase',
+			'setName',
+		];
 		$methods = get_class_methods($this);
 		foreach ($methods as $method) {
 			if (substr($method, 0, 3) === 'set' && !in_array($method, $ignoredMethods)) {
-			   $setMethod = $method;
-			   $getMethod = substr_replace($method, 'get', 0, 3);
-			   $checkMethod = substr_replace($method, 'is', 0, 3);
+				$setMethod = $method;
+				$getMethod = substr_replace($method, 'get', 0, 3);
+				$checkMethod = substr_replace($method, 'is', 0, 3);
 				if (in_array($getMethod, $methods)) {
 					$this->{$setMethod}($column->{$getMethod}());
 				} elseif (in_array($checkMethod, $methods)) {
@@ -183,6 +187,7 @@ final class Column {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -192,6 +197,7 @@ final class Column {
 	 */
 	public function getName(): string {
 		return $this->_name;
+
 	}
 
 	/**
@@ -201,6 +207,7 @@ final class Column {
 	 */
 	public function isDatabase(): bool {
 		return $this->_database;
+
 	}
 
 	/**
@@ -210,10 +217,11 @@ final class Column {
 	 * row (you may wish to add scope='row' to the TH elements using columns.createdCell option).
 	 *
 	 * @return string|null
-	 * @link https://datatables.net/reference/option/columns.cellType
+	 * @link   https://datatables.net/reference/option/columns.cellType
 	 */
 	public function getCellType(): ?string {
 		return $this->_cellType;
+
 	}
 
 	/**
@@ -223,15 +231,19 @@ final class Column {
 	 * row (you may wish to add scope='row' to the TH elements using columns.createdCell option).
 	 *
 	 * @param string|null $cellType
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.cellType
+	 * @link   https://datatables.net/reference/option/columns.cellType
 	 */
 	public function setCellType(?string $cellType): self {
 		if (!in_array($cellType, ['td', 'th']) && !empty($cellType)) {
 			throw new InvalidArgumentException("\$cellType must be 'td' or 'th'. Found: $cellType.");
 		}
+
 		$this->_cellType = $cellType;
+
 		return $this;
+
 	}
 
 	/**
@@ -240,10 +252,11 @@ final class Column {
 	 * Javascript or Ajax. This can be useful for styling columns.
 	 *
 	 * @return string|null
-	 * @link https://datatables.net/reference/option/columns.className
+	 * @link   https://datatables.net/reference/option/columns.className
 	 */
 	public function getClassName(): ?string {
 		return $this->_className;
+
 	}
 
 	/**
@@ -252,12 +265,15 @@ final class Column {
 	 * Javascript or Ajax. This can be useful for styling columns.
 	 *
 	 * @param string|null $className
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.className
+	 * @link   https://datatables.net/reference/option/columns.className
 	 */
 	public function setClassName(?string $className): self {
 		$this->_className = $className;
+
 		return $this;
+
 	}
 
 	/**
@@ -266,10 +282,11 @@ final class Column {
 	 * Javascript or Ajax. This can be useful for styling columns.
 	 *
 	 * @return string|null
-	 * @link https://datatables.net/reference/option/columns.contentPadding
+	 * @link   https://datatables.net/reference/option/columns.contentPadding
 	 */
 	public function getContentPadding(): ?string {
 		return $this->_contentPadding;
+
 	}
 
 	/**
@@ -284,12 +301,15 @@ final class Column {
 	 * that is found to be the longest string for the column - i.e. padding.
 	 *
 	 * @param string $contentPadding
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.contentPadding
+	 * @link   https://datatables.net/reference/option/columns.contentPadding
 	 */
 	public function setContentPadding(?string $contentPadding): self {
 		$this->_contentPadding = $contentPadding;
+
 		return $this;
+
 	}
 
 	/**
@@ -310,9 +330,9 @@ final class Column {
 	 *  - colIndex (integer) - DataTables' internal index for the column.
 	 *
 	 * @return string|array|null
-	 * @link https://datatables.net/reference/option/columns.createdCell
-	 * @link https://datatables.net/reference/type/node
-	 * @link https://datatables.net/reference/type/integer
+	 * @link   https://datatables.net/reference/option/columns.createdCell
+	 * @link   https://datatables.net/reference/type/node
+	 * @link   https://datatables.net/reference/type/integer
 	 */
 	public function getCreatedCell() {
 		return $this->_createdCell;
@@ -338,20 +358,28 @@ final class Column {
 	 * @param string|array|null $bodyOrParams To use application template file, leave blank or pass an array with params
 	 *                                        that will be used in file. To use the body mode, pass an string that will
 	 *                                        putted inside the js function.
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.createdCell
-	 * @link https://datatables.net/reference/type/node
-	 * @link https://datatables.net/reference/type/integer
+	 * @link   https://datatables.net/reference/option/columns.createdCell
+	 * @link   https://datatables.net/reference/type/node
+	 * @link   https://datatables.net/reference/type/integer
 	 */
 	public function setCreatedCell($bodyOrParams = []): self {
-		$bodyOrParamsType = getType($bodyOrParams);
-		$validTypes = ['string', 'array', 'NULL'];
+		$bodyOrParamsType = gettype($bodyOrParams);
+		$validTypes = [
+			'string',
+			'array',
+			'NULL',
+		];
 		$validTypesString = str_replace(' and ', ' or ', Text::toList($validTypes));
 		if (!in_array($bodyOrParamsType, $validTypes)) {
 			throw new InvalidArgumentException("In \$bodyOrParams you can use only $validTypesString. Found: '$bodyOrParamsType'.");
 		}
+
 		$this->_createdCell = $bodyOrParams;
+
 		return $this;
+
 	}
 
 	/**
@@ -366,7 +394,7 @@ final class Column {
 	 * that can be used for this.
 	 *
 	 * @return int|array|null
-	 * @link https://datatables.net/reference/option/columns.orderData
+	 * @link   https://datatables.net/reference/option/columns.orderData
 	 */
 	public function getOrderData() {
 		return $this->_orderData;
@@ -384,12 +412,17 @@ final class Column {
 	 * that can be used for this.
 	 *
 	 * @param int|array|null $orderData
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.orderData
+	 * @link   https://datatables.net/reference/option/columns.orderData
 	 */
 	public function setOrderData($orderData): self {
-		$orderDataType = getType($orderData);
-		$validTypes = ['integer', 'array', 'NULL'];
+		$orderDataType = gettype($orderData);
+		$validTypes = [
+			'integer',
+			'array',
+			'NULL',
+		];
 		$validTypesString = str_replace(' and ', ' or ', Text::toList($validTypes));
 		if (is_array($orderData)) {
 			Validator::getInstance()->checkKeysValueTypesOrFail($orderData, 'integer', 'integer', '$orderData');
@@ -398,8 +431,11 @@ final class Column {
 		} elseif (!in_array($orderDataType, $validTypes)) {
 			throw new InvalidArgumentException("In \$orderData you can use only $validTypesString. Found: '$orderDataType'.");
 		}
+
 		$this->_orderData = $orderData;
+
 		return $this;
+
 	}
 
 	/**
@@ -415,11 +451,12 @@ final class Column {
 	 * separately. See the DataTables sorting plug-ins page for further information.
 	 *
 	 * @return string|null
-	 * @link https://datatables.net/reference/option/columns.orderDataType
-	 * @link https://datatables.net/plug-ins/sorting/
+	 * @link   https://datatables.net/reference/option/columns.orderDataType
+	 * @link   https://datatables.net/plug-ins/sorting/
 	 */
 	public function getOrderDataType(): ?string {
 		return $this->_orderDataType;
+
 	}
 
 	/**
@@ -435,17 +472,21 @@ final class Column {
 	 * separately. See the DataTables sorting plug-ins page for further information.
 	 *
 	 * @param string|null $orderDataType
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.orderDataType
-	 * @link https://datatables.net/plug-ins/sorting/
+	 * @link   https://datatables.net/reference/option/columns.orderDataType
+	 * @link   https://datatables.net/plug-ins/sorting/
 	 */
 	public function setOrderDataType(?string $orderDataType): self {
 		$validOrderDataTypeString = str_replace(' and ', ' or ', Text::toList(static::VALID_ORDER_DATA_TYPES));
 		if (!in_array($orderDataType, static::VALID_ORDER_DATA_TYPES) && !empty($orderDataType)) {
 			throw new InvalidArgumentException("In \$orderDataType you can use only $validOrderDataTypeString. Found: '$orderDataType'.");
 		}
+
 		$this->_orderDataType = $orderDataType;
+
 		return $this;
+
 	}
 
 	/**
@@ -454,10 +495,11 @@ final class Column {
 	 * allow ascending sorting etc) using this parameter.
 	 *
 	 * @return array
-	 * @link https://datatables.net/reference/option/columns.orderSequence
+	 * @link   https://datatables.net/reference/option/columns.orderSequence
 	 */
 	public function getOrderSequence(): array {
 		return $this->_orderSequence;
+
 	}
 
 	/**
@@ -466,8 +508,9 @@ final class Column {
 	 * allow ascending sorting etc) using this parameter.
 	 *
 	 * @param array $orderSequence
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.orderSequence
+	 * @link   https://datatables.net/reference/option/columns.orderSequence
 	 */
 	public function setOrderSequence(array $orderSequence = []): self {
 		Validator::getInstance()->checkKeysValueTypesOrFail($orderSequence, 'integer', 'string', '$orderSequence');
@@ -476,8 +519,11 @@ final class Column {
 				throw new InvalidArgumentException("In \$orderDataType you can use only 'asc' or 'desc'. Found: '$item'.");
 			}
 		}
+
 		$this->_orderSequence = $orderSequence;
+
 		return $this;
+
 	}
 
 	/**
@@ -489,10 +535,11 @@ final class Column {
 	 * a column using the order option or the order() method if required.
 	 *
 	 * @return bool|null
-	 * @link https://datatables.net/reference/option/columns.orderable
+	 * @link   https://datatables.net/reference/option/columns.orderable
 	 */
 	public function isOrderable(): ?bool {
 		return $this->_orderable;
+
 	}
 
 	/**
@@ -504,12 +551,15 @@ final class Column {
 	 * a column using the order option or the order() method if required.
 	 *
 	 * @param bool|null $orderable
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.orderable
+	 * @link   https://datatables.net/reference/option/columns.orderable
 	 */
 	public function setOrderable(?bool $orderable): self {
 		$this->_orderable = $orderable;
+
 		return $this;
+
 	}
 
 	/**
@@ -519,10 +569,11 @@ final class Column {
 	 * buttons for example.
 	 *
 	 * @return bool|null
-	 * @link https://datatables.net/reference/option/columns.searchable
+	 * @link   https://datatables.net/reference/option/columns.searchable
 	 */
 	public function isSearchable(): ?bool {
 		return $this->_searchable;
+
 	}
 
 	/**
@@ -532,12 +583,15 @@ final class Column {
 	 * buttons for example.
 	 *
 	 * @param bool|null $searchable
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.searchable
+	 * @link   https://datatables.net/reference/option/columns.searchable
 	 */
 	public function setSearchable(?bool $searchable): self {
 		$this->_searchable = $searchable;
+
 		return $this;
+
 	}
 
 	/**
@@ -552,10 +606,11 @@ final class Column {
 	 * document, or be constructed using standard DOM / jQuery methods.
 	 *
 	 * @return string
-	 * @link https://datatables.net/reference/option/columns.title
+	 * @link   https://datatables.net/reference/option/columns.title
 	 */
 	public function getTitle(): string {
 		return $this->_title;
+
 	}
 
 	/**
@@ -570,12 +625,15 @@ final class Column {
 	 * document, or be constructed using standard DOM / jQuery methods.
 	 *
 	 * @param string $title
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.title
+	 * @link   https://datatables.net/reference/option/columns.title
 	 */
 	public function setTitle(string $title): self {
 		$this->_title = $title;
+
 		return $this;
+
 	}
 
 	/**
@@ -631,10 +689,11 @@ final class Column {
 	 * ordering and search actions are performed by a server-side script.
 	 *
 	 * @return string|null
-	 * @link https://datatables.net/reference/option/columns.type
+	 * @link   https://datatables.net/reference/option/columns.type
 	 */
 	public function getType(): ?string {
 		return $this->_type;
+
 	}
 
 	/**
@@ -690,16 +749,20 @@ final class Column {
 	 * ordering and search actions are performed by a server-side script.
 	 *
 	 * @param string|null $type
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.type
+	 * @link   https://datatables.net/reference/option/columns.type
 	 */
 	public function setType(?string $type): self {
 		$validTypesString = str_replace(' and ', ' or ', Text::toList(static::VALID_TYPES));
 		if (!in_array($type, static::VALID_TYPES) && !empty($type)) {
 			throw new InvalidArgumentException("Type must be $validTypesString. Found: '$type'.");
 		}
+
 		$this->_type = $type;
+
 		return $this;
+
 	}
 
 	/**
@@ -713,10 +776,11 @@ final class Column {
 	 * (for example a database ID column).
 	 *
 	 * @return bool|null
-	 * @link https://datatables.net/reference/option/columns.visible
+	 * @link   https://datatables.net/reference/option/columns.visible
 	 */
 	public function isVisible(): ?bool {
 		return $this->_visible;
+
 	}
 
 	/**
@@ -730,12 +794,15 @@ final class Column {
 	 * (for example a database ID column).
 	 *
 	 * @param bool|null $visible
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.visible
+	 * @link   https://datatables.net/reference/option/columns.visible
 	 */
 	public function setVisible(?bool $visible): self {
 		$this->_visible = $visible;
+
 		return $this;
+
 	}
 
 	/**
@@ -749,10 +816,11 @@ final class Column {
 	 * attempt to lay the table out in an optimal manner taking this options all into account.
 	 *
 	 * @return string|null
-	 * @link https://datatables.net/reference/option/columns.width
+	 * @link   https://datatables.net/reference/option/columns.width
 	 */
 	public function getWidth(): ?string {
 		return $this->_width;
+
 	}
 
 	/**
@@ -766,12 +834,15 @@ final class Column {
 	 * attempt to lay the table out in an optimal manner taking this options all into account.
 	 *
 	 * @param string|null $width
+	 *
 	 * @return \DataTables\Table\Column
-	 * @link https://datatables.net/reference/option/columns.width
+	 * @link   https://datatables.net/reference/option/columns.width
 	 */
 	public function setWidth(?string $width): self {
 		$this->_width = $width;
+
 		return $this;
+
 	}
 
 }

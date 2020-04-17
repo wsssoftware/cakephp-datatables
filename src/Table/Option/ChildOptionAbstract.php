@@ -2,14 +2,19 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link:     https://github.com/wsssoftware/cakephp-data-renderer
+ * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 
 namespace DataTables\Table\Option;
 
+/**
+ * Class ChildOptionAbstract
+ *
+ * Created by allancarvalho in abril 17, 2020
+ */
 abstract class ChildOptionAbstract extends OptionAbstract {
 
 	/**
