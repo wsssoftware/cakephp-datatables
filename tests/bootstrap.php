@@ -43,8 +43,11 @@ require_once $root . '/vendor/autoload.php';
  */
 require_once $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
 
+Cake\Core\Configure::write('App.namespace', 'TestApp');
+
 class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
 class_alias(TestApp\DataTables\Tables\CategoriesTables::class, 'App\DataTables\Tables\CategoriesTables');
+
 if (file_exists($root . '/config/bootstrap.php')) {
 	require $root . '/config/bootstrap.php';
 	return;

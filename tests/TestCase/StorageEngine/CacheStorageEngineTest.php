@@ -10,10 +10,14 @@
 
 namespace DataTables\Test\TestCase\StorageEngine;
 
+use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
 use DataTables\StorageEngine\CacheStorageEngine;
+use DataTables\Table\ConfigBundle;
+use DataTables\Tools\Builder;
+use InvalidArgumentException;
 use TestApp\Application;
 
 /**
@@ -43,6 +47,7 @@ class CacheStorageEngineTest extends TestCase {
 		parent::setUp();
 		$plugin = new Plugin();
 		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
 		$this->Cache = new CacheStorageEngine();
 	}
 
@@ -59,50 +64,45 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testInvalidCacheConfig() {
-		$this->markTestIncomplete('Not implemented yet.');
-		//$this->expectException(InvalidArgumentException::class);
-		//$this->Cache = new CacheStorageEngine('cache_abc');
+		$this->expectException(InvalidArgumentException::class);
+		$this->Cache = new CacheStorageEngine('cache_abc');
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testSave() {
-		$this->markTestIncomplete('Not implemented yet.');
-		//$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
-		//$this->assertTrue($this->Cache->save('abc', $buildConfig));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$this->assertTrue($this->Cache->save('abc', $buildConfig));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testRead() {
-		$this->markTestIncomplete('Not implemented yet.');
-		//$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
-		//$this->Cache->save('abc', $buildConfig);
-		//$this->assertEmpty($this->Cache->read('def'));
-		//$this->assertInstanceOf(ConfigBundle::class, $this->Cache->read('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$this->Cache->save('abc', $buildConfig);
+		$this->assertEmpty($this->Cache->read('def'));
+		$this->assertInstanceOf(ConfigBundle::class, $this->Cache->read('abc'));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testDelete() {
-		$this->markTestIncomplete('Not implemented yet.');
-		//$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
-		//$this->Cache->save('abc', $buildConfig);
-		//$this->assertTrue($this->Cache->delete('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$this->Cache->save('abc', $buildConfig);
+		$this->assertTrue($this->Cache->delete('abc'));
 	}
 
 	/**
 	 * @return void
 	 */
 	public function testExists() {
-		$this->markTestIncomplete('Not implemented yet.');
-		//$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
-		//$this->Cache->save('abc', $buildConfig);
-		//$this->assertFalse($this->Cache->exists('def'));
-		//$this->assertTrue($this->Cache->exists('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$this->Cache->save('abc', $buildConfig);
+		$this->assertFalse($this->Cache->exists('def'));
+		$this->assertTrue($this->Cache->exists('abc'));
 	}
 
 }

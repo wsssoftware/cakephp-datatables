@@ -23,8 +23,8 @@ class Application extends BaseApplication {
 	 * @return void
 	 */
 	public function bootstrap(): void {
-		$this->addPlugin(Plugin::class);
 		parent::bootstrap();
+		$this->addPlugin(Plugin::class);
 	}
 
 }
