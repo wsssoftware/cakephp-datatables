@@ -98,7 +98,6 @@ final class Columns {
 				throw new FatalErrorException("Column '{$column->getName()}' already exist in index $key.");
 			}
 		}
-		$column->setDefault($this->Default);
 		$this->_columns[] = $column;
 		return $column;
 	}

@@ -13,15 +13,16 @@ namespace DataTables\Table\Option;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use DataTables\Table\Option\Section\AjaxOption;
 use DataTables\Table\Option\Section\ColumnsOption;
 use DataTables\Table\Option\Section\FeaturesOption;
 use DataTables\Table\Option\Section\OptionsOption;
 
 /**
  * Class MainOption
- *
  * Created by allancarvalho in abril 17, 2020
  *
+ * @property \DataTables\Table\Option\Section\AjaxOption $Ajax
  * @property \DataTables\Table\Option\Section\FeaturesOption $Features
  * @property \DataTables\Table\Option\Section\OptionsOption $Options
  * @property \DataTables\Table\Option\Section\ColumnsOption $Columns
@@ -48,13 +49,17 @@ final class MainOption extends OptionAbstract {
 	protected $_printAllOptions = false;
 
 	/**
-	 * @inheritDoc
+	 * MainOption constructor.
+	 *
+	 * @param string|null $url
 	 */
-	public function __construct() {
+	public function __construct(string $url = null) {
 		parent::__construct();
+		$this->Ajax = new AjaxOption($this);
 		$this->Features = new FeaturesOption($this);
 		$this->Options = new OptionsOption($this);
 		$this->Columns = new ColumnsOption($this);
+		$this->setConfig('ajax.url', $url);
 	}
 
 	/**
@@ -70,7 +75,6 @@ final class MainOption extends OptionAbstract {
 	 * Define if all options will be printed or not.
 	 *
 	 * @param bool $printAllOptions
-	 *
 	 * @return $this
 	 */
 	public function setPrintAllOptions(bool $printAllOptions): self {
@@ -83,7 +87,6 @@ final class MainOption extends OptionAbstract {
 	 * Tell if a field or a many fields will be printed or not.
 	 *
 	 * @param string|null $field The field that you intent to see or null for all.
-	 *
 	 * @return string|array|null A value if exists or null.
 	 */
 	public function getMustPrint(?string $field = null) {
@@ -99,7 +102,6 @@ final class MainOption extends OptionAbstract {
 	 *
 	 * @param string $field The field that will be changed.
 	 * @param bool $must True or false to set if it will printed or not.
-	 *
 	 * @return \DataTables\Table\Option\MainOption
 	 */
 	public function setMustPrint(string $field, bool $must = true): MainOption {
@@ -113,7 +115,6 @@ final class MainOption extends OptionAbstract {
 	 *
 	 * @param string|null $field The field that you intent to see or null for all.
 	 * @param string|array|null $default A default value for called config.
-	 *
 	 * @return mixed A value if exists or null.
 	 */
 	public function getConfig(?string $field = null, $default = null) {
@@ -126,7 +127,6 @@ final class MainOption extends OptionAbstract {
 	 * @param string $field The field that will be changed.
 	 * @param mixed $value A value intended to save at config.
 	 * @param bool $mustPrint Set or not the field as 'mustPrint'.
-	 *
 	 * @return $this
 	 */
 	public function setConfig(string $field, $value, bool $mustPrint = true): self {
@@ -139,7 +139,6 @@ final class MainOption extends OptionAbstract {
 	 * Get the config as json.
 	 *
 	 * @param bool|null $printAllOptions
-	 *
 	 * @return string
 	 */
 	public function getConfigAsJson(?bool $printAllOptions = null): string {
@@ -155,7 +154,6 @@ final class MainOption extends OptionAbstract {
 	 * Get the config as array.
 	 *
 	 * @param bool|null $printAllOptions
-	 *
 	 * @return array
 	 */
 	public function getConfigAsArray(?bool $printAllOptions = null): array {

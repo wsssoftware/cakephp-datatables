@@ -12,9 +12,10 @@ declare(strict_types = 1);
 
 return [
 	'DataTables' => [
+		'autoLoadLibraries' => true,
 		'StorageEngine' => [
 			'class' => \DataTables\StorageEngine\CacheStorageEngine::class,
-			'disableWhenDebugOn' => true,
+			'forceCache' => false,
 		],
 		'resources' => [
 			'templates' => ROOT . DS . 'templates' . DS . 'data_tables' . DS,
@@ -26,7 +27,7 @@ return [
 				'prefix' => 'built_config_',
 				'path' => CACHE . DS . 'data_tables' . DS . 'config_bundles' . DS,
 				'serialize' => true,
-				'duration' => '+30 days',
+				'duration' => '+1 year',
 				'url' => env('CACHE_CAKECORE_URL', null),
 			],
 		],

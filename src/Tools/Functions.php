@@ -19,7 +19,6 @@ use ReflectionClass;
 
 /**
  * Class Functions
- *
  * Created by allancarvalho in abril 17, 2020
  */
 class Functions {
@@ -40,6 +39,7 @@ class Functions {
 		if (static::$instance === null) {
 			static::$instance = new self();
 		}
+
 		return static::$instance;
 	}
 
@@ -49,8 +49,9 @@ class Functions {
 	 * @param array $array
 	 * @return int|string|null
 	 */
-	public function arrayKeyFirst(array $array){
+	public function arrayKeyFirst(array $array) {
 		reset($array);
+
 		return key($array);
 	}
 
@@ -60,8 +61,9 @@ class Functions {
 	 * @param array $array
 	 * @return int|string|null
 	 */
-	public function arrayKeyLast(array $array){
+	public function arrayKeyLast(array $array) {
 		end($array);
+
 		return key($array);
 	}
 
@@ -72,18 +74,18 @@ class Functions {
 	 * @return bool
 	 */
 	public function isSameAsCurrentUrl(array $url = []): bool {
-	    $currentUrlMd5 = $this->getUrlMd5(
+		$currentUrlMd5 = $this->getUrlMd5(
 			Router::getRequest()->getParam('controller'),
 			Router::getRequest()->getParam('action'),
 			Router::getRequest()->getQuery(),
 			Router::getRequest()->getParam('prefix'),
 			Router::getRequest()->getParam('pass')
 		);
-	    $controller = Hash::get($url, 'controller', Router::getRequest()->getParam('controller'));
-	    $action = Hash::get($url, 'action', Router::getRequest()->getParam('action'));
-	    $query = Hash::get($url, '?', Router::getRequest()->getQuery());
+		$controller = Hash::get($url, 'controller', Router::getRequest()->getParam('controller'));
+		$action = Hash::get($url, 'action', Router::getRequest()->getParam('action'));
+		$query = Hash::get($url, '?', Router::getRequest()->getQuery());
 		$prefix = Hash::get($url, 'prefix', Router::getRequest()->getParam('prefix'));
-	    if (!is_array($query)) {
+		if (!is_array($query)) {
 			throw new InvalidArgumentException('Query param must be an array.');
 		}
 
@@ -91,9 +93,42 @@ class Functions {
 		$url = Hash::remove($url, 'action');
 		$url = Hash::remove($url, '?');
 		$url = Hash::remove($url, 'prefix');
-	    $urlMd5 = $this->getUrlMd5($controller, $action, $query, $prefix, $url);
+		$urlMd5 = $this->getUrlMd5($controller, $action, $query, $prefix, $url);
 
-	    return $currentUrlMd5 === $urlMd5;
+		return $currentUrlMd5 === $urlMd5;
+	}
+
+	/**
+	 * Convert Url in md5 string
+	 *
+	 * @param string $controller
+	 * @param string $action
+	 * @param array $query
+	 * @param string|null $prefix
+	 * @param array $pass
+	 * @return string
+	 */
+	private function getUrlMd5(
+		string $controller,
+		string $action,
+		array $query = [],
+		?string $prefix = null,
+		array $pass = []
+	): string {
+		$md5Items = [];
+		$md5Items[] = Inflector::camelize($controller);
+		$md5Items[] = Inflector::camelize($action);
+		$md5Items[] = !empty($prefix) ? Inflector::camelize($prefix) : '_EMPTY_';
+		ksort($pass);
+		foreach ($pass as $key => $passItem) {
+			$md5Items[] = Inflector::camelize("$key=$passItem");
+		}
+		ksort($query);
+		foreach ($query as $key => $queryItem) {
+			$md5Items[] = Inflector::camelize("$key=$queryItem");
+		}
+
+		return md5(implode('::', $md5Items));
 	}
 
 	/**
@@ -103,11 +138,11 @@ class Functions {
 	 * @return bool
 	 */
 	public function isInCurrentUrl(array $url = []): bool {
-	    $currentController = Router::getRequest()->getParam('controller');
-	    $currentAction = Router::getRequest()->getParam('action');
-	    $currentQuery = Router::getRequest()->getQuery();
-	    $currentPrefix = Router::getRequest()->getParam('prefix');
-	    $currentPass = Router::getRequest()->getParam('pass');
+		$currentController = Router::getRequest()->getParam('controller');
+		$currentAction = Router::getRequest()->getParam('action');
+		$currentQuery = Router::getRequest()->getQuery();
+		$currentPrefix = Router::getRequest()->getParam('prefix');
+		$currentPass = Router::getRequest()->getParam('pass');
 		$controller = Hash::get($url, 'controller', $currentController);
 		$action = Hash::get($url, 'action', $currentAction);
 		$query = Hash::get($url, '?', []);
@@ -133,49 +168,20 @@ class Functions {
 				return false;
 			}
 		}
+
 		return true;
 	}
 
 	/**
-	 * Convert Url in md5 string
-	 *
-	 * @param string $controller
-	 * @param string $action
-	 * @param array $query
-	 * @param string|null $prefix
-	 * @param array $pass
+	 * @param string $classWithNameSpace
 	 * @return string
+	 * @throws \ReflectionException
 	 */
-	private function getUrlMd5(string $controller, string $action, array $query = [], ?string $prefix = null, array $pass = []): string {
-	    $md5Items = [];
-	    $md5Items[] = Inflector::camelize($controller);
-	    $md5Items[] = Inflector::camelize($action);
-	    $md5Items[] = !empty($prefix) ? Inflector::camelize($prefix) : '_EMPTY_';
-		ksort($pass);
-		foreach ($pass as $key => $passItem) {
-			$md5Items[] = Inflector::camelize("$key=$passItem");
-		}
-		ksort($query);
-		foreach ($query as $key => $queryItem) {
-			$md5Items[] = Inflector::camelize("$key=$queryItem");
-		}
-		return md5(implode('::', $md5Items));
-	}
+	public function getClassAndVersionMd5(string $classWithNameSpace): string {
+		$classMd5 = $this->getClassMd5($classWithNameSpace);
+		$versionMd5 = md5($this->getPluginCurrentVersion());
 
-	/**
-	 * Return current package version.
-	 *
-	 * @return string
-	 */
-	public function getPluginCurrentVersion(): string {
-	    $version = '0';
-	    $packages = json_decode(file_get_contents(ROOT . DS . 'vendor' . DS . 'composer' . DS . 'installed.json'));
-		foreach ($packages as $package) {
-			if ($package->name === 'allanmcarvalho/cakephp-datatables') {
-				$version = $package->version;
-			}
-	    }
-		return $version;
+		return md5($classMd5 . $versionMd5);
 	}
 
 	/**
@@ -190,14 +196,44 @@ class Functions {
 	}
 
 	/**
-	 * @param string $classWithNameSpace
-	 * @throws \ReflectionException
+	 * Return current package version.
+	 *
 	 * @return string
 	 */
-	public function getClassAndVersionMd5(string $classWithNameSpace): string {
-		$classMd5 = $this->getClassMd5($classWithNameSpace);
-		$versionMd5 = md5($this->getPluginCurrentVersion());
-		return md5($classMd5 . $versionMd5);
+	public function getPluginCurrentVersion(): string {
+		$version = '0';
+		$packages = json_decode(file_get_contents(ROOT . DS . 'vendor' . DS . 'composer' . DS . 'installed.json'));
+		foreach ($packages as $package) {
+			if ($package->name === 'allanmcarvalho/cakephp-datatables') {
+				$version = $package->version;
+			}
+		}
+
+		return $version;
+	}
+
+	/**
+	 * Insert Tab on string
+	 *
+	 * @param string $text Text to be increased.
+	 * @param int $tabAmount Tab amount.
+	 * @param bool $skipFirst Skip first line.
+	 * @return string
+	 */
+	public function increaseTabOnString(string $text, int $tabAmount = 1, bool $skipFirst = false): string {
+		$indent = str_repeat('    ', $tabAmount);
+		$exploded = explode("\n", $text);
+		$isFirst = true;
+		foreach ($exploded as $key => $item) {
+			if ($isFirst === true && $skipFirst === true) {
+				$isFirst = false;
+			} else {
+				$exploded[$key] = $indent . $item;
+			}
+
+		}
+
+		return implode("\n", $exploded);
 	}
 
 }

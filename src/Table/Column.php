@@ -11,7 +11,6 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
-use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use DataTables\Tools\Validator;
@@ -156,38 +155,6 @@ final class Column {
 
 		$this->_database = $database;
 		$this->_columnSchema = $columnSchema;
-	}
-
-	/**
-	 * Set the attributes using a Column class.
-	 *
-	 * @param \DataTables\Table\Column $column
-	 *
-	 * @return void
-	 */
-	public function setDefault(Column $column): void {
-		$ignoredMethods = [
-			'setDefault',
-			'setTitle',
-			'setDatabase',
-			'setName',
-		];
-		$methods = get_class_methods($this);
-		foreach ($methods as $method) {
-			if (substr($method, 0, 3) === 'set' && !in_array($method, $ignoredMethods)) {
-				$setMethod = $method;
-				$getMethod = substr_replace($method, 'get', 0, 3);
-				$checkMethod = substr_replace($method, 'is', 0, 3);
-				if (in_array($getMethod, $methods)) {
-					$this->{$setMethod}($column->{$getMethod}());
-				} elseif (in_array($checkMethod, $methods)) {
-					$this->{$setMethod}($column->{$checkMethod}());
-				} else {
-					throw new FatalErrorException("Method getter '$getMethod' or checker '$checkMethod' not found.");
-				}
-			}
-		}
-
 	}
 
 	/**

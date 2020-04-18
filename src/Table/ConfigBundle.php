@@ -16,20 +16,9 @@ use DataTables\Table\Option\MainOption;
 
 /**
  * Class ConfigBundle
- *
  * Created by allancarvalho in abril 17, 2020
  */
 final class ConfigBundle {
-
-	/**
-	 * @var string The md5 used to check changes.
-	 */
-	private $_checkMd5;
-
-	/**
-	 * @var \DataTables\Table\QueryBaseState The DataTables query state.
-	 */
-	public $Query;
 
 	/**
 	 * @var \DataTables\Table\Columns The DataTables table columns.
@@ -37,23 +26,46 @@ final class ConfigBundle {
 	public $Columns;
 
 	/**
+	 * @var \DataTables\Table\CustomRotesConfig The DataTables table custom rotes config.
+	 */
+	public $CustomRotesConfigs;
+
+	/**
 	 * @var \DataTables\Table\Option\MainOption The DataTables JS Options.
 	 */
 	public $Options;
 
 	/**
+	 * @var \DataTables\Table\QueryBaseState The DataTables query state.
+	 */
+	public $Query;
+
+	/**
+	 * @var string The md5 used to check changes.
+	 */
+	private $_checkMd5;
+
+	/**
 	 * ConfigBundle constructor.
 	 *
 	 * @param string $checkMd5 The md5 used to check changes.
-	 * @param \DataTables\Table\QueryBaseState $queryBaseState The DataTables base query.
-	 * @param \DataTables\Table\Columns $_columns The DataTables table columns.
+	 * @param \DataTables\Table\CustomRotesConfig $customRotesConfig
+	 * @param \DataTables\Table\Columns $columns The DataTables table columns.
 	 * @param \DataTables\Table\Option\MainOption $options The DataTables JS Options.
+	 * @param \DataTables\Table\QueryBaseState $query The DataTables base query.
 	 */
-	public function __construct(string $checkMd5, QueryBaseState $queryBaseState, Columns $_columns, MainOption $options) {
+	public function __construct(
+		string $checkMd5,
+		CustomRotesConfig $customRotesConfig,
+		Columns $columns,
+		MainOption $options,
+		QueryBaseState $query
+	) {
 		$this->_checkMd5 = $checkMd5;
-		$this->Query = $queryBaseState;
-		$this->Columns = $_columns;
+		$this->CustomRotesConfigs = $customRotesConfig;
+		$this->Columns = $columns;
 		$this->Options = $options;
+		$this->Query = $query;
 	}
 
 	/**
@@ -72,10 +84,11 @@ final class ConfigBundle {
 
 	/**
 	 * @param \Cake\View\View $view
+	 * @param array $options
 	 * @return string
 	 */
-	public function generateTableHtml(View $view): string {
-		return $view->cell('DataTables.DataTables::table', [$this->Columns])->render();
+	public function generateTableHtml(View $view, array $options = []): string {
+		return $view->cell('DataTables.DataTables::table', [$this, $options])->render();
 	}
 
 }

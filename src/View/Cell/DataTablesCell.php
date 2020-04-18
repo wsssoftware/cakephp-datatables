@@ -12,7 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\View\Cell;
 
 use Cake\View\Cell;
-use DataTables\Table\Columns;
+use DataTables\Table\ConfigBundle;
 
 /**
  * Class DataTablesCell
@@ -24,11 +24,22 @@ class DataTablesCell extends Cell {
 	/**
 	 * Method that return the table html structure.
 	 *
-	 * @param \DataTables\Table\Columns $columns Config that is a concatenation of Tables class and config method.
+	 * @param \DataTables\Table\ConfigBundle $configBundle
+	 * @param array $options A table tag options.
+	 *
 	 * @return void
 	 */
-	public function table(Columns $columns): void {
-
+	public function table(ConfigBundle $configBundle, array $options = []): void {
+		$options['id'] = $configBundle->getUniqueId();
+		$tableContent = '<thead><tr>';
+		foreach ($configBundle->Columns->getColumns() as $column) {
+			$tableContent .= '<th>' . $column->getTitle() . '</th>';
+		}
+		$tableContent .= '</tr><thead>';
+		$tableContent .= '<tbody><tr><td style="text-align: center" colspan="' . count($configBundle->Columns->getColumns()) . '">';
+		$tableContent .= __d('datatables', 'Loading {0} data', 'DataTables') . '...';
+		$tableContent .= '</td></tr></tbody>';
+		$this->set(compact('configBundle', 'options', 'tableContent'));
 	}
 
 }

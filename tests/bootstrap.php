@@ -2,10 +2,10 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link:     https://github.com/wsssoftware/cakephp-data-renderer
+ * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -29,7 +29,6 @@ $findRoot = function ($root) {
 };
 $root = $findRoot(__FILE__);
 unset($findRoot);
-
 if (file_exists($root . DS . 'config' . DS . 'paths.php')) {
 	require_once $root . DS . 'config' . DS . 'paths.php';
 }
@@ -45,6 +44,7 @@ require_once $root . '/vendor/autoload.php';
 require_once $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
 
 class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
+class_alias(TestApp\DataTables\Tables\CategoriesTables::class, 'App\DataTables\Tables\CategoriesTables');
 if (file_exists($root . '/config/bootstrap.php')) {
 	require $root . '/config/bootstrap.php';
 	return;

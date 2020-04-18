@@ -7,10 +7,11 @@
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
-declare(strict_types = 1);
 
+use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
+use Cake\Routing\Route\DashedRoute;
 
-
-?>
-
-<?= $this->Html->tag('table', $tableContent, $options) ?>
+Router::plugin('DataTables', ['path' => '/data-tables'], function (RouteBuilder $builder) {
+	$builder->fallbacks(DashedRoute::class);
+});
