@@ -62,7 +62,6 @@ class DataTablesHelper extends Helper {
 	public function renderTable(string $tableAndConfig, array $options = []): string {
 		$configBundle = Builder::getInstance()->getConfigBundle($tableAndConfig, $this->getConfig('cache'));
 		$this->_configBundles[$configBundle->getUniqueId()] = $configBundle;
-		$this->_configBundles[] = $configBundle;
 
 		return $configBundle->generateTableHtml($this->getView(), $options);
 	}

@@ -21,11 +21,6 @@ use DataTables\Table\Option\Section\OptionsOption;
 /**
  * Class MainOption
  * Created by allancarvalho in abril 17, 2020
- *
- * @property \DataTables\Table\Option\Section\AjaxOption $Ajax
- * @property \DataTables\Table\Option\Section\FeaturesOption $Features
- * @property \DataTables\Table\Option\Section\OptionsOption $Options
- * @property \DataTables\Table\Option\Section\ColumnsOption $Columns
  */
 final class MainOption extends OptionAbstract {
 
@@ -47,6 +42,26 @@ final class MainOption extends OptionAbstract {
 	 * @var bool
 	 */
 	protected $_printAllOptions = false;
+
+	/**
+	 * @var \DataTables\Table\Option\Section\AjaxOption
+	 */
+	public $Ajax;
+
+	/**
+	 * @var \DataTables\Table\Option\Section\FeaturesOption
+	 */
+	public $Features;
+
+	/**
+	 * @var \DataTables\Table\Option\Section\OptionsOption
+	 */
+	public $Options;
+
+	/**
+	 * @var \DataTables\Table\Option\Section\ColumnsOption
+	 */
+	public $Columns;
 
 	/**
 	 * MainOption constructor.

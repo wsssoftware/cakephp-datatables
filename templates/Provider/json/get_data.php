@@ -7,4 +7,11 @@
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
- echo $configMethod->Options->getConfigAsJson();
+
+use Cake\Core\Configure;
+
+$options = 0;
+if (Configure::read('debug') === true) {
+	$options = JSON_PRETTY_PRINT;
+}
+ echo json_encode($result, $options);
