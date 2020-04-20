@@ -15,8 +15,8 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
 use DataTables\StorageEngine\CacheStorageEngine;
+use DataTables\Table\Builder;
 use DataTables\Table\ConfigBundle;
-use DataTables\Tools\Builder;
 use InvalidArgumentException;
 use TestApp\Application;
 

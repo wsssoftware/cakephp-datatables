@@ -6,6 +6,8 @@
  * link:     https://github.com/wsssoftware/cakephp-data-renderer
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ *
+ * @var \DataTables\Table\ConfigBundle[] $configBundles
  */
 
 use Cake\Core\Configure;

@@ -65,16 +65,13 @@ final class MainOption extends OptionAbstract {
 
 	/**
 	 * MainOption constructor.
-	 *
-	 * @param string|null $url
 	 */
-	public function __construct(string $url = null) {
+	public function __construct() {
 		parent::__construct();
 		$this->Ajax = new AjaxOption($this);
 		$this->Features = new FeaturesOption($this);
 		$this->Options = new OptionsOption($this);
 		$this->Columns = new ColumnsOption($this);
-		$this->setConfig('ajax.url', $url);
 	}
 
 	/**

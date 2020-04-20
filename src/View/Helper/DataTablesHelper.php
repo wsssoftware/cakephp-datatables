@@ -2,7 +2,6 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- *
  * link:     https://github.com/wsssoftware/cakephp-data-renderer
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
@@ -12,8 +11,9 @@ declare(strict_types = 1);
 namespace DataTables\View\Helper;
 
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\View\Helper;
-use DataTables\Tools\Builder;
+use DataTables\Table\Builder;
 
 /**
  * Class DataTablesHelper
@@ -61,6 +61,16 @@ class DataTablesHelper extends Helper {
 	 */
 	public function renderTable(string $tableAndConfig, array $options = []): string {
 		$configBundle = Builder::getInstance()->getConfigBundle($tableAndConfig, $this->getConfig('cache'));
+		$url = Router::url([
+			'controller' => 'Provider',
+			'action' => 'getTablesData',
+			$configBundle->getTableCass(),
+			$configBundle->getConfigMethod(),
+			md5(Router::url()),
+			'plugin' => 'DataTables',
+			'prefix' => false,
+		]);
+		$configBundle->Options->Ajax->setUrl($url);
 		$this->_configBundles[$configBundle->getUniqueId()] = $configBundle;
 
 		return $configBundle->generateTableHtml($this->getView(), $options);

@@ -15,7 +15,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\View\JsonView;
-use DataTables\Tools\Builder;
+use DataTables\Table\Builder;
 
 /**
  * Class ProviderController
@@ -29,6 +29,11 @@ class ProviderController extends AppController {
 	 * @var bool
 	 */
 	private $_cache = true;
+
+	/**
+	 * @var \DataTables\Table\ConfigBundle
+	 */
+	private $_configBundle;
 
 	/**
 	 * @inheritDoc
@@ -58,16 +63,16 @@ class ProviderController extends AppController {
 	 *
 	 * @param string $tablesCass
 	 * @param string $configBundle
+	 * @param string|null $urlMd5
 	 * @return \Cake\Http\Response|null|void Renders view
 	 * @throws \ReflectionException
 	 */
-	public function getData(string $tablesCass, string $configBundle) {
-		$configBundle = Builder::getInstance()
+	public function getTablesData(string $tablesCass, string $configBundle, string $urlMd5 = null) {
+		$this->_configBundle = Builder::getInstance()
 		                       ->getConfigBundle("$tablesCass::$configBundle", $this->_cache);
-		$this->DataTables->setConfigBundle($configBundle);
 
 		$result = [
-			'draw' => $this->DataTables->getData('draw', 1),
+			'draw' => $this->getData('draw', 1),
 			'recordsTotal' => 100,
 			'recordsFiltered' => 100,
 			'data' => [
@@ -82,6 +87,18 @@ class ProviderController extends AppController {
 		];
 		$this->viewBuilder()->setClassName(JsonView::class);
 		$this->set(compact('result'));
+	}
+
+	/**
+	 * @param string|null $name
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	private function getData(?string $name = null, $default = null) {
+		if ($this->_configBundle->Options->Ajax->getRequestType() === 'POST') {
+			$this->getRequest()->getData($name, $default);
+		}
+		return $this->getRequest()->getQuery($name, $default);
 	}
 
 }

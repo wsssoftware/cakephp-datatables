@@ -9,26 +9,21 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Tools;
+namespace DataTables\Table;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
-use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DataTables\StorageEngine\StorageEngineInterface;
-use DataTables\Table\Columns;
-use DataTables\Table\ConfigBundle;
-use DataTables\Table\CustomRotesConfig;
 use DataTables\Table\Option\MainOption;
-use DataTables\Table\QueryBaseState;
-use DataTables\Table\Tables;
+use DataTables\Tools\Functions;
 use InvalidArgumentException;
 
 /**
  * Class Builder
  * Created by allancarvalho in abril 17, 2020
  */
-class Builder {
+final class Builder {
 
 	/**
 	 * Storage a instance of object.
@@ -36,6 +31,17 @@ class Builder {
 	 * @var self
 	 */
 	public static $instance;
+
+	/**
+	 * Get the configured storage engine.
+	 *
+	 * @return \DataTables\StorageEngine\StorageEngineInterface
+	 */
+	public function getStorageEngine(): StorageEngineInterface {
+		$class = Configure::read('DataTables.StorageEngine.class');
+
+		return new $class();
+	}
 
 	/**
 	 * Get or build a ConfigBundle.
@@ -73,34 +79,6 @@ class Builder {
 	}
 
 	/**
-	 * Return the tables class FQN.
-	 *
-	 * @param string $tables
-	 * @return string
-	 */
-	private function getTablesClassFQN(string $tables): string {
-		$exploded = explode('::', $tables);
-		$tablesClass = $exploded[0];
-		$tablesFQN = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
-		if (class_exists($tablesFQN) === false) {
-			throw new FatalErrorException("Class '$tablesFQN' not found.");
-		}
-
-		return $tablesFQN;
-	}
-
-	/**
-	 * Get the configured storage engine.
-	 *
-	 * @return \DataTables\StorageEngine\StorageEngineInterface
-	 */
-	public function getStorageEngine(): StorageEngineInterface {
-		$class = Configure::read('DataTables.StorageEngine.class');
-
-		return new $class();
-	}
-
-	/**
 	 * Build a ConfigBundle class
 	 *
 	 * @param string $tablesClass Tables class.
@@ -114,12 +92,10 @@ class Builder {
 		string $md5
 	): ConfigBundle {
 		$tables = static::getInstance()->buildTables($this->getTablesClassFQN($tablesClass), $configMethod);
-		$customRotesConfig = static::getInstance()->buildCustomRotesConfig($tables);
 		$columns = static::getInstance()->buildColumns($tables);
-		$url = Router::url(['controller' => 'Provider', 'action' => 'getData', $tablesClass, $configMethod, 'plugin' => 'DataTables', 'prefix' => false], true);
-		$options = static::getInstance()->buildOptions($tables, $url);
-		$queryBaseState = static::getInstance()->buildQueryBaseState($tables);
-		$configBundle = new ConfigBundle($md5, $customRotesConfig, $columns, $options, $queryBaseState);
+		$options = static::getInstance()->buildOptions();
+		$queryBaseState = static::getInstance()->buildQueryBaseState();
+		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $tablesClass, $configMethod);
 		$tables->{$configMethod . 'Config'}($configBundle);
 
 		return $configBundle;
@@ -148,7 +124,7 @@ class Builder {
 	/**
 	 * Return a instance of builder object.
 	 *
-	 * @return \DataTables\Tools\Builder
+	 * @return \DataTables\Table\Builder
 	 */
 	public static function getInstance(): Builder {
 		if (static::$instance === null) {
@@ -156,16 +132,6 @@ class Builder {
 		}
 
 		return static::$instance;
-	}
-
-	/**
-	 * Get the CustomRotesConfig class used in the DataTables table.
-	 *
-	 * @param \DataTables\Table\Tables $table Tables class instance.
-	 * @return \DataTables\Table\CustomRotesConfig
-	 */
-	private function buildCustomRotesConfig(Tables $table): CustomRotesConfig {
-		return new CustomRotesConfig($table);
 	}
 
 	/**
@@ -181,22 +147,36 @@ class Builder {
 	/**
 	 * Get the JsOptions class used in the DataTables table.
 	 *
-	 * @param \DataTables\Table\Tables $table Tables class instance.
-	 * @param string $url
 	 * @return \DataTables\Table\Option\MainOption
 	 */
-	private function buildOptions(Tables $table, string $url): MainOption {
-		return new MainOption($url);
+	private function buildOptions(): MainOption {
+		return new MainOption();
 	}
 
 	/**
 	 * Get the QueryBaseState class used in the DataTables table.
 	 *
-	 * @param \DataTables\Table\Tables $table Tables class instance.
 	 * @return \DataTables\Table\QueryBaseState
 	 */
-	private function buildQueryBaseState(Tables $table) {
+	private function buildQueryBaseState() {
 		return new QueryBaseState();
+	}
+
+	/**
+	 * Return the tables class FQN.
+	 *
+	 * @param string $tables
+	 * @return string
+	 */
+	private function getTablesClassFQN(string $tables): string {
+		$exploded = explode('::', $tables);
+		$tablesClass = $exploded[0];
+		$tablesFQN = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
+		if (class_exists($tablesFQN) === false) {
+			throw new FatalErrorException("Class '$tablesFQN' not found.");
+		}
+
+		return $tablesFQN;
 	}
 
 }
