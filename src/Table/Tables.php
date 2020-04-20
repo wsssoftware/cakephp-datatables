@@ -10,6 +10,7 @@
 declare(strict_types = 1);
 
 namespace DataTables\Table;
+
 use Cake\Error\FatalErrorException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
