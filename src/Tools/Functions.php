@@ -11,6 +11,8 @@ declare(strict_types = 1);
 
 namespace DataTables\Tools;
 
+use Cake\Routing\Router;
+use DataTables\Table\ConfigBundle;
 use ReflectionClass;
 
 /**
@@ -125,6 +127,15 @@ class Functions {
 		}
 
 		return implode("\n", $exploded);
+	}
+
+	/**
+	 * @param \DataTables\Table\ConfigBundle $configBundle
+	 * @return string
+	 */
+	public function getConfigBundleAndUrlUniqueMd5(ConfigBundle $configBundle): string {
+		$urlMd5 = md5(Router::url());
+		return "$urlMd5.{$configBundle->getCheckMd5()}";
 	}
 
 }

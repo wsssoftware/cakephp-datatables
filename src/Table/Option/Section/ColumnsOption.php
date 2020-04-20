@@ -46,6 +46,30 @@ final class ColumnsOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/
 	 */
 	public function setColumns(Columns $columns): MainOption {
+		$columnDefs = [
+			'targets' => '_all',
+		];
+		foreach ($columns->Default->getConfig() as $configName => $value) {
+			if (!in_array($configName, ['title'])) {
+				$columnDefs[$configName] = $value;
+			}
+		}
+		$columnsConfig = [];
+		foreach ($columns->getColumns() as $column) {
+			if ($column->isDatabase() === false) {
+				$column->setSearchable(false);
+				$column->setOrderable(false);
+			}
+			$columnItem = [];
+			foreach ($column->getConfig() as $configName => $value) {
+				$columnItem[$configName] = $value;
+			}
+			$columnsConfig[] = $columnItem;
+		}
+
+		$this->_setConfig('columnDefs', [$columnDefs]);
+		$this->_setConfig('columns', $columnsConfig);
+
 	    return $this->getMainOption();
 	}
 

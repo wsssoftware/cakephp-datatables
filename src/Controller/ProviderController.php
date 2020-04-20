@@ -13,7 +13,7 @@ namespace DataTables\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\I18n\Time;
+use Cake\ORM\Query;
 use Cake\View\JsonView;
 use DataTables\Table\Builder;
 
@@ -69,24 +69,40 @@ class ProviderController extends AppController {
 	 */
 	public function getTablesData(string $tablesCass, string $configBundle, string $urlMd5 = null) {
 		$this->_configBundle = Builder::getInstance()
-		                       ->getConfigBundle("$tablesCass::$configBundle", $this->_cache);
+		                              ->getConfigBundle("$tablesCass::$configBundle", $this->_cache);
+
+		$pageSize = (int)$this->getData('length');
+		$page = (int)($this->getData('start') + $pageSize) / $pageSize;
+		$items = $this->getFind()->page($page, $pageSize);
+
+		$data = [];
+		foreach ($items as $item) {
+			$data[] = [
+				$item->id,
+				$item->name,
+				h($item->created),
+				h($item->modified),
+				'',
+			];
+		}
 
 		$result = [
 			'draw' => $this->getData('draw', 1),
-			'recordsTotal' => 100,
-			'recordsFiltered' => 100,
-			'data' => [
-				[
-					111,
-					'Allan Carvalho',
-					h(Time::now()->modify('-30 days')),
-					h(Time::now()->modify('-2 months')),
-					'',
-				],
-			],
+			'recordsTotal' => $items->count(),
+			'recordsFiltered' => $items->count(),
+			'data' => $data,
 		];
 		$this->viewBuilder()->setClassName(JsonView::class);
 		$this->set(compact('result'));
+	}
+
+	/**
+	 * @return \Cake\ORM\Query
+	 */
+	private function getFind(): Query {
+		$find = $this->_configBundle->Columns->getTables()->getOrmTable()->find();
+
+		return $find;
 	}
 
 	/**
@@ -96,8 +112,9 @@ class ProviderController extends AppController {
 	 */
 	private function getData(?string $name = null, $default = null) {
 		if ($this->_configBundle->Options->Ajax->getRequestType() === 'POST') {
-			$this->getRequest()->getData($name, $default);
+			return $this->getRequest()->getData($name, $default);
 		}
+
 		return $this->getRequest()->getQuery($name, $default);
 	}
 

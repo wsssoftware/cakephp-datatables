@@ -183,7 +183,7 @@ class ColumnTest extends TestCase {
 	 */
 	public function testOrderSequence() {
 		$col = $this->Columns->addDatabaseColumn('Users.id');
-		static::assertEquals([], $col->getOrderSequence());
+		static::assertEquals(null, $col->getOrderSequence());
 		$col->setOrderSequence(['asc']);
 		static::assertEquals(['asc'], $col->getOrderSequence());
 		$col->setOrderSequence(['desc', 'asc']);

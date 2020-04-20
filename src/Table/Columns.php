@@ -13,6 +13,7 @@ namespace DataTables\Table;
 
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
+use DataTables\Table\Tables;
 use InvalidArgumentException;
 
 /**
@@ -51,6 +52,13 @@ final class Columns {
 	public function __construct(Tables $tables) {
 		$this->_tables = $tables;
 		$this->Default = new Column('default', 'empty', false);
+	}
+
+	/**
+	 * @return \DataTables\Table\Tables
+	 */
+	public function getTables(): Tables {
+		return $this->_tables;
 	}
 
 	/**

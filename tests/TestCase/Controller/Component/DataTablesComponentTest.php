@@ -3,9 +3,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\Controller\Component;
 
-use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
-use DataTables\Controller\Component\DataTablesComponent;
 
 /**
  * DataTables\Controller\Component\DataTablesComponent Test Case
@@ -26,8 +24,6 @@ class DataTablesComponentTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$registry = new ComponentRegistry();
-		$this->DataTables = new DataTablesComponent($registry);
 	}
 
 	/**

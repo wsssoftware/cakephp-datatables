@@ -12,6 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\Table\Option;
 
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use DataTables\Table\Option\Section\AjaxOption;
 use DataTables\Table\Option\Section\ColumnsOption;
@@ -65,13 +66,16 @@ final class MainOption extends OptionAbstract {
 
 	/**
 	 * MainOption constructor.
+	 *
+	 * @param string $url
 	 */
-	public function __construct() {
+	public function __construct(string $url) {
 		parent::__construct();
 		$this->Ajax = new AjaxOption($this);
 		$this->Features = new FeaturesOption($this);
 		$this->Options = new OptionsOption($this);
 		$this->Columns = new ColumnsOption($this);
+		$this->setConfig('ajax.url', $url);
 	}
 
 	/**
@@ -169,6 +173,9 @@ final class MainOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getConfigAsArray(?bool $printAllOptions = null): array {
+		$url = Hash::get($this->_config, 'ajax.url');
+		$url = "$url/" . md5(Router::url());
+		$this->_config = Hash::insert($this->_config, 'ajax.url', $url);
 		if ($printAllOptions === true || (empty($printAllOptions) && $this->_printAllOptions === true)) {
 			return $this->_config;
 		}

@@ -33,7 +33,7 @@ class DataTablesCell extends Cell {
 		$options['id'] = $configBundle->getUniqueId();
 		$tableContent = '<thead><tr>';
 		foreach ($configBundle->Columns->getColumns() as $column) {
-			$tableContent .= '<th>' . $column->getTitle() . '</th>';
+			$tableContent .= '<th>' . __d('datatables', 'loading') . '...</th>';
 		}
 		$tableContent .= '</tr><thead>';
 		$tableContent .= '<tbody><tr><td style="text-align: center" colspan="' . count($configBundle->Columns->getColumns()) . '">';

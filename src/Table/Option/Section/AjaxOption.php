@@ -2,7 +2,6 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- *
  * link:     https://github.com/wsssoftware/cakephp-data-renderer
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
@@ -11,7 +10,6 @@ declare(strict_types = 1);
 
 namespace DataTables\Table\Option\Section;
 
-use Cake\Error\FatalErrorException;
 use DataTables\Table\Option\ChildOptionAbstract;
 use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
@@ -53,25 +51,6 @@ final class AjaxOption extends ChildOptionAbstract {
 	}
 
 	/**
-	 * Setter method.
-	 * The way that the DataTables will do the request. Can be GET or POST.
-	 *
-	 * @param string $url
-	 * @return \DataTables\Table\Option\MainOption
-	 * @link https://datatables.net/reference/option/ajax
-	 */
-	public function setUrl(string $url): MainOption {
-		$trace = debug_backtrace();
-		$expectedClass = 'DataTables\View\Helper\DataTablesHelper::renderTable';
-		if (!isset($trace[1]) || $trace[1]['class'] . '::' . $trace[1]['function'] !== $expectedClass) {
-			throw new FatalErrorException('This method can only called by DataTablesHelper');
-		}
-		$this->_setConfig('ajax.url', $url);
-
-		return $this->getMainOption();
-	}
-
-	/**
 	 * Getter method.
 	 * The way that the DataTables will do the request. Can be GET or POST.
 	 *
@@ -91,7 +70,7 @@ final class AjaxOption extends ChildOptionAbstract {
 	 * @link https://datatables.net/reference/option/ajax
 	 */
 	public function setRequestType(string $requestType): MainOption {
-		$requestType = mb_strtolower($requestType);
+		$requestType = mb_strtoupper($requestType);
 		if (!in_array($requestType, ['GET', 'POST'])) {
 			throw new InvalidArgumentException("\$requestType must be GET or POST. Found: $requestType.");
 		}

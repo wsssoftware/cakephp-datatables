@@ -11,6 +11,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use DataTables\Tools\Validator;
@@ -50,18 +51,23 @@ final class Column {
 	];
 
 	/**
-	 * The column name.
-	 *
-	 * @var string
+	 * @var array
 	 */
-	private $_name;
-
-	/**
-	 * If the column is or not a database column.
-	 *
-	 * @var boolean
-	 */
-	private $_database;
+	private $_config = [
+		'cellType' => null,
+		'className' => null,
+		'contentPadding' => null,
+		'createdCell' => null,
+		'orderData' => null,
+		'orderDataType' => null,
+		'orderSequence' => null,
+		'orderable' => null,
+		'searchable' => null,
+		'title' => null,
+		'type' => null,
+		'visible' => null,
+		'width' => null,
+	];
 
 	/**
 	 * If the column is or not a database column.
@@ -71,69 +77,14 @@ final class Column {
 	private $_columnSchema;
 
 	/**
-	 * @var string|null
+	 * @var string
 	 */
-	private $_cellType = null;
+	private $_name;
 
 	/**
-	 * @var string|null
+	 * @var bool
 	 */
-	private $_className = null;
-
-	/**
-	 * @var string|null
-	 */
-	private $_contentPadding = null;
-
-	/**
-	 * @var string|array|null
-	 */
-	private $_createdCell = null;
-
-	/**
-	 * @var integer|array|null
-	 */
-	private $_orderData = null;
-
-	/**
-	 * @var string|null
-	 */
-	private $_orderDataType = null;
-
-	/**
-	 * @var array
-	 */
-	private $_orderSequence = [];
-
-	/**
-	 * @var boolean|null
-	 */
-	private $_orderable = null;
-
-	/**
-	 * @var boolean|null
-	 */
-	private $_searchable = null;
-
-	/**
-	 * @var string|null
-	 */
-	private $_title = null;
-
-	/**
-	 * @var string|null
-	 */
-	private $_type = null;
-
-	/**
-	 * @var boolean|null
-	 */
-	private $_visible = null;
-
-	/**
-	 * @var string|null
-	 */
-	private $_width = null;
+	private $_database;
 
 	/**
 	 * Column constructor.
@@ -145,16 +96,34 @@ final class Column {
 	 */
 	public function __construct(string $name, string $title = null, bool $database = true, array $columnSchema = []) {
 		$this->_name = $name;
-		if (!empty($title)) {
-			$this->_title = $title;
-		} elseif ($database === true) {
-			$this->_title = Inflector::humanize(explode('.', $name)[1]);
-		} else {
-			$this->_title = Inflector::humanize($name);
+		if (empty($title)) {
+			if ($database === true) {
+				$title = Inflector::humanize(explode('.', $name)[1]);
+			} else {
+				$title = Inflector::humanize($name);
+			}
 		}
-
+		$this->_config = Hash::insert($this->_config, 'title', $title);
 		$this->_database = $database;
 		$this->_columnSchema = $columnSchema;
+	}
+
+	/**
+	 * @param bool $onlyDirty
+	 * @return array
+	 */
+	public function getConfig(bool $onlyDirty = true): array {
+		if ($onlyDirty === false) {
+			return $this->_config;
+		}
+
+		$result = [];
+		foreach ($this->_config as $index => $item) {
+			if ($item !== null) {
+				$result[$index] = $item;
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -187,7 +156,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.cellType
 	 */
 	public function getCellType(): ?string {
-		return $this->_cellType;
+		return Hash::get($this->_config, 'cellType');
 
 	}
 
@@ -206,8 +175,7 @@ final class Column {
 		if (!in_array($cellType, ['td', 'th']) && !empty($cellType)) {
 			throw new InvalidArgumentException("\$cellType must be 'td' or 'th'. Found: $cellType.");
 		}
-
-		$this->_cellType = $cellType;
+		$this->_config = Hash::insert($this->_config, 'cellType', $cellType);
 
 		return $this;
 
@@ -222,7 +190,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.className
 	 */
 	public function getClassName(): ?string {
-		return $this->_className;
+		return Hash::get($this->_config, 'className');
 
 	}
 
@@ -237,7 +205,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.className
 	 */
 	public function setClassName(?string $className): self {
-		$this->_className = $className;
+		$this->_config = Hash::insert($this->_config, 'className', $className);
 
 		return $this;
 
@@ -252,7 +220,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.contentPadding
 	 */
 	public function getContentPadding(): ?string {
-		return $this->_contentPadding;
+		return Hash::get($this->_config, 'contentPadding');
 
 	}
 
@@ -273,7 +241,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.contentPadding
 	 */
 	public function setContentPadding(?string $contentPadding): self {
-		$this->_contentPadding = $contentPadding;
+		$this->_config = Hash::insert($this->_config, 'contentPadding', $contentPadding);
 
 		return $this;
 
@@ -302,7 +270,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/type/integer
 	 */
 	public function getCreatedCell() {
-		return $this->_createdCell;
+		return Hash::get($this->_config, 'createdCell');
 	}
 
 	/**
@@ -342,8 +310,7 @@ final class Column {
 		if (!in_array($bodyOrParamsType, $validTypes)) {
 			throw new InvalidArgumentException("In \$bodyOrParams you can use only $validTypesString. Found: '$bodyOrParamsType'.");
 		}
-
-		$this->_createdCell = $bodyOrParams;
+		$this->_config = Hash::insert($this->_config, 'createdCell', $bodyOrParams);
 
 		return $this;
 
@@ -364,7 +331,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.orderData
 	 */
 	public function getOrderData() {
-		return $this->_orderData;
+		return Hash::get($this->_config, 'orderData');
 	}
 
 	/**
@@ -398,8 +365,7 @@ final class Column {
 		} elseif (!in_array($orderDataType, $validTypes)) {
 			throw new InvalidArgumentException("In \$orderData you can use only $validTypesString. Found: '$orderDataType'.");
 		}
-
-		$this->_orderData = $orderData;
+		$this->_config = Hash::insert($this->_config, 'orderData', $orderData);
 
 		return $this;
 
@@ -422,8 +388,7 @@ final class Column {
 	 * @link   https://datatables.net/plug-ins/sorting/
 	 */
 	public function getOrderDataType(): ?string {
-		return $this->_orderDataType;
-
+		return Hash::get($this->_config, 'orderDataType');
 	}
 
 	/**
@@ -449,8 +414,7 @@ final class Column {
 		if (!in_array($orderDataType, static::VALID_ORDER_DATA_TYPES) && !empty($orderDataType)) {
 			throw new InvalidArgumentException("In \$orderDataType you can use only $validOrderDataTypeString. Found: '$orderDataType'.");
 		}
-
-		$this->_orderDataType = $orderDataType;
+		$this->_config = Hash::insert($this->_config, 'orderDataType', $orderDataType);
 
 		return $this;
 
@@ -464,9 +428,8 @@ final class Column {
 	 * @return array
 	 * @link   https://datatables.net/reference/option/columns.orderSequence
 	 */
-	public function getOrderSequence(): array {
-		return $this->_orderSequence;
-
+	public function getOrderSequence(): ?array {
+		return Hash::get($this->_config, 'orderSequence');
 	}
 
 	/**
@@ -486,11 +449,9 @@ final class Column {
 				throw new InvalidArgumentException("In \$orderDataType you can use only 'asc' or 'desc'. Found: '$item'.");
 			}
 		}
-
-		$this->_orderSequence = $orderSequence;
+		$this->_config = Hash::insert($this->_config, 'orderSequence', $orderSequence);
 
 		return $this;
-
 	}
 
 	/**
@@ -505,8 +466,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.orderable
 	 */
 	public function isOrderable(): ?bool {
-		return $this->_orderable;
-
+		return Hash::get($this->_config, 'orderable');
 	}
 
 	/**
@@ -523,7 +483,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.orderable
 	 */
 	public function setOrderable(?bool $orderable): self {
-		$this->_orderable = $orderable;
+		$this->_config = Hash::insert($this->_config, 'orderable', $orderable);
 
 		return $this;
 
@@ -539,8 +499,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.searchable
 	 */
 	public function isSearchable(): ?bool {
-		return $this->_searchable;
-
+		return Hash::get($this->_config, 'searchable');
 	}
 
 	/**
@@ -555,7 +514,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.searchable
 	 */
 	public function setSearchable(?bool $searchable): self {
-		$this->_searchable = $searchable;
+		$this->_config = Hash::insert($this->_config, 'searchable', $searchable);
 
 		return $this;
 
@@ -576,8 +535,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.title
 	 */
 	public function getTitle(): string {
-		return $this->_title;
-
+		return Hash::get($this->_config, 'title');
 	}
 
 	/**
@@ -597,10 +555,9 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.title
 	 */
 	public function setTitle(string $title): self {
-		$this->_title = $title;
+		$this->_config = Hash::insert($this->_config, 'title', $title);
 
 		return $this;
-
 	}
 
 	/**
@@ -659,8 +616,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.type
 	 */
 	public function getType(): ?string {
-		return $this->_type;
-
+		return Hash::get($this->_config, 'type');
 	}
 
 	/**
@@ -725,8 +681,7 @@ final class Column {
 		if (!in_array($type, static::VALID_TYPES) && !empty($type)) {
 			throw new InvalidArgumentException("Type must be $validTypesString. Found: '$type'.");
 		}
-
-		$this->_type = $type;
+		$this->_config = Hash::insert($this->_config, 'type', $type);
 
 		return $this;
 
@@ -746,8 +701,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.visible
 	 */
 	public function isVisible(): ?bool {
-		return $this->_visible;
-
+		return Hash::get($this->_config, 'visible');
 	}
 
 	/**
@@ -766,7 +720,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.visible
 	 */
 	public function setVisible(?bool $visible): self {
-		$this->_visible = $visible;
+		$this->_config = Hash::insert($this->_config, 'visible', $visible);
 
 		return $this;
 
@@ -786,8 +740,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.width
 	 */
 	public function getWidth(): ?string {
-		return $this->_width;
-
+		return Hash::get($this->_config, 'width');
 	}
 
 	/**
@@ -806,7 +759,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.width
 	 */
 	public function setWidth(?string $width): self {
-		$this->_width = $width;
+		$this->_config = Hash::insert($this->_config, 'width', $width);
 
 		return $this;
 

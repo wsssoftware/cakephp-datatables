@@ -39,7 +39,7 @@ class OptionsOptionTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$this->MainOption = new MainOption();
+		$this->MainOption = new MainOption('abc');
 	}
 
 	/**

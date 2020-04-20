@@ -11,7 +11,6 @@ declare(strict_types = 1);
 namespace DataTables\View\Helper;
 
 use Cake\Core\Configure;
-use Cake\Routing\Router;
 use Cake\View\Helper;
 use DataTables\Table\Builder;
 
@@ -53,24 +52,14 @@ class DataTablesHelper extends Helper {
 	/**
 	 * Render the table html structure of a DataTables configure.
 	 *
-	 * @param string $tableAndConfig A Tables class plus config method that you want to render concatenated by '::'.
+	 * @param string $tablesAndConfig A Tables class plus config method that you want to render concatenated by '::'.
 	 *                               Eg.: 'Foo::main'.
 	 * @param array $options A table tag options.
 	 * @return string
 	 * @throws \ReflectionException
 	 */
-	public function renderTable(string $tableAndConfig, array $options = []): string {
-		$configBundle = Builder::getInstance()->getConfigBundle($tableAndConfig, $this->getConfig('cache'));
-		$url = Router::url([
-			'controller' => 'Provider',
-			'action' => 'getTablesData',
-			$configBundle->getTableCass(),
-			$configBundle->getConfigMethod(),
-			md5(Router::url()),
-			'plugin' => 'DataTables',
-			'prefix' => false,
-		]);
-		$configBundle->Options->Ajax->setUrl($url);
+	public function renderTable(string $tablesAndConfig, array $options = []): string {
+		$configBundle = Builder::getInstance()->getConfigBundle($tablesAndConfig, $this->getConfig('cache'));
 		$this->_configBundles[$configBundle->getUniqueId()] = $configBundle;
 
 		return $configBundle->generateTableHtml($this->getView(), $options);

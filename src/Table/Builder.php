@@ -13,6 +13,7 @@ namespace DataTables\Table;
 
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DataTables\StorageEngine\StorageEngineInterface;
 use DataTables\Table\Option\MainOption;
@@ -59,14 +60,14 @@ final class Builder {
 	/**
 	 * Get or build a ConfigBundle.
 	 *
-	 * @param string $tableAndConfig A Tables class plus config method that you want to render concatenated by '::'.
+	 * @param string $tablesAndConfig A Tables class plus config method that you want to render concatenated by '::'.
 	 *     Eg.: 'Foo::main'.
 	 * @param bool $cache If true will try to get from cache.
 	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
 	 */
-	public function getConfigBundle(string $tableAndConfig, bool $cache = true): ConfigBundle {
-		$exploded = explode('::', $tableAndConfig);
+	public function getConfigBundle(string $tablesAndConfig, bool $cache = true): ConfigBundle {
+		$exploded = explode('::', $tablesAndConfig);
 		if (count($exploded) !== 2) {
 			throw new InvalidArgumentException('Table param must be a concatenation of Tables class and config. Eg.: Foo::method.');
 		}
@@ -74,7 +75,7 @@ final class Builder {
 		$tablesClass = $exploded[0];
 		$configMethod = $exploded[1];
 		$md5 = Functions::getInstance()->getClassAndVersionMd5($this->getTablesClassFQN($tablesClass));
-		$cacheKey = Inflector::underscore(str_replace('::', '_', $tableAndConfig));
+		$cacheKey = Inflector::underscore(str_replace('::', '_', $tablesAndConfig));
 
 		$configBundle = null;
 		if ($cache === true && $storageEngine->exists($cacheKey)) {
@@ -87,6 +88,7 @@ final class Builder {
 				throw new FatalErrorException('Unable to save the ConfigBundle cache.');
 			}
 		}
+		$configBundle = $this->checkIfHaveCustomItemsInSession($configBundle);
 
 		return $configBundle;
 	}
@@ -106,10 +108,19 @@ final class Builder {
 	): ConfigBundle {
 		$tables = static::getInstance()->buildTables($this->getTablesClassFQN($tablesClass), $configMethod);
 		$columns = static::getInstance()->buildColumns($tables);
-		$options = static::getInstance()->buildOptions();
+		$url = Router::url([
+			'controller' => 'Provider',
+			'action' => 'getTablesData',
+			$tablesClass,
+			$configMethod,
+			'plugin' => 'DataTables',
+			'prefix' => false,
+		]);
+		$options = static::getInstance()->buildOptions($url);
 		$queryBaseState = static::getInstance()->buildQueryBaseState();
 		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $tablesClass, $configMethod);
 		$tables->{$configMethod . 'Config'}($configBundle);
+		$configBundle->Options->Columns->setColumns($columns);
 
 		return $configBundle;
 	}
@@ -135,6 +146,29 @@ final class Builder {
 	}
 
 	/**
+	 * Check if exists a custom Query and Options config for an specific url. If exists, the method will overwrite the
+	 * original Options and Query.
+	 *
+	 * @param \DataTables\Table\ConfigBundle $configBundle
+	 * @return \DataTables\Table\ConfigBundle
+	 */
+	private function checkIfHaveCustomItemsInSession(ConfigBundle $configBundle): ConfigBundle {
+		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
+		$session = Router::getRequest()->getSession();
+		if ($session->check("DataTables.configs.options.$md5")) {
+			/** @var \DataTables\Table\Option\MainOption $options */
+			$options = $session->read("DataTables.configs.options.$md5");
+			$configBundle->Options = $options;
+		}
+		if ($session->check("DataTables.configs.query.$md5")) {
+			/** @var \DataTables\Table\QueryBaseState $query */
+			$query = $session->read("DataTables.configs.query.$md5");
+			$configBundle->Query = $query;
+		}
+		return $configBundle;
+	}
+
+	/**
 	 * Get the Columns class used in the DataTables table.
 	 *
 	 * @param \DataTables\Table\Tables $table Tables class instance.
@@ -147,10 +181,11 @@ final class Builder {
 	/**
 	 * Get the JsOptions class used in the DataTables table.
 	 *
+	 * @param string $url
 	 * @return \DataTables\Table\Option\MainOption
 	 */
-	private function buildOptions(): MainOption {
-		return new MainOption();
+	private function buildOptions(string $url): MainOption {
+		return new MainOption($url);
 	}
 
 	/**
