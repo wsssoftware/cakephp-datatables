@@ -33,6 +33,19 @@ final class Builder {
 	public static $instance;
 
 	/**
+	 * Return a instance of builder object.
+	 *
+	 * @return \DataTables\Table\Builder
+	 */
+	public static function getInstance(): Builder {
+		if (static::$instance === null) {
+			static::$instance = new self();
+		}
+
+		return static::$instance;
+	}
+
+	/**
 	 * Get the configured storage engine.
 	 *
 	 * @return \DataTables\StorageEngine\StorageEngineInterface
@@ -122,19 +135,6 @@ final class Builder {
 	}
 
 	/**
-	 * Return a instance of builder object.
-	 *
-	 * @return \DataTables\Table\Builder
-	 */
-	public static function getInstance(): Builder {
-		if (static::$instance === null) {
-			static::$instance = new self();
-		}
-
-		return static::$instance;
-	}
-
-	/**
 	 * Get the Columns class used in the DataTables table.
 	 *
 	 * @param \DataTables\Table\Tables $table Tables class instance.
@@ -165,11 +165,11 @@ final class Builder {
 	/**
 	 * Return the tables class FQN.
 	 *
-	 * @param string $tables
+	 * @param string $tablesName
 	 * @return string
 	 */
-	private function getTablesClassFQN(string $tables): string {
-		$exploded = explode('::', $tables);
+	private function getTablesClassFQN(string $tablesName): string {
+		$exploded = explode('::', $tablesName);
 		$tablesClass = $exploded[0];
 		$tablesFQN = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
 		if (class_exists($tablesFQN) === false) {

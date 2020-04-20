@@ -10,7 +10,6 @@
 declare(strict_types = 1);
 
 namespace DataTables\Table;
-
 use Cake\Error\FatalErrorException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -30,10 +29,8 @@ abstract class Tables {
 	protected $_ormTableName;
 
 	/**
-	 * @var \Cake\ORM\Table
+	 * Tables constructor.
 	 */
-	private $_ormTable;
-
 	public function __construct() {
 		$className = get_called_class();
 		$classShortName = explode('\\', get_called_class());
