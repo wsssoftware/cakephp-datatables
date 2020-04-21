@@ -237,7 +237,11 @@ class ColumnTest extends TestCase {
 	 */
 	public function testType() {
 		$col = $this->Columns->addDatabaseColumn('Users.id');
-		static::assertEquals(null, $col->getType());
+		$columnType = null;
+		if (!empty($col->getColumnSchema()['type']) && !empty(Column::DATA_TABLES_TYPE_MAP[$col->getColumnSchema()['type']])) {
+			$columnType = Column::DATA_TABLES_TYPE_MAP[$col->getColumnSchema()['type']];
+		}
+		static::assertEquals($columnType, $col->getType());
 		foreach (Column::VALID_TYPES as $type) {
 			$col->setType($type);
 			static::assertEquals($type, $col->getType());

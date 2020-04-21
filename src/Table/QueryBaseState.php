@@ -11,9 +11,10 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\ORM\Query;
+
 /**
  * Class QueryBaseState
- *
  * Created by allancarvalho in abril 17, 2020
  */
 final class QueryBaseState {
@@ -47,6 +48,11 @@ final class QueryBaseState {
 	 * @var array
 	 */
 	private $_notMatchingItems = [];
+
+	/**
+	 * @var array
+	 */
+	private $_orderItems = [];
 
 	/**
 	 * @var array
@@ -89,33 +95,28 @@ final class QueryBaseState {
 	private $_andWhereItems = [];
 
 	/**
-	 * @var array
-	 */
-	private $_urlWhereItems = [];
-
-	/**
 	 * Return
 	 *
-	 * @return array
+	 * @param \Cake\ORM\Query $query
+	 * @return \Cake\ORM\Query
 	 */
-	public function getArray(): array {
-		return [
-			'contain' => $this->_containItems,
-			'select' => $this->_selectItems,
-			'selectAllExcept' => $this->_selectAllExceptItems,
-			'leftJoinWith' => $this->_leftJoinWithItems,
-			'innerJoinWith' => $this->_innerJoinWithItems,
-			'notMatching' => $this->_notMatchingItems,
-			'orderAsc' => $this->_orderAscItems,
-			'orderDesc' => $this->_orderDescItems,
-			'where' => $this->_whereItems,
-			'whereInList' => $this->_whereInListItems,
-			'whereNotNull' => $this->_whereNotNullItems,
-			'whereNotInList' => $this->_whereNotInListItems,
-			'whereNull' => $this->_whereNullItems,
-			'andWhere' => $this->_andWhereItems,
-			'urlWhere' => $this->_urlWhereItems,
-		];
+	public function mergeWithQuery(Query $query): Query {
+		$this->mergeContain($query);
+		$this->mergeSelect($query);
+		$this->mergeSelectAllExcept($query);
+		$this->mergeLeftJoinWith($query);
+		$this->mergeInnerJoinWith($query);
+		$this->mergeNotMatching($query);
+		$this->mergeOrder($query);
+		$this->mergeOrderAsc($query);
+		$this->mergeOrderDesc($query);
+		$this->mergeWhere($query);
+		$this->mergeWhereInList($query);
+		$this->mergeWhereNotNull($query);
+		$this->mergeWhereNotInList($query);
+		$this->mergeWhereNull($query);
+		$this->mergeAndWhere($query);
+		return $query;
 	}
 
 	/**
@@ -146,6 +147,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeContain(Query $query): void {
+		foreach ($this->_containItems as $containItem) {
+			$query->contain($containItem['associations'], $containItem['queryBuilder']);
+		}
+	}
+
+	/**
 	 * @param array|\Cake\Database\ExpressionInterface|callable|string|\Cake\ORM\Table|\Cake\ORM\Association $fields Fields
 	 * to be added to the list.
 	 * @param bool $overwrite whether to reset fields with passed list or not
@@ -160,6 +171,16 @@ final class QueryBaseState {
 			'fields' => $fields,
 		];
 		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeSelect(Query $query): void {
+		foreach ($this->_selectItems as $selectItem) {
+			$query->select($selectItem['fields']);
+		}
 	}
 
 	/**
@@ -182,6 +203,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeSelectAllExcept(Query $query): void {
+		foreach ($this->_selectAllExceptItems as $selectAllExceptItem) {
+			$query->selectAllExcept($selectAllExceptItem['table'], $selectAllExceptItem['excludedFields']);
+		}
+	}
+
+	/**
 	 * @param string $assoc The association to join with
 	 * @param callable|null $builder a function that will receive a pre-made query object
 	 * that can be used to add custom conditions or selecting some fields
@@ -194,6 +225,16 @@ final class QueryBaseState {
 			'builder' => $builder,
 		];
 		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeLeftJoinWith(Query $query): void {
+		foreach ($this->_leftJoinWithItems as $leftJoinWithItem) {
+			$query->leftJoinWith($leftJoinWithItem['assoc'], $leftJoinWithItem['builder']);
+		}
 	}
 
 	/**
@@ -212,6 +253,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeInnerJoinWith(Query $query): void{
+		foreach ($this->_innerJoinWithItems as $innerJoinWithItem) {
+			$query->innerJoinWith($innerJoinWithItem['assoc'], $innerJoinWithItem['builder']);
+		}
+	}
+
+	/**
 	 * @param string $assoc The association to filter by
 	 * @param callable|null $builder a function that will receive a pre-made query object
 	 * that can be used to add custom conditions or selecting some fields
@@ -224,6 +275,45 @@ final class QueryBaseState {
 			'builder' => $builder,
 		];
 		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeNotMatching(Query $query): void {
+		foreach ($this->_notMatchingItems as $notMatchingItem) {
+			$query->notMatching($notMatchingItem['assoc'], $notMatchingItem['builder']);
+		}
+	}
+
+	/**
+	 * @param array|\Cake\Database\ExpressionInterface|\Closure|string $fields fields to be added to the list
+	 * @param bool $overwrite whether to reset order with field list or not
+	 * @return $this
+	 * @see \Cake\ORM\Query::order()
+	 */
+	public function order($fields, $overwrite = false): self {
+		if ($overwrite === true) {
+			$this->_orderAscItems = [];
+		}
+		if (!$fields) {
+			return $this;
+		}
+		$this->_orderItems[] = [
+			'fields' => $fields,
+		];
+		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeOrder(Query $query): void {
+		foreach ($this->_orderItems as $orderItem) {
+			$query->order($orderItem['fields']);
+		}
 	}
 
 	/**
@@ -243,6 +333,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeOrderAsc(Query $query): void {
+		foreach ($this->_orderAscItems as $orderAscItem) {
+			$query->orderAsc($orderAscItem['field']);
+		}
+	}
+
+	/**
 	 * @param string|\Cake\Database\Expression\QueryExpression $field The field to order on.
 	 * @param bool $overwrite Whether or not to reset the order clauses.
 	 * @return $this
@@ -256,6 +356,16 @@ final class QueryBaseState {
 			'field' => $field,
 		];
 		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeOrderDesc(Query $query): void {
+		foreach ($this->_orderDescItems as $orderDescItem) {
+			$query->orderDesc($orderDescItem['field']);
+		}
 	}
 
 	/**
@@ -277,6 +387,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeWhere(Query $query): void {
+		foreach ($this->_whereItems as $whereItem) {
+			$query->where($whereItem['conditions'], $whereItem['types']);
+		}
+	}
+
+	/**
 	 * @param string $field Field
 	 * @param array $values Array of values
 	 * @param array $options Options
@@ -293,6 +413,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeWhereInList(Query $query): void {
+		foreach ($this->_whereInListItems as $whereInListItem) {
+			$query->whereInList($whereInListItem['field'], $whereInListItem['values'], $whereInListItem['options']);
+		}
+	}
+
+	/**
 	 * @param array|string|\Cake\Database\ExpressionInterface $fields A single field or expressions or a list of them
 	 *  that should be not null.
 	 * @return $this
@@ -303,6 +433,16 @@ final class QueryBaseState {
 			'fields' => $fields,
 		];
 		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeWhereNotNull(Query $query): void {
+		foreach ($this->_whereNotNullItems as $whereNotNullItem) {
+			$query->whereNotNull($whereNotNullItem['fields']);
+		}
 	}
 
 	/**
@@ -322,6 +462,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeWhereNotInList(Query $query): void {
+		foreach ($this->_whereNotInListItems as $whereNotInListItem) {
+			$query->whereNotInList($whereNotInListItem['field'], $whereNotInListItem['values'], $whereNotInListItem['options']);
+		}
+	}
+
+	/**
 	 * @param array|string|\Cake\Database\ExpressionInterface $fields A single field or expressions or a list of them
 	 *   that should be null.
 	 * @return $this
@@ -332,6 +482,16 @@ final class QueryBaseState {
 			'fields' => $fields,
 		];
 		return $this;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function mergeWhereNull(Query $query): void {
+		foreach ($this->_whereNullItems as $whereNullItem) {
+			$query->whereNull($whereNullItem['fields']);
+		}
 	}
 
 	/**
@@ -349,18 +509,13 @@ final class QueryBaseState {
 	}
 
 	/**
-	 * Add a condition for a specific URL
-	 *
-	 * @param string|array|\Cake\Database\ExpressionInterface|\Closure|null $conditions The conditions to filter on.
-	 * @param string|array|\Psr\Http\Message\UriInterface|null $url An array specifying any of the following:
-	 * @return $this
+	 * @param \Cake\ORM\Query $query
+	 * @return void
 	 */
-	public function urlWhere($conditions, $url): self {
-		$this->_urlWhereItems[] = [
-			'conditions' => $conditions,
-			'url' => $url,
-		];
-		return $this;
+	private function mergeAndWhere(Query $query): void {
+		foreach ($this->_andWhereItems as $andWhereItem) {
+			$query->andWhere($andWhereItem['conditions'], $andWhereItem['types']);
+		}
 	}
 
 }

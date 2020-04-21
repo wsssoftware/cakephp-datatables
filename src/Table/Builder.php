@@ -153,17 +153,26 @@ final class Builder {
 	 * @return \DataTables\Table\ConfigBundle
 	 */
 	private function checkIfHaveCustomItemsInSession(ConfigBundle $configBundle): ConfigBundle {
-		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
+		$md5s = [
+			Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle),
+			Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle, true),
+		];
+		$foundCustomOptions = false;
+		$foundCustomQuery = false;
 		$session = Router::getRequest()->getSession();
-		if ($session->check("DataTables.configs.options.$md5")) {
-			/** @var \DataTables\Table\Option\MainOption $options */
-			$options = $session->read("DataTables.configs.options.$md5");
-			$configBundle->Options = $options;
-		}
-		if ($session->check("DataTables.configs.query.$md5")) {
-			/** @var \DataTables\Table\QueryBaseState $query */
-			$query = $session->read("DataTables.configs.query.$md5");
-			$configBundle->Query = $query;
+		foreach ($md5s as $md5) {
+			if ($foundCustomOptions === false && $session->check("DataTables.configs.options.$md5")) {
+				/** @var \DataTables\Table\Option\MainOption $options */
+				$options = $session->read("DataTables.configs.options.$md5");
+				$configBundle->Options = $options;
+				$foundCustomOptions = true;
+			}
+			if ($foundCustomQuery === false && $session->check("DataTables.configs.query.$md5")) {
+				/** @var \DataTables\Table\QueryBaseState $query */
+				$query = $session->read("DataTables.configs.query.$md5");
+				$configBundle->Query = $query;
+				$foundCustomQuery = true;
+			}
 		}
 		return $configBundle;
 	}

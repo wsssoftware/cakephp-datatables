@@ -131,11 +131,30 @@ class Functions {
 
 	/**
 	 * @param \DataTables\Table\ConfigBundle $configBundle
+	 * @param bool $ajax
 	 * @return string
 	 */
-	public function getConfigBundleAndUrlUniqueMd5(ConfigBundle $configBundle): string {
-		$urlMd5 = md5(Router::url());
+	public function getConfigBundleAndUrlUniqueMd5(ConfigBundle $configBundle, bool $ajax = false): string {
+		if ($ajax) {
+			$urlMd5 = Router::getRequest()->getParam('pass.2', 'empty');
+		} else {
+			$urlMd5 = md5(Router::url());
+		}
 		return "$urlMd5.{$configBundle->getCheckMd5()}";
+	}
+
+	/**
+	 * Check if a regex expression if valid.
+	 *
+	 * @param string $regex
+	 * @return bool
+	 */
+	public function checkRegexFormat(string $regex): bool {
+		$regexCheck = '/^((?:(?:[^?+*{}()[\]\\|]+|\\.|\[(?:\^?\\.|\^[^\\]|[^\\^])(?:[^\]\\]+|\\.)*\]|\((?:\?[:=!]|\?<[=!]|\?>)?(?1)??\)|\(\?(?:R|[+-]?\d+)\))(?:(?:[?+*]|\{\d+(?:,\d*)?\})[?+]?)?|\|)*)$/';
+		return (bool)preg_match(
+			$regexCheck,
+			$regex
+		);
 	}
 
 }

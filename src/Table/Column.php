@@ -50,6 +50,30 @@ final class Column {
 		self::DOM_CHECKBOX,
 	];
 
+	const DATA_TABLES_TYPE_MAP = [
+		'tinyinteger' => 'num',
+		'smallinteger' => 'num',
+		'integer' => 'num',
+		'biginteger' => 'num',
+		'binary' => 'string',
+		'binaryuuid' => 'string',
+		'boolean' => 'num',
+		'date' => 'date',
+		'datetime' => 'date',
+		'datetimefractional' => 'date',
+		'decimal' => 'num',
+		'float' => 'num',
+		'json' => 'string',
+		'string' => 'string',
+		'char' => 'string',
+		'text' => 'string',
+		'time' => 'date',
+		'timestamp' => 'date',
+		'timestampfractional' => 'date',
+		'timestamptimezone' => 'date',
+		'uuid' => 'string',
+	];
+
 	/**
 	 * @var array
 	 */
@@ -58,6 +82,7 @@ final class Column {
 		'className' => null,
 		'contentPadding' => null,
 		'createdCell' => null,
+		'name' => null,
 		'orderData' => null,
 		'orderDataType' => null,
 		'orderSequence' => null,
@@ -77,11 +102,6 @@ final class Column {
 	private $_columnSchema;
 
 	/**
-	 * @var string
-	 */
-	private $_name;
-
-	/**
 	 * @var bool
 	 */
 	private $_database;
@@ -95,7 +115,6 @@ final class Column {
 	 * @param array $columnSchema
 	 */
 	public function __construct(string $name, string $title = null, bool $database = true, array $columnSchema = []) {
-		$this->_name = $name;
 		if (empty($title)) {
 			if ($database === true) {
 				$title = Inflector::humanize(explode('.', $name)[1]);
@@ -103,9 +122,13 @@ final class Column {
 				$title = Inflector::humanize($name);
 			}
 		}
+		$this->_config = Hash::insert($this->_config, 'name', $name);
 		$this->_config = Hash::insert($this->_config, 'title', $title);
 		$this->_database = $database;
 		$this->_columnSchema = $columnSchema;
+		if ($database === true && !empty($columnSchema['type']) && !empty(static::DATA_TABLES_TYPE_MAP[$columnSchema['type']])) {
+			$this->setType(static::DATA_TABLES_TYPE_MAP[$columnSchema['type']]);
+		}
 	}
 
 	/**
@@ -132,7 +155,7 @@ final class Column {
 	 * @return string
 	 */
 	public function getName(): string {
-		return $this->_name;
+		return Hash::get($this->_config, 'name');
 
 	}
 
@@ -144,6 +167,13 @@ final class Column {
 	public function isDatabase(): bool {
 		return $this->_database;
 
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getColumnSchema(): array {
+		return $this->_columnSchema;
 	}
 
 	/**

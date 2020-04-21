@@ -14,8 +14,10 @@ namespace DataTables\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
+use Cake\Utility\Hash;
 use Cake\View\JsonView;
 use DataTables\Table\Builder;
+use DataTables\Tools\Functions;
 
 /**
  * Class ProviderController
@@ -68,15 +70,12 @@ class ProviderController extends AppController {
 	 * @throws \ReflectionException
 	 */
 	public function getTablesData(string $tablesCass, string $configBundle, string $urlMd5 = null) {
-		$this->_configBundle = Builder::getInstance()
-		                              ->getConfigBundle("$tablesCass::$configBundle", $this->_cache);
-
+		$this->_configBundle = Builder::getInstance()->getConfigBundle("$tablesCass::$configBundle", $this->_cache);
 		$pageSize = (int)$this->getData('length');
 		$page = (int)($this->getData('start') + $pageSize) / $pageSize;
-		$items = $this->getFind()->page($page, $pageSize);
-
+		$find = $this->getFind()->page($page, $pageSize);
 		$data = [];
-		foreach ($items as $item) {
+		foreach ($find as $item) {
 			$data[] = [
 				$item->id,
 				$item->name,
@@ -88,21 +87,15 @@ class ProviderController extends AppController {
 
 		$result = [
 			'draw' => $this->getData('draw', 1),
-			'recordsTotal' => $items->count(),
-			'recordsFiltered' => $items->count(),
+			'recordsTotal' => $find->count(),
+			'recordsFiltered' => $find->count(),
 			'data' => $data,
 		];
+		if ((bool)$this->getData('debug')) {
+			$result = $this->getData();
+		}
 		$this->viewBuilder()->setClassName(JsonView::class);
 		$this->set(compact('result'));
-	}
-
-	/**
-	 * @return \Cake\ORM\Query
-	 */
-	private function getFind(): Query {
-		$find = $this->_configBundle->Columns->getTables()->getOrmTable()->find();
-
-		return $find;
 	}
 
 	/**
@@ -116,6 +109,57 @@ class ProviderController extends AppController {
 		}
 
 		return $this->getRequest()->getQuery($name, $default);
+	}
+
+	/**
+	 * @return \Cake\ORM\Query
+	 */
+	private function getFind(): Query {
+		$query = $this->_configBundle->Columns->getTables()->getOrmTable()->find();
+		$this->_configBundle->Query->mergeWithQuery($query);
+		$orders = $this->getData('order', []);
+		foreach ($orders as $order) {
+			$databaseColumn = $this->_configBundle->Columns->getColumnNameByIndex((int)$order['column']);
+			if ($order['dir'] === 'asc') {
+				$query->orderAsc($databaseColumn);
+			} elseif ($order['dir'] === 'desc') {
+				$query->orderDesc($databaseColumn);
+			}
+		}
+		$this->doSearch($query);
+		return $query;
+	}
+
+	/**
+	 * @param \Cake\ORM\Query $query
+	 * @return void
+	 */
+	private function doSearch(Query $query): void {
+		$orWhere = [];
+		$columnOrWhere = [];
+		$searchValue = $this->getData('search.value', null);
+		$searchRegex = filter_var($this->getData('search.regex', false), FILTER_VALIDATE_BOOLEAN);
+		foreach ($this->getData('columns') as $column) {
+			if (filter_var($column['searchable'], FILTER_VALIDATE_BOOLEAN) === true) {
+				$databaseColumn = $this->_configBundle->Columns->getColumnNameByIndex((int)$column['data']);
+				if (!empty($searchValue)) {
+					$orWhere += ["CONVERT($databaseColumn,char) LIKE" => "%$searchValue%"];
+					if ($searchRegex === true && Functions::getInstance()->checkRegexFormat($searchValue)) {
+						$orWhere += ["CONVERT($databaseColumn,char) REGEXP" => "$searchValue"];
+					}
+				}
+				$columnSearchValue = Hash::get($column, 'search.value', null);
+				$columnSearchRegex = filter_var(Hash::get($column, 'search.regex', false), FILTER_VALIDATE_BOOLEAN);
+				if (!empty($columnSearchValue)) {
+					$columnOrWhere += ["CONVERT($databaseColumn,char) LIKE" => "%$columnSearchValue%"];
+					if ($columnSearchRegex === true && Functions::getInstance()->checkRegexFormat($columnSearchValue)) {
+						$columnOrWhere += ["CONVERT($databaseColumn,char) REGEXP" => "$columnSearchValue"];
+					}
+				}
+			}
+		}
+		$query->where(['OR' => $orWhere]);
+		$query->where(['OR' => $columnOrWhere]);
 	}
 
 }

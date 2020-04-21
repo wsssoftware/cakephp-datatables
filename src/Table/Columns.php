@@ -71,6 +71,27 @@ final class Columns {
 	}
 
 	/**
+	 * Return all configured columns.
+	 *
+	 * @param int $index
+	 * @return \DataTables\Table\Column
+	 */
+	public function getColumnByIndex(int $index): Column {
+		$columns = array_values($this->_columns);
+		return $columns[$index];
+	}
+
+	/**
+	 * Return all configured columns.
+	 *
+	 * @param int $index
+	 * @return string
+	 */
+	public function getColumnNameByIndex(int $index): string {
+		return $this->getColumnByIndex($index)->getName();
+	}
+
+	/**
 	 * Add a database column to DataTables table.
 	 *
 	 * @param string $dataBaseField
