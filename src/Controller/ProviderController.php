@@ -13,11 +13,12 @@ namespace DataTables\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\ORM\Association\HasMany;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
-use Cake\View\JsonView;
 use DataTables\Table\Builder;
 use DataTables\Tools\Functions;
+use DataTables\View\DataTablesView;
 
 /**
  * Class ProviderController
@@ -74,28 +75,20 @@ class ProviderController extends AppController {
 		$pageSize = (int)$this->getData('length');
 		$page = (int)($this->getData('start') + $pageSize) / $pageSize;
 		$find = $this->getFind()->page($page, $pageSize);
-		$data = [];
-		foreach ($find as $item) {
-			$data[] = [
-				$item->id,
-				$item->name,
-				h($item->created),
-				h($item->modified),
-				'',
-			];
-		}
+		$data = $find->toArray();
 
 		$result = [
 			'draw' => $this->getData('draw', 1),
 			'recordsTotal' => $find->count(),
 			'recordsFiltered' => $find->count(),
-			'data' => $data,
+			'data' => [],
 		];
 		if ((bool)$this->getData('debug')) {
 			$result = $this->getData();
 		}
-		$this->viewBuilder()->setClassName(JsonView::class);
-		$this->set(compact('result'));
+		$this->viewBuilder()->setClassName(DataTablesView::class);
+		$configBundle = $this->_configBundle;
+		$this->set(compact('result', 'data', 'configBundle'));
 	}
 
 	/**
@@ -116,10 +109,28 @@ class ProviderController extends AppController {
 	 */
 	private function getFind(): Query {
 		$query = $this->_configBundle->Columns->getTables()->getOrmTable()->find();
+		$columns = $this->_configBundle->Columns;
 		$this->_configBundle->Query->mergeWithQuery($query);
+		$select = [];
+		$contains = [];
+		foreach ($columns->getColumns() as $columnName => $column) {
+			if (count(explode('.', $columnName)) === 2) {
+				$association = Functions::getInstance()->getAssociationUsingPath($columns->getTables()->getOrmTable(), $column->getAssociationPath());
+				if (!$association instanceof HasMany) {
+					$select[] = $columnName;
+				}
+			}
+			$associationPaths = substr_replace($column->getAssociationPath(), '', 0, strlen($columns->getTables()->getOrmTable()->getAlias()) + 1);
+			if (!empty($associationPaths)) {
+				$containArray = Hash::insert([], $associationPaths, []);
+				$contains = Hash::merge($contains, $containArray);
+			}
+		}
+		$query->contain($contains);
+		$query->select($select);
 		$orders = $this->getData('order', []);
 		foreach ($orders as $order) {
-			$databaseColumn = $this->_configBundle->Columns->getColumnNameByIndex((int)$order['column']);
+			$databaseColumn = $columns->getColumnNameByIndex((int)$order['column']);
 			if ($order['dir'] === 'asc') {
 				$query->orderAsc($databaseColumn);
 			} elseif ($order['dir'] === 'desc') {

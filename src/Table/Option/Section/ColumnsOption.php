@@ -11,9 +11,11 @@ declare(strict_types = 1);
 
 namespace DataTables\Table\Option\Section;
 
+use Cake\ORM\Association\HasMany;
 use DataTables\Table\Columns;
 use DataTables\Table\Option\ChildOptionAbstract;
 use DataTables\Table\Option\MainOption;
+use DataTables\Tools\Functions;
 
 /**
  * Class ColumnsOption
@@ -59,6 +61,12 @@ final class ColumnsOption extends ChildOptionAbstract {
 			if ($column->isDatabase() === false) {
 				$column->setSearchable(false);
 				$column->setOrderable(false);
+			} else {
+				$association = Functions::getInstance()->getAssociationUsingPath($columns->getTables()->getOrmTable(), $column->getAssociationPath());
+				if ($association instanceof HasMany) {
+					$column->setSearchable(false);
+					$column->setOrderable(false);
+				}
 			}
 			$columnItem = [];
 			foreach ($column->getConfig() as $configName => $value) {

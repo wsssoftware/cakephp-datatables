@@ -29,6 +29,11 @@ class Functions {
 	public static $instance;
 
 	/**
+	 * @var int
+	 */
+	private $getAssociationAttempt = 0;
+
+	/**
 	 * Return a instance of builder object.
 	 *
 	 * @return \DataTables\Tools\Functions
@@ -155,6 +160,58 @@ class Functions {
 			$regexCheck,
 			$regex
 		);
+	}
+
+	/**
+	 * Get association path using tree searching.
+	 *
+	 * @param \Cake\ORM\Table|\Cake\ORM\Association $table
+	 * @param string $neededAssociation
+	 * @param array $currentPath
+	 * @param int $treeMax
+	 * @return mixed
+	 */
+	public function getAssociationPath($table, string $neededAssociation, array $currentPath = [], int $treeMax = 15) {
+		if (empty($currentPath)) {
+			$this->getAssociationAttempt = 0;
+		}
+		$this->getAssociationAttempt++;
+		if ($this->getAssociationAttempt > $treeMax) {
+			return false;
+		}
+		$currentPath[] = $table->getAlias();
+		if ($neededAssociation === $table->getAlias()) {
+			return implode('.', $currentPath);
+		}
+		foreach ($table->associations() as $association) {
+			$result = $this->getAssociationPath($association, $neededAssociation, $currentPath);
+			if ($result !== false) {
+				return $result;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param \Cake\ORM\Table $table
+	 * @param string $associationPath
+	 * @return \Cake\ORM\Table|\Cake\ORM\Association
+	 */
+	public function getAssociationUsingPath($table, string $associationPath) {
+		if ($associationPath === $table->getAlias()) {
+			return $table;
+		}
+		$paths = explode('.', $associationPath);
+		if (!empty($paths[0]) && $paths[0] === $table->getAlias()) {
+			unset($paths[0]);
+		}
+
+		$association = $table;
+		foreach ($paths as $path) {
+			$association = $association->getAssociation($path);
+		}
+
+		return $association;
 	}
 
 }

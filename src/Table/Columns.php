@@ -2,7 +2,6 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- *
  * link:     https://github.com/wsssoftware/cakephp-data-renderer
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
@@ -13,12 +12,11 @@ namespace DataTables\Table;
 
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
-use DataTables\Table\Tables;
+use DataTables\Tools\Functions;
 use InvalidArgumentException;
 
 /**
  * Class Columns
- *
  * Created by allancarvalho in abril 17, 2020
  */
 final class Columns {
@@ -77,7 +75,9 @@ final class Columns {
 	 * @return \DataTables\Table\Column
 	 */
 	public function getColumnByIndex(int $index): Column {
-		$columns = array_values($this->_columns);
+		$columns = $this->_columns;
+		$columns = array_values($columns);
+
 		return $columns[$index];
 	}
 
@@ -99,7 +99,9 @@ final class Columns {
 	 * @return \DataTables\Table\Column
 	 */
 	public function addDatabaseColumn(string $dataBaseField, ?string $title = null): Column {
-		$column = $this->normalizeDataTableField($dataBaseField, $title);
+		$columnInfo = $this->normalizeDataTableField($dataBaseField);
+		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", $title, true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
+
 		return $this->saveColumn($column);
 	}
 
@@ -111,7 +113,11 @@ final class Columns {
 	 * @return \DataTables\Table\Column
 	 */
 	public function addNonDatabaseColumn(string $label, ?string $title = null): Column {
+		if (preg_match('/[^A-Za-z0-9]+/', $label)) {
+			throw new InvalidArgumentException("On non databases fields, you must use only alphanumeric chars. Found: $label.");
+		}
 		$column = new Column($label, $title, false);
+
 		return $this->saveColumn($column);
 	}
 
@@ -127,7 +133,8 @@ final class Columns {
 				throw new FatalErrorException("Column '{$column->getName()}' already exist in index $key.");
 			}
 		}
-		$this->_columns[] = $column;
+		$this->_columns[$column->getName()] = $column;
+
 		return $column;
 	}
 
@@ -135,12 +142,12 @@ final class Columns {
 	 * Check if class, tables, fields and associations exists, and after normalize the name.
 	 *
 	 * @param string $dataBaseField
-	 * @param string|null $title
-	 * @return \DataTables\Table\Column
+	 * @return array
 	 */
-	private function normalizeDataTableField(string $dataBaseField, ?string $title): Column {
+	public function normalizeDataTableField(string $dataBaseField): array {
 		$ormTable = $this->_tables->getOrmTable();
 		$explodedDataBaseField = explode('.', $dataBaseField);
+		$associationPath = '';
 		if (count($explodedDataBaseField) === 2) {
 			$table = Inflector::camelize($explodedDataBaseField[0]);
 			$column = Inflector::dasherize($explodedDataBaseField[1]);
@@ -150,26 +157,22 @@ final class Columns {
 		} else {
 			throw new InvalidArgumentException("$dataBaseField is a invalid \$dataBaseField.");
 		}
-
-		if ($table === Inflector::camelize($ormTable->getAlias())) {
-			if (!$ormTable->getSchema()->hasColumn($column)) {
-				throw new InvalidArgumentException("The field '$column' not exists in '$table'");
-			}
-			$columnSchema = $this->_tables->getOrmTable()->getSchema()->getColumn($column);
-		} else {
-			if (!$ormTable->hasAssociation($table)) {
-				throw new InvalidArgumentException("The table '$table' isn't associated with '" . $ormTable->getAlias() . "'.");
-			}
-			/** @var \Cake\ORM\Association|\Cake\ORM\Table $association */
-			$association = $ormTable->getAssociation($table);
-			if (!$association->getSchema()->hasColumn($column)) {
-				throw new InvalidArgumentException("The field '$column' not exists in '{$association->getAlias()}'");
-			}
-			$columnSchema = $association->getSchema()->getColumn($column);
+		$associationPath = Functions::getInstance()->getAssociationPath($ormTable, $table);
+		if ($associationPath === false) {
+			throw new InvalidArgumentException("The table '$table' isn't associated with '" . $ormTable->getAlias() . "' or with its associations.");
 		}
-		$column = new Column("$table.$column", $title, true, $columnSchema);
+		$association = Functions::getInstance()->getAssociationUsingPath($ormTable, $associationPath);
+		if (!$association->getSchema()->hasColumn($column)) {
+			throw new InvalidArgumentException("The field '$column' not exists in '$table'");
+		}
+		$columnSchema = $association->getSchema()->getColumn($column);
 
-		return $column;
+		return [
+			'table' => $table,
+			'column' => $column,
+			'columnSchema' => $columnSchema,
+			'associationPath' => $associationPath,
+		];
 	}
 
 }

@@ -107,14 +107,20 @@ final class Column {
 	private $_database;
 
 	/**
+	 * @var string
+	 */
+	private $_associationPath = '';
+
+	/**
 	 * Column constructor.
 	 *
 	 * @param string $name
 	 * @param string|null $title
 	 * @param bool $database
 	 * @param array $columnSchema
+	 * @param string $associationPath
 	 */
-	public function __construct(string $name, string $title = null, bool $database = true, array $columnSchema = []) {
+	public function __construct(string $name, string $title = null, bool $database = true, array $columnSchema = [], string $associationPath = '') {
 		if (empty($title)) {
 			if ($database === true) {
 				$title = Inflector::humanize(explode('.', $name)[1]);
@@ -126,9 +132,17 @@ final class Column {
 		$this->_config = Hash::insert($this->_config, 'title', $title);
 		$this->_database = $database;
 		$this->_columnSchema = $columnSchema;
+		$this->_associationPath = $associationPath;
 		if ($database === true && !empty($columnSchema['type']) && !empty(static::DATA_TABLES_TYPE_MAP[$columnSchema['type']])) {
 			$this->setType(static::DATA_TABLES_TYPE_MAP[$columnSchema['type']]);
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAssociationPath(): string {
+		return $this->_associationPath;
 	}
 
 	/**
@@ -170,10 +184,15 @@ final class Column {
 	}
 
 	/**
-	 * @return array
+	 * @param string|null $name
+	 * @return mixed
 	 */
-	public function getColumnSchema(): array {
-		return $this->_columnSchema;
+	public function getColumnSchema(string $name = null) {
+		if (empty($name)) {
+			return $this->_columnSchema;
+		}
+
+		return Hash::get($this->_columnSchema, $name);
 	}
 
 	/**

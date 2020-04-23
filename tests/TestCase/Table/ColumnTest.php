@@ -77,7 +77,7 @@ class ColumnTest extends TestCase {
 		$col = $this->Columns->addDatabaseColumn('Users.id');
 		static::assertEquals(true, $col->isDatabase());
 		static::assertEquals('Users.id', $col->getName());
-		$col = $this->Columns->addNonDatabaseColumn('Users.test');
+		$col = $this->Columns->addNonDatabaseColumn('test');
 		static::assertEquals(false, $col->isDatabase());
 	}
 
