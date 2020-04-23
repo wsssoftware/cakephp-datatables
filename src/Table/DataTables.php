@@ -11,16 +11,18 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Datasource\EntityInterface;
 use Cake\Error\FatalErrorException;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use DataTables\View\DataTablesView;
 
 /**
  * Class Tables
  *
  * Created by allancarvalho in abril 17, 2020
  */
-abstract class Tables {
+abstract class DataTables {
 
 	/**
 	 * The database table name that will be used to load the DataTables ORM table.
@@ -30,18 +32,24 @@ abstract class Tables {
 	protected $_ormTableName;
 
 	/**
+	 * @var string
+	 */
+	protected $_alias;
+
+	/**
 	 * Tables constructor.
 	 */
 	public function __construct() {
 		$className = get_called_class();
 		$classShortName = explode('\\', get_called_class());
 		$classShortName = array_pop($classShortName);
-		if (substr($classShortName, -6, 6) !== 'Tables') {
-			throw new FatalErrorException("The class '$className' must have the name ending with 'Tables'");
+		if (substr($classShortName, -10, 10) !== 'DataTables') {
+			throw new FatalErrorException("The class '$className' must have the name ending with 'DataTables'");
 		}
 		if (empty($this->_ormTableName)) {
-			$this->_ormTableName = substr_replace($classShortName, '', -6, 6);
+			$this->_ormTableName = substr_replace($classShortName, '', -10, 10);
 		}
+		$this->_alias = substr_replace($classShortName, '', -10, 10);
 	}
 
 	/**
@@ -49,6 +57,31 @@ abstract class Tables {
 	 */
 	public function getOrmTable(): Table {
 		return TableRegistry::getTableLocator()->get($this->_ormTableName);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAlias(): string {
+		return $this->_alias;
+	}
+
+	/**
+	 * Will implements all the table configuration.
+	 *
+	 * @param \DataTables\Table\ConfigBundle $configBundle
+	 * @return void
+	 */
+	public function config(ConfigBundle $configBundle) {
+	}
+
+	/**
+	 * @param \DataTables\View\DataTablesView $appView
+	 * @param \Cake\Datasource\EntityInterface $entity
+	 * @param \DataTables\Table\Renderer $renderer
+	 * @return void
+	 */
+	public function rowRenderer(DataTablesView $appView, EntityInterface $entity, Renderer $renderer) {
 	}
 
 }

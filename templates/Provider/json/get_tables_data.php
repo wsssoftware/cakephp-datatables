@@ -17,16 +17,12 @@ use Cake\Core\Configure;
 use DataTables\Table\Renderer;
 
 $renderer = new Renderer($configBundle->Columns);
-$tables = $configBundle->Columns->getTables();
-$method = $configBundle->getConfigMethod() . 'Renderer';
+$tables = $configBundle->Columns->getDataTables();
 $rows = [];
 
 foreach ($data as $entity) {
-	if (method_exists($tables, $method)) {
-		$tables->{$method}($this, $entity, $renderer);
-
-		$rows[] = $renderer->renderRow($entity);
-	}
+	$tables->rowRenderer($this, $entity, $renderer);
+	$rows[] = $renderer->renderRow($entity);
 }
 
 $result['data'] = $rows;

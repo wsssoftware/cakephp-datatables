@@ -31,9 +31,9 @@ final class Columns {
 	/**
 	 * A selected Tables class.
 	 *
-	 * @var \DataTables\Table\Tables
+	 * @var \DataTables\Table\DataTables
 	 */
-	private $_tables;
+	private $_dataTables;
 
 	/**
 	 * Default application column configuration.
@@ -45,18 +45,18 @@ final class Columns {
 	/**
 	 * Columns constructor.
 	 *
-	 * @param \DataTables\Table\Tables $tables
+	 * @param \DataTables\Table\DataTables $dataTables
 	 */
-	public function __construct(Tables $tables) {
-		$this->_tables = $tables;
+	public function __construct(DataTables $dataTables) {
+		$this->_dataTables = $dataTables;
 		$this->Default = new Column('default', 'empty', false);
 	}
 
 	/**
-	 * @return \DataTables\Table\Tables
+	 * @return \DataTables\Table\DataTables
 	 */
-	public function getTables(): Tables {
-		return $this->_tables;
+	public function getDataTables(): DataTables {
+		return $this->_dataTables;
 	}
 
 	/**
@@ -101,7 +101,6 @@ final class Columns {
 	public function addDatabaseColumn(string $dataBaseField, ?string $title = null): Column {
 		$columnInfo = $this->normalizeDataTableField($dataBaseField);
 		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", $title, true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
-
 		return $this->saveColumn($column);
 	}
 
@@ -145,7 +144,7 @@ final class Columns {
 	 * @return array
 	 */
 	public function normalizeDataTableField(string $dataBaseField): array {
-		$ormTable = $this->_tables->getOrmTable();
+		$ormTable = $this->_dataTables->getOrmTable();
 		$explodedDataBaseField = explode('.', $dataBaseField);
 		$associationPath = '';
 		if (count($explodedDataBaseField) === 2) {

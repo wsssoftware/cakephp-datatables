@@ -16,6 +16,7 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Association\HasMany;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use DataTables\Table\Builder;
 use DataTables\Tools\Functions;
 use DataTables\View\DataTablesView;
@@ -71,7 +72,7 @@ class ProviderController extends AppController {
 	 * @throws \ReflectionException
 	 */
 	public function getTablesData(string $tablesCass, string $configBundle, string $urlMd5 = null) {
-		$this->_configBundle = Builder::getInstance()->getConfigBundle("$tablesCass::$configBundle", $this->_cache);
+		$this->_configBundle = Builder::getInstance()->getConfigBundle(Inflector::camelize($tablesCass), $this->_cache);
 		$pageSize = (int)$this->getData('length');
 		$page = (int)($this->getData('start') + $pageSize) / $pageSize;
 		$find = $this->getFind()->page($page, $pageSize);
@@ -108,19 +109,19 @@ class ProviderController extends AppController {
 	 * @return \Cake\ORM\Query
 	 */
 	private function getFind(): Query {
-		$query = $this->_configBundle->Columns->getTables()->getOrmTable()->find();
+		$query = $this->_configBundle->Columns->getDataTables()->getOrmTable()->find();
 		$columns = $this->_configBundle->Columns;
 		$this->_configBundle->Query->mergeWithQuery($query);
 		$select = [];
 		$contains = [];
 		foreach ($columns->getColumns() as $columnName => $column) {
 			if (count(explode('.', $columnName)) === 2) {
-				$association = Functions::getInstance()->getAssociationUsingPath($columns->getTables()->getOrmTable(), $column->getAssociationPath());
+				$association = Functions::getInstance()->getAssociationUsingPath($columns->getDataTables()->getOrmTable(), $column->getAssociationPath());
 				if (!$association instanceof HasMany) {
 					$select[] = $columnName;
 				}
 			}
-			$associationPaths = substr_replace($column->getAssociationPath(), '', 0, strlen($columns->getTables()->getOrmTable()->getAlias()) + 1);
+			$associationPaths = substr_replace($column->getAssociationPath(), '', 0, strlen($columns->getDataTables()->getOrmTable()->getAlias()) + 1);
 			if (!empty($associationPaths)) {
 				$containArray = Hash::insert([], $associationPaths, []);
 				$contains = Hash::merge($contains, $containArray);

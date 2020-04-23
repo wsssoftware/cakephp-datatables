@@ -22,7 +22,7 @@ use DataTables\Tools\Functions;
  * Class Renderer
  * Created by allancarvalho in abril 22, 2020
  */
-class Renderer {
+final class Renderer {
 
 	/**
 	 * @var array
@@ -107,7 +107,7 @@ class Renderer {
 	 * @return mixed
 	 */
 	public function getPropertyUsingPath(string $path, Entity $entity, string $property) {
-		$table = $this->_columns->getTables()->getOrmTable();
+		$table = $this->_columns->getDataTables()->getOrmTable();
 		if ($path === $table->getAlias()) {
 			return $entity->{$property};
 		}
@@ -118,17 +118,9 @@ class Renderer {
 		foreach ($associationNames as $associationName) {
 			$association = $association->getAssociation($associationName);
 			if ($association instanceof BelongsTo) {
-				if (method_exists($association, 'getAlias')) {
-					$propertyPath[] = Inflector::underscore(Inflector::singularize($association->getAlias()));
-				} else {
-					return '';
-				}
+				$propertyPath[] = Inflector::underscore(Inflector::singularize($association->getAlias()));
 			} elseif ($association instanceof HasMany) {
-				if (method_exists($association, 'getAlias')) {
-					$propertyPath[] = Inflector::underscore(Inflector::pluralize($association->getAlias()));
-				} else {
-					return '';
-				}
+				$propertyPath[] = Inflector::underscore(Inflector::pluralize($association->getAlias()));
 			}
 		}
 		$result = $entity;

@@ -26,11 +26,6 @@ final class ConfigBundle {
 	private $_tableCass;
 
 	/**
-	 * @var string
-	 */
-	private $_configMethod;
-
-	/**
 	 * @var \DataTables\Table\Columns The DataTables table columns.
 	 */
 	public $Columns;
@@ -58,22 +53,19 @@ final class ConfigBundle {
 	 * @param \DataTables\Table\Option\MainOption $options The DataTables JS Options.
 	 * @param \DataTables\Table\QueryBaseState $query The DataTables base query.
 	 * @param string $tableCass Tables class name.
-	 * @param string $_configMethod Config method from tables class.
 	 */
 	public function __construct(
 		string $checkMd5,
 		Columns $columns,
 		MainOption $options,
 		QueryBaseState $query,
-		string $tableCass,
-		string $_configMethod
+		string $tableCass
 	) {
 		$this->_checkMd5 = $checkMd5;
 		$this->Columns = $columns;
 		$this->Options = $options;
 		$this->Query = $query;
 		$this->_tableCass = $tableCass;
-		$this->_configMethod = $_configMethod;
 	}
 
 	/**
@@ -81,13 +73,6 @@ final class ConfigBundle {
 	 */
 	public function getTableCass() {
 		return $this->_tableCass;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getConfigMethod(): string {
-		return $this->_configMethod;
 	}
 
 	/**

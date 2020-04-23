@@ -13,7 +13,7 @@ namespace DataTables\Test\TestCase\Table;
 use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;
 use DataTables\Table\Columns;
-use DataTables\Table\Tables;
+use DataTables\Table\DataTables;
 use InvalidArgumentException;
 
 /**
@@ -47,9 +47,9 @@ class ColumnsTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		/** @var \DataTables\Table\Tables $tables */
-		$tables = $this->getMockBuilder(Tables::class)
-			->setMockClassName('ArticlesTables')
+		/** @var \DataTables\Table\DataTables $tables */
+		$tables = $this->getMockBuilder(DataTables::class)
+			->setMockClassName('ArticlesDataTables')
 			->getMockForAbstractClass();
 		$tables->getOrmTable()->addAssociations([
 			'belongsTo' => [

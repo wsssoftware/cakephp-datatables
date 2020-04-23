@@ -11,7 +11,7 @@
 namespace DataTables\Test\TestCase\Tools;
 
 use Cake\TestSuite\TestCase;
-use DataTables\Tools\Js;
+use DataTables\Tools\Minifier;
 
 /**
  * Class JsTest
@@ -32,7 +32,7 @@ class JsTest extends TestCase {
 		$lenBefore = 47;
 		$lenAfter = 21;
 		$this->assertEquals($lenBefore, strlen($js));
-		$this->assertEquals($lenAfter, strlen(Js::minifyFile($js)));
+		$this->assertEquals($lenAfter, strlen(Minifier::js($js)));
 	}
 
 }

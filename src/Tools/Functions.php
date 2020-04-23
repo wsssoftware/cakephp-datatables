@@ -184,7 +184,7 @@ class Functions {
 			return implode('.', $currentPath);
 		}
 		foreach ($table->associations() as $association) {
-			$result = $this->getAssociationPath($association, $neededAssociation, $currentPath);
+			$result = $this->getAssociationPath($association, $neededAssociation, $currentPath, $treeMax);
 			if ($result !== false) {
 				return $result;
 			}

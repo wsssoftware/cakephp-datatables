@@ -12,7 +12,7 @@
 
 use Cake\Core\Configure;
 use DataTables\Tools\Functions;
-use DataTables\Tools\Js;
+use DataTables\Tools\Minifier;
 
 $minify = !(bool)Configure::read('debug');
 $body = '';
@@ -29,6 +29,5 @@ foreach ($configBundles as $configBundle) {
         });
     </script>
 <?php else: ?>
-    <script type="text/javascript">$(document).ready(function () {<?= Js::minifyFile($body) ?>});</script>
-<?php endif; ?>
-
+    <script type="text/javascript">$(document).ready(function () {<?= Minifier::js($body) ?>});</script>
+<?php endif;

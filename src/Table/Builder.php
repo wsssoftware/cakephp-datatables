@@ -18,7 +18,6 @@ use Cake\Utility\Inflector;
 use DataTables\StorageEngine\StorageEngineInterface;
 use DataTables\Table\Option\MainOption;
 use DataTables\Tools\Functions;
-use InvalidArgumentException;
 
 /**
  * Class Builder
@@ -60,22 +59,19 @@ final class Builder {
 	/**
 	 * Get or build a ConfigBundle.
 	 *
-	 * @param string $tablesAndConfig A Tables class plus config method that you want to render concatenated by '::'.
+	 * @param string $dataTables  DataTables class FQN or name.
 	 *     Eg.: 'Foo::main'.
 	 * @param bool $cache If true will try to get from cache.
 	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
 	 */
-	public function getConfigBundle(string $tablesAndConfig, bool $cache = true): ConfigBundle {
-		$exploded = explode('::', $tablesAndConfig);
-		if (count($exploded) !== 2) {
-			throw new InvalidArgumentException('Table param must be a concatenation of Tables class and config. Eg.: Foo::method.');
-		}
+	public function getConfigBundle(string $dataTables, bool $cache = true): ConfigBundle {
+		$dataTables = $this->parseClassNameToFQN($dataTables);
+		$dataTablesName = explode('\\', $dataTables);
+		$dataTablesName = array_pop($dataTablesName);
 		$storageEngine = $this->getStorageEngine();
-		$tablesClass = $exploded[0];
-		$configMethod = $exploded[1];
-		$md5 = Functions::getInstance()->getClassAndVersionMd5($this->getTablesClassFQN($tablesClass));
-		$cacheKey = Inflector::underscore(str_replace('::', '_', $tablesAndConfig));
+		$md5 = Functions::getInstance()->getClassAndVersionMd5($dataTables);
+		$cacheKey = Inflector::underscore($dataTablesName);
 
 		$configBundle = null;
 		if ($cache === true && $storageEngine->exists($cacheKey)) {
@@ -83,7 +79,7 @@ final class Builder {
 			$configBundle = $storageEngine->read($cacheKey);
 		}
 		if (empty($configBundle) && !$configBundle instanceof ConfigBundle) {
-			$configBundle = $this->buildConfigBundle($tablesClass, $configMethod, $md5);
+			$configBundle = $this->buildConfigBundle($dataTables, $md5);
 			if ($cache && !$storageEngine->save($cacheKey, $configBundle)) {
 				throw new FatalErrorException('Unable to save the ConfigBundle cache.');
 			}
@@ -96,30 +92,28 @@ final class Builder {
 	/**
 	 * Build a ConfigBundle class
 	 *
-	 * @param string $tablesClass Tables class.
-	 * @param string $configMethod The method that will be called.
+	 * @param string $dataTablesFQN Tables FQN class.
 	 * @param string $md5 Md5 verifier used in the cache.
 	 * @return \DataTables\Table\ConfigBundle
 	 */
 	public function buildConfigBundle(
-		string $tablesClass,
-		string $configMethod,
+		string $dataTablesFQN,
 		string $md5
 	): ConfigBundle {
-		$tables = static::getInstance()->buildTables($this->getTablesClassFQN($tablesClass), $configMethod);
-		$columns = static::getInstance()->buildColumns($tables);
+		$dataTablesFQN = $this->parseClassNameToFQN($dataTablesFQN);
+		$dataTables = static::getInstance()->buildDataTables($dataTablesFQN);
+		$columns = static::getInstance()->buildColumns($dataTables);
 		$url = Router::url([
 			'controller' => 'Provider',
 			'action' => 'getTablesData',
-			$tablesClass,
-			$configMethod,
+			Inflector::dasherize($dataTables->getAlias()),
 			'plugin' => 'DataTables',
 			'prefix' => false,
 		]);
 		$options = static::getInstance()->buildOptions($url);
 		$queryBaseState = static::getInstance()->buildQueryBaseState();
-		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $tablesClass, $configMethod);
-		$tables->{$configMethod . 'Config'}($configBundle);
+		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $dataTablesFQN);
+		$dataTables->config($configBundle);
 		$configBundle->Options->Columns->setColumns($columns);
 
 		return $configBundle;
@@ -128,21 +122,16 @@ final class Builder {
 	/**
 	 * Get the Tables class.
 	 *
-	 * @param string $tablesClassWithNameSpace Tables class with full namespace.
-	 * @param string $configMethod The method that will be called.
-	 * @return \DataTables\Table\Tables
+	 * @param string $dataTablesFQN Tables class with full namespace.
+	 * @return \DataTables\Table\DataTables
 	 */
-	public function buildTables(string $tablesClassWithNameSpace, string $configMethod): Tables {
-		/** @var \DataTables\Table\Tables $tables */
-		$tables = new $tablesClassWithNameSpace();
-		if (empty($tables)) {
-			throw new FatalErrorException("Tables class '$tablesClassWithNameSpace' not found.");
+	public function buildDataTables(string $dataTablesFQN): DataTables {
+		/** @var \DataTables\Table\DataTables $dataTables */
+		$dataTables = new $dataTablesFQN();
+		if (!$dataTables instanceof DataTables) {
+			throw new FatalErrorException("Class '$dataTablesFQN' must be an inheritance of 'DataTables'.");
 		}
-		if (!method_exists($tables, $configMethod . 'Config')) {
-			throw new FatalErrorException("Config method '{$configMethod}Config' don't exist in '$tablesClassWithNameSpace'.");
-		}
-
-		return $tables;
+		return $dataTables;
 	}
 
 	/**
@@ -180,11 +169,11 @@ final class Builder {
 	/**
 	 * Get the Columns class used in the DataTables table.
 	 *
-	 * @param \DataTables\Table\Tables $table Tables class instance.
+	 * @param \DataTables\Table\DataTables $dataTables Tables class instance.
 	 * @return \DataTables\Table\Columns
 	 */
-	private function buildColumns(Tables $table): Columns {
-		return new Columns($table);
+	private function buildColumns(DataTables $dataTables): Columns {
+		return new Columns($dataTables);
 	}
 
 	/**
@@ -209,18 +198,21 @@ final class Builder {
 	/**
 	 * Return the tables class FQN.
 	 *
-	 * @param string $tablesName
+	 * @param string $dataTablesName
 	 * @return string
 	 */
-	private function getTablesClassFQN(string $tablesName): string {
-		$exploded = explode('::', $tablesName);
-		$tablesClass = $exploded[0];
-		$tablesFQN = Configure::read('App.namespace') . '\\DataTables\\Tables\\' . $tablesClass . 'Tables';
-		if (class_exists($tablesFQN) === false) {
-			throw new FatalErrorException("Class '$tablesFQN' not found.");
+	private function parseClassNameToFQN(string $dataTablesName): string {
+		$expectedPath = Configure::read('App.namespace') . '\\DataTables\\Tables\\';
+		if (count(explode('\\', $dataTablesName)) === 1) {
+			$dataTablesName = $expectedPath . $dataTablesName . 'DataTables';
 		}
-
-		return $tablesFQN;
+		if (!class_exists($dataTablesName)) {
+			throw new FatalErrorException("Class '$dataTablesName' not found.");
+		}
+		if (strpos($dataTablesName, $expectedPath) === false) {
+			throw new FatalErrorException("All DataTables class must stay in '$expectedPath'. Found: '$dataTablesName'.");
+		}
+		return $dataTablesName;
 	}
 
 }

@@ -18,7 +18,7 @@ use MatthiasMullie\Minify\JS as JsMinify;
  *
  * Created by allancarvalho in abril 17, 2020
  */
-class Js {
+class Minifier {
 
 	/**
 	 * Minify a js script.
@@ -26,7 +26,7 @@ class Js {
 	 * @param string $content Js to be minified.
 	 * @return string Minified Js.
 	 */
-	public static function minifyFile(string $content): string {
+	public static function js(string $content): string {
 		$minifyJs = new JsMinify();
 		return $minifyJs->add($content)->minify();
 	}

@@ -52,14 +52,13 @@ class DataTablesHelper extends Helper {
 	/**
 	 * Render the table html structure of a DataTables configure.
 	 *
-	 * @param string $tablesAndConfig A Tables class plus config method that you want to render concatenated by '::'.
-	 *                               Eg.: 'Foo::main'.
+	 * @param string $dataTables DataTables class FQN or name.
 	 * @param array $options A table tag options.
 	 * @return string
 	 * @throws \ReflectionException
 	 */
-	public function renderTable(string $tablesAndConfig, array $options = []): string {
-		$configBundle = Builder::getInstance()->getConfigBundle($tablesAndConfig, $this->getConfig('cache'));
+	public function renderTable(string $dataTables, array $options = []): string {
+		$configBundle = Builder::getInstance()->getConfigBundle($dataTables, $this->getConfig('cache'));
 		$this->_configBundles[$configBundle->getUniqueId()] = $configBundle;
 
 		return $configBundle->generateTableHtml($this->getView(), $options);

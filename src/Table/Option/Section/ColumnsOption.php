@@ -62,7 +62,7 @@ final class ColumnsOption extends ChildOptionAbstract {
 				$column->setSearchable(false);
 				$column->setOrderable(false);
 			} else {
-				$association = Functions::getInstance()->getAssociationUsingPath($columns->getTables()->getOrmTable(), $column->getAssociationPath());
+				$association = Functions::getInstance()->getAssociationUsingPath($columns->getDataTables()->getOrmTable(), $column->getAssociationPath());
 				if ($association instanceof HasMany) {
 					$column->setSearchable(false);
 					$column->setOrderable(false);

@@ -7,30 +7,33 @@
  * link     https://github.com/allanmcarvalho/cakephp-data-renderer
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
+declare(strict_types = 1);
 
-namespace DataTables\Test\TestCase\Table;
+namespace TestApp\DataTables\Tables;
 
-use Cake\Error\FatalErrorException;
-use Cake\TestSuite\TestCase;
-use DataTables\Table\Tables;
+use DataTables\Table\ConfigBundle;
+use DataTables\Table\DataTables;
 
 /**
- * Class TablesTest
+ * Class CategoriesTables
  *
  * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class TablesTest extends TestCase {
+class CategoriesDataTables extends DataTables {
 
 	/**
+	 * @var string
+	 */
+	protected $_ormTableName = 'Categories';
+
+	/**
+	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 * @return void
 	 */
-	public function testWrongClassName() {
-		$this->expectException(FatalErrorException::class);
-		$this->getMockBuilder(Tables::class)
-			->setMockClassName('ArticlesAbc')
-			->getMockForAbstractClass();
+	public function mainConfig(ConfigBundle $configBundle): void {
+
 	}
 
 }
