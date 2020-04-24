@@ -12,7 +12,7 @@ namespace DataTables\Table\ResourcesConfig;
 
 interface ResourcesConfigInterface {
 
-	const THEME_NONE = null;
+	const THEME_NONE = '';
 	const THEME_BASE = 'base';
 	const THEME_BOOTSTRAP3 = 'bootstrap3';
 	const THEME_BOOTSTRAP4 = 'bootstrap4';

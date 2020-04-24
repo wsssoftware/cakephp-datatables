@@ -14,6 +14,7 @@ use Cake\TestSuite\TestCase;
 use DataTables\Table\Column;
 use DataTables\Table\Columns;
 use DataTables\Table\DataTables;
+use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
 
 /**
@@ -69,6 +70,18 @@ class ColumnTest extends TestCase {
 		unset($this->Columns);
 
 		parent::tearDown();
+	}
+
+	/**
+	 * Check if print all options getter and setter is working
+	 *
+	 * @return void
+	 */
+	public function testColumns() {
+		$mainOption = new MainOption('abc');
+		$this->Columns->addNonDatabaseColumn('action');
+		$mainOption->setColumns($this->Columns);
+		$this->assertEquals(2, count($mainOption->getConfig('columns')));
 	}
 
 	/**

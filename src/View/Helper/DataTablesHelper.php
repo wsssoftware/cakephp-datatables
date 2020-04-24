@@ -14,7 +14,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\View\Helper;
 use DataTables\Table\Builder;
-use DataTables\Table\ResourcesConfig\LocalResourceConfig;
+use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
 
 /**
  * Class DataTablesHelper
@@ -79,10 +79,10 @@ class DataTablesHelper extends Helper {
 	}
 
 	/**
-	 * @return \DataTables\Table\ResourcesConfig\LocalResourceConfig
+	 * @return \DataTables\Table\ResourcesConfig\LocalResourcesConfig
 	 */
 	public function getLocalResourceConfig() {
-		return LocalResourceConfig::getInstance();
+		return LocalResourcesConfig::getInstance();
 	}
 
 	/**

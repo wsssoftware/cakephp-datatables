@@ -16,7 +16,7 @@ use Cake\Core\Configure;
  * Class DataTablesFilesConfig
  * Created by allancarvalho in abril 18, 2020
  */
-final class LocalResourceConfig extends ResourcesConfigAbstract {
+final class LocalResourcesConfig extends ResourcesConfigAbstract {
 
 	/**
 	 * Storage a instance of object.
@@ -28,10 +28,11 @@ final class LocalResourceConfig extends ResourcesConfigAbstract {
 	/**
 	 * Return a instance of builder object.
 	 *
-	 * @return \DataTables\Table\ResourcesConfig\LocalResourceConfig
+	 * @param bool $reset
+	 * @return \DataTables\Table\ResourcesConfig\LocalResourcesConfig
 	 */
-	public static function getInstance(): LocalResourceConfig {
-		if (static::$instance === null) {
+	public static function getInstance(bool $reset = false): LocalResourcesConfig {
+		if (static::$instance === null || $reset === true) {
 			static::$instance = new self();
 		}
 		return static::$instance;

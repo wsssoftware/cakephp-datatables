@@ -115,6 +115,15 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 * ResourcesConfigAbstract constructor.
 	 */
 	public function __construct() {
+		$this->reset();
+	}
+
+	/**
+	 * Reset all the settings.
+	 *
+	 * @return void
+	 */
+	public function reset(): void {
 		$configure = Configure::read('DataTables.libraries');
 		if (empty($configure)) {
 			$configure = [];
@@ -144,20 +153,20 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 *
 	 * @return array
 	 */
-	private function getList(): array {
+	public function getList(): array {
 		$result = ['css' => [], 'js' => []];
-		switch ($this->_jquery) {
+		switch ($this->getJquery()) {
 			case static::JQUERY_1:
 				$result = $this->putInArray($result, $this->getJQuery1Library());
 				break;
 			case static::JQUERY_3:
 				$result = $this->putInArray($result, $this->getJQuery3Library());
 		}
-		if ($this->_theme !== static::THEME_NONE) {
-			$themeFunction = static::THEME_GET_FUNCTIONS[$this->_theme];
+		if ($this->getTheme() !== static::THEME_NONE) {
+			$themeFunction = static::THEME_GET_FUNCTIONS[$this->getTheme()];
 			$result = $this->putInArray($result, $this->{$themeFunction}());
 		}
-		if ($this->_theme !== static::THEME_BASE && $this->_loadThemeLibrary === true) {
+		if ($this->getTheme() !== static::THEME_BASE && $this->isLoadThemeLibrary() === true) {
 			$themeLibraryFunction = static::THEME_GET_LIBRARY_FUNCTIONS[$this->_theme];
 			$result = $this->putInArray($result, $this->{$themeLibraryFunction}());
 		}
@@ -234,10 +243,10 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 		}
 		$toRender = $this->getList();
 		foreach ($toRender['css'] as $css) {
-			$view->Html->css("DataTables.{$this->_dataTablesVersion}/$css", ['block' => $this->_cssBlock]);
+			$view->Html->css("DataTables.{$this->getDataTablesVersion()}/$css", ['block' => $this->getCssBlock()]);
 		}
 		foreach ($toRender['js'] as $js) {
-			$view->Html->script("DataTables.{$this->_dataTablesVersion}/$js", ['block' => $this->_scriptBlock]);
+			$view->Html->script("DataTables.{$this->getDataTablesVersion()}/$js", ['block' => $this->getScriptBlock()]);
 		}
 	}
 

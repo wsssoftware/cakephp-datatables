@@ -14,6 +14,10 @@ use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;
 use DataTables\Table\Option\MainOption;
 
+/**
+ * Class FeaturesOptionTraitTest
+ * Created by allancarvalho in abril 24, 2020
+ */
 class FeaturesOptionTraitTest extends TestCase {
 
 	/**
