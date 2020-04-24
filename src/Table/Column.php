@@ -40,7 +40,6 @@ final class Column {
 		self::TYPE_HTML,
 		self::TYPE_STRING,
 	];
-
 	const DOM_TEXT = 'dom-text';
 	const DOM_SELECT = 'dom-select';
 	const DOM_CHECKBOX = 'dom-checkbox';
@@ -49,7 +48,6 @@ final class Column {
 		self::DOM_SELECT,
 		self::DOM_CHECKBOX,
 	];
-
 	const DATA_TABLES_TYPE_MAP = [
 		'tinyinteger' => 'num',
 		'smallinteger' => 'num',
@@ -115,18 +113,14 @@ final class Column {
 	 * Column constructor.
 	 *
 	 * @param string $name
-	 * @param string|null $title
 	 * @param bool $database
 	 * @param array $columnSchema
 	 * @param string $associationPath
 	 */
-	public function __construct(string $name, string $title = null, bool $database = true, array $columnSchema = [], string $associationPath = '') {
-		if (empty($title)) {
-			if ($database === true) {
-				$title = Inflector::humanize(explode('.', $name)[1]);
-			} else {
-				$title = Inflector::humanize($name);
-			}
+	public function __construct(string $name, bool $database = true, array $columnSchema = [], string $associationPath = '') {
+		$title = Inflector::humanize($name);
+		if ($database === true) {
+			$title = Inflector::humanize(explode('.', $name)[1]);
 		}
 		$this->_config = Hash::insert($this->_config, 'name', $name);
 		$this->_config = Hash::insert($this->_config, 'title', $title);
@@ -153,7 +147,6 @@ final class Column {
 		if ($onlyDirty === false) {
 			return $this->_config;
 		}
-
 		$result = [];
 		foreach ($this->_config as $index => $item) {
 			if ($item !== null) {
@@ -170,7 +163,6 @@ final class Column {
 	 */
 	public function getName(): string {
 		return Hash::get($this->_config, 'name');
-
 	}
 
 	/**
@@ -180,7 +172,6 @@ final class Column {
 	 */
 	public function isDatabase(): bool {
 		return $this->_database;
-
 	}
 
 	/**
@@ -191,7 +182,6 @@ final class Column {
 		if (empty($name)) {
 			return $this->_columnSchema;
 		}
-
 		return Hash::get($this->_columnSchema, $name);
 	}
 
@@ -206,7 +196,6 @@ final class Column {
 	 */
 	public function getCellType(): ?string {
 		return Hash::get($this->_config, 'cellType');
-
 	}
 
 	/**
@@ -225,9 +214,7 @@ final class Column {
 			throw new InvalidArgumentException("\$cellType must be 'td' or 'th'. Found: $cellType.");
 		}
 		$this->_config = Hash::insert($this->_config, 'cellType', $cellType);
-
 		return $this;
-
 	}
 
 	/**
@@ -240,7 +227,6 @@ final class Column {
 	 */
 	public function getClassName(): ?string {
 		return Hash::get($this->_config, 'className');
-
 	}
 
 	/**
@@ -255,9 +241,7 @@ final class Column {
 	 */
 	public function setClassName(?string $className): self {
 		$this->_config = Hash::insert($this->_config, 'className', $className);
-
 		return $this;
-
 	}
 
 	/**
@@ -270,7 +254,6 @@ final class Column {
 	 */
 	public function getContentPadding(): ?string {
 		return Hash::get($this->_config, 'contentPadding');
-
 	}
 
 	/**
@@ -291,9 +274,7 @@ final class Column {
 	 */
 	public function setContentPadding(?string $contentPadding): self {
 		$this->_config = Hash::insert($this->_config, 'contentPadding', $contentPadding);
-
 		return $this;
-
 	}
 
 	/**
@@ -360,9 +341,7 @@ final class Column {
 			throw new InvalidArgumentException("In \$bodyOrParams you can use only $validTypesString. Found: '$bodyOrParamsType'.");
 		}
 		$this->_config = Hash::insert($this->_config, 'createdCell', $bodyOrParams);
-
 		return $this;
-
 	}
 
 	/**
@@ -415,9 +394,7 @@ final class Column {
 			throw new InvalidArgumentException("In \$orderData you can use only $validTypesString. Found: '$orderDataType'.");
 		}
 		$this->_config = Hash::insert($this->_config, 'orderData', $orderData);
-
 		return $this;
-
 	}
 
 	/**
@@ -459,14 +436,9 @@ final class Column {
 	 * @link   https://datatables.net/plug-ins/sorting/
 	 */
 	public function setOrderDataType(?string $orderDataType): self {
-		$validOrderDataTypeString = str_replace(' and ', ' or ', Text::toList(static::VALID_ORDER_DATA_TYPES));
-		if (!in_array($orderDataType, static::VALID_ORDER_DATA_TYPES) && !empty($orderDataType)) {
-			throw new InvalidArgumentException("In \$orderDataType you can use only $validOrderDataTypeString. Found: '$orderDataType'.");
-		}
+		Validator::getInstance()->inArrayOrFail($orderDataType, static::VALID_ORDER_DATA_TYPES);
 		$this->_config = Hash::insert($this->_config, 'orderDataType', $orderDataType);
-
 		return $this;
-
 	}
 
 	/**
@@ -499,7 +471,6 @@ final class Column {
 			}
 		}
 		$this->_config = Hash::insert($this->_config, 'orderSequence', $orderSequence);
-
 		return $this;
 	}
 
@@ -533,9 +504,7 @@ final class Column {
 	 */
 	public function setOrderable(?bool $orderable): self {
 		$this->_config = Hash::insert($this->_config, 'orderable', $orderable);
-
 		return $this;
-
 	}
 
 	/**
@@ -564,9 +533,7 @@ final class Column {
 	 */
 	public function setSearchable(?bool $searchable): self {
 		$this->_config = Hash::insert($this->_config, 'searchable', $searchable);
-
 		return $this;
-
 	}
 
 	/**
@@ -605,7 +572,6 @@ final class Column {
 	 */
 	public function setTitle(string $title): self {
 		$this->_config = Hash::insert($this->_config, 'title', $title);
-
 		return $this;
 	}
 
@@ -726,12 +692,8 @@ final class Column {
 	 * @link   https://datatables.net/reference/option/columns.type
 	 */
 	public function setType(?string $type): self {
-		$validTypesString = str_replace(' and ', ' or ', Text::toList(static::VALID_TYPES));
-		if (!in_array($type, static::VALID_TYPES) && !empty($type)) {
-			throw new InvalidArgumentException("Type must be $validTypesString. Found: '$type'.");
-		}
+		Validator::getInstance()->inArrayOrFail($type, static::VALID_TYPES);
 		$this->_config = Hash::insert($this->_config, 'type', $type);
-
 		return $this;
 
 	}
@@ -770,9 +732,7 @@ final class Column {
 	 */
 	public function setVisible(?bool $visible): self {
 		$this->_config = Hash::insert($this->_config, 'visible', $visible);
-
 		return $this;
-
 	}
 
 	/**

@@ -49,7 +49,7 @@ final class Columns {
 	 */
 	public function __construct(DataTables $dataTables) {
 		$this->_dataTables = $dataTables;
-		$this->Default = new Column('default', 'empty', false);
+		$this->Default = new Column('default', false);
 	}
 
 	/**
@@ -95,12 +95,11 @@ final class Columns {
 	 * Add a database column to DataTables table.
 	 *
 	 * @param string $dataBaseField
-	 * @param string|null $title
 	 * @return \DataTables\Table\Column
 	 */
-	public function addDatabaseColumn(string $dataBaseField, ?string $title = null): Column {
+	public function addDatabaseColumn(string $dataBaseField): Column {
 		$columnInfo = $this->normalizeDataTableField($dataBaseField);
-		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", $title, true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
+		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
 		return $this->saveColumn($column);
 	}
 
@@ -108,14 +107,13 @@ final class Columns {
 	 * Add a non database column to DataTables table.
 	 *
 	 * @param string $label
-	 * @param string|null $title
 	 * @return \DataTables\Table\Column
 	 */
-	public function addNonDatabaseColumn(string $label, ?string $title = null): Column {
+	public function addNonDatabaseColumn(string $label): Column {
 		if (preg_match('/[^A-Za-z0-9]+/', $label)) {
 			throw new InvalidArgumentException("On non databases fields, you must use only alphanumeric chars. Found: $label.");
 		}
-		$column = new Column($label, $title, false);
+		$column = new Column($label, false);
 
 		return $this->saveColumn($column);
 	}
@@ -146,7 +144,6 @@ final class Columns {
 	public function normalizeDataTableField(string $dataBaseField): array {
 		$ormTable = $this->_dataTables->getOrmTable();
 		$explodedDataBaseField = explode('.', $dataBaseField);
-		$associationPath = '';
 		if (count($explodedDataBaseField) === 2) {
 			$table = Inflector::camelize($explodedDataBaseField[0]);
 			$column = Inflector::dasherize($explodedDataBaseField[1]);

@@ -7,11 +7,13 @@ use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use DataTables\Table\Builder;
 use DataTables\Table\ConfigBundle;
 use DataTables\Table\Option\MainOption;
 use DataTables\Table\QueryBaseState;
 use DataTables\Tools\Functions;
+use InvalidArgumentException;
 
 /**
  * DataTables component
@@ -43,59 +45,61 @@ class DataTablesComponent extends Component {
 	}
 
 	/**
-	 * @param string $tablesAndConfig
+	 * @param string $dataTables
 	 * @return \DataTables\Table\Option\MainOption
 	 * @throws \ReflectionException
 	 */
-	public function getOptions(string $tablesAndConfig): MainOption {
-		$configBundle = $this->getConfigBundle($tablesAndConfig);
-		$options = $configBundle->Options;
-		$optionsClassMd5 = $this->getClassMd5($options);
-		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
-		EventManager::instance()->on('Controller.beforeRender', function () use ($md5, $optionsClassMd5, $options)
-		{
-			if ($optionsClassMd5 !== $this->getClassMd5($options)) {
-				$session = $this->getController()->getRequest()->getSession();
-				$session->write("DataTables.configs.options.$md5", $options);
-			}
-		});
-
-		return $options;
+	public function getOptions(string $dataTables): MainOption {
+		return $this->setEventAndGetObject($dataTables, 'Options');
 	}
 
 	/**
-	 * @param string $tablesAndConfig
+	 * @param string $dataTables
 	 * @return \DataTables\Table\QueryBaseState
 	 * @throws \ReflectionException
 	 */
-	public function getQuery(string $tablesAndConfig): QueryBaseState {
-		$configBundle = $this->getConfigBundle($tablesAndConfig);
-		$query = $configBundle->Query;
-		$queryClassMd5 = $this->getClassMd5($query);
-		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
-
-		EventManager::instance()->on('Controller.beforeRender', function () use ($md5, $queryClassMd5, $query)
-		{
-			if ($queryClassMd5 !== $this->getClassMd5($query)) {
-				$session = $this->getController()->getRequest()->getSession();
-				$session->write("DataTables.configs.query.$md5", $query);
-			}
-		});
-
-		return $query;
+	public function getQuery(string $dataTables): QueryBaseState {
+		return $this->setEventAndGetObject($dataTables, 'Query');
 	}
 
 	/**
-	 * @param string $tablesAndConfig
+	 * @param string $dataTables
+	 * @param string $objectName
+	 * @return \DataTables\Table\QueryBaseState|\DataTables\Table\Option\MainOption
+	 * @throws \ReflectionException
+	 */
+	private function setEventAndGetObject(string $dataTables, string $objectName) {
+		$configBundle = $this->getConfigBundle($dataTables);
+		if (!in_array($objectName, ['Query', 'Options'])) {
+			throw new InvalidArgumentException("\$objectName must be 'Query' or 'Options'. Found: $objectName.");
+		}
+		$object = $configBundle->{$objectName};
+		$classMd5 = $this->getClassMd5($object);
+		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
+
+		EventManager::instance()->on('Controller.beforeRender', function () use ($objectName, $md5, $classMd5, $object)
+		{
+			if ($classMd5 !== $this->getClassMd5($object)) {
+				$session = $this->getController()->getRequest()->getSession();
+				$objectNameLower = Inflector::underscore($objectName);
+				$session->write("DataTables.configs.$objectNameLower.$md5", $object);
+			}
+		});
+
+		return $object;
+	}
+
+	/**
+	 * @param string $dataTables
 	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
 	 */
-	private function getConfigBundle(string $tablesAndConfig): ConfigBundle {
-		if (empty($this->_configBundles[$tablesAndConfig])) {
-			$this->_configBundles[$tablesAndConfig] = Builder::getInstance()->getConfigBundle($tablesAndConfig, $this->_cache);
+	private function getConfigBundle(string $dataTables): ConfigBundle {
+		if (empty($this->_configBundles[$dataTables])) {
+			$this->_configBundles[$dataTables] = Builder::getInstance()->getConfigBundle($dataTables, $this->_cache);
 		}
 
-		return $this->_configBundles[$tablesAndConfig];
+		return $this->_configBundles[$dataTables];
 	}
 
 	/**

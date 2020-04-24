@@ -6,7 +6,6 @@
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
-
 declare(strict_types = 1);
 
 namespace DataTables\Controller;
@@ -77,7 +76,6 @@ class ProviderController extends AppController {
 		$page = (int)($this->getData('start') + $pageSize) / $pageSize;
 		$find = $this->getFind()->page($page, $pageSize);
 		$data = $find->toArray();
-
 		$result = [
 			'draw' => $this->getData('draw', 1),
 			'recordsTotal' => $find->count(),
@@ -109,28 +107,21 @@ class ProviderController extends AppController {
 	 * @return \Cake\ORM\Query
 	 */
 	private function getFind(): Query {
-		$query = $this->_configBundle->Columns->getDataTables()->getOrmTable()->find();
-		$columns = $this->_configBundle->Columns;
-		$this->_configBundle->Query->mergeWithQuery($query);
 		$select = [];
 		$contains = [];
+		$columns = $this->_configBundle->Columns;
+		$table = $columns->getDataTables()->getOrmTable();
+		$query = $this->_configBundle->Query->mergeWithQuery($table->find());
 		foreach ($columns->getColumns() as $columnName => $column) {
-			if (count(explode('.', $columnName)) === 2) {
-				$association = Functions::getInstance()->getAssociationUsingPath($columns->getDataTables()->getOrmTable(), $column->getAssociationPath());
-				if (!$association instanceof HasMany) {
-					$select[] = $columnName;
-				}
+			if ($column->isDatabase() && !Functions::getInstance()->getAssociationUsingPath($table, $column->getAssociationPath()) instanceof HasMany) {
+				$select[] = $columnName;
 			}
-			$associationPaths = substr_replace($column->getAssociationPath(), '', 0, strlen($columns->getDataTables()->getOrmTable()->getAlias()) + 1);
+			$associationPaths = substr_replace($column->getAssociationPath(), '', 0, strlen($table->getAlias()) + 1);
 			if (!empty($associationPaths)) {
-				$containArray = Hash::insert([], $associationPaths, []);
-				$contains = Hash::merge($contains, $containArray);
+				$contains = Hash::merge($contains, Hash::insert([], $associationPaths, []));
 			}
 		}
-		$query->contain($contains);
-		$query->select($select);
-		$orders = $this->getData('order', []);
-		foreach ($orders as $order) {
+		foreach ($this->getData('order', []) as $order) {
 			$databaseColumn = $columns->getColumnNameByIndex((int)$order['column']);
 			if ($order['dir'] === 'asc') {
 				$query->orderAsc($databaseColumn);
@@ -139,7 +130,7 @@ class ProviderController extends AppController {
 			}
 		}
 		$this->doSearch($query);
-		return $query;
+		return $query->contain($contains)->select($select);
 	}
 
 	/**
@@ -154,24 +145,30 @@ class ProviderController extends AppController {
 		foreach ($this->getData('columns') as $column) {
 			if (filter_var($column['searchable'], FILTER_VALIDATE_BOOLEAN) === true) {
 				$databaseColumn = $this->_configBundle->Columns->getColumnNameByIndex((int)$column['data']);
-				if (!empty($searchValue)) {
-					$orWhere += ["CONVERT($databaseColumn,char) LIKE" => "%$searchValue%"];
-					if ($searchRegex === true && Functions::getInstance()->checkRegexFormat($searchValue)) {
-						$orWhere += ["CONVERT($databaseColumn,char) REGEXP" => "$searchValue"];
-					}
-				}
+				$this->insertSearchInArray($orWhere, $databaseColumn, $searchValue, $searchRegex);
 				$columnSearchValue = Hash::get($column, 'search.value', null);
 				$columnSearchRegex = filter_var(Hash::get($column, 'search.regex', false), FILTER_VALIDATE_BOOLEAN);
-				if (!empty($columnSearchValue)) {
-					$columnOrWhere += ["CONVERT($databaseColumn,char) LIKE" => "%$columnSearchValue%"];
-					if ($columnSearchRegex === true && Functions::getInstance()->checkRegexFormat($columnSearchValue)) {
-						$columnOrWhere += ["CONVERT($databaseColumn,char) REGEXP" => "$columnSearchValue"];
-					}
-				}
+				$this->insertSearchInArray($columnOrWhere, $databaseColumn, $columnSearchValue, $columnSearchRegex);
 			}
 		}
 		$query->where(['OR' => $orWhere]);
 		$query->where(['OR' => $columnOrWhere]);
+	}
+
+	/**
+	 * @param array $conditions
+	 * @param string $databaseColumn
+	 * @param string $searchValue
+	 * @param bool $searchRegex
+	 * @return void
+	 */
+	private function insertSearchInArray(array &$conditions, string $databaseColumn, string $searchValue, bool $searchRegex): void {
+		if (!empty($searchValue)) {
+			$conditions += ["CONVERT($databaseColumn,char) LIKE" => "%$searchValue%"];
+			if ($searchRegex === true && Functions::getInstance()->checkRegexFormat($searchValue)) {
+				$conditions += ["CONVERT($databaseColumn,char) REGEXP" => "$searchValue"];
+			}
+		}
 	}
 
 }

@@ -98,4 +98,34 @@ class Validator {
 		}
 	}
 
+	/**
+	 * Check if item is in array or fail.
+	 *
+	 * @param mixed $needle
+	 * @param array $haystack
+	 * @param bool $allowEmpty
+	 * @param bool $strict
+	 * @return void
+	 */
+	public function inArrayOrFail($needle, array $haystack, bool $allowEmpty = true, bool $strict = false): void {
+		$haystackValidString = $this->arrayToStringMessage($haystack);
+		if (!in_array($needle, $haystack, $strict) && empty($needle) !== $allowEmpty) {
+			throw new InvalidArgumentException("You can use only $haystackValidString. Found: '$needle'.");
+		}
+	}
+
+	/**
+	 * Convert an array to string message.
+	 *
+	 * @param array $array
+	 * @param string|null $and
+	 * @return string
+	 */
+	private function arrayToStringMessage(array $array, ?string $and = 'or'): string {
+		foreach ($array as $index => $item) {
+			$array[$index] = "'$item'";
+		}
+		return Text::toList($array, $and);
+	}
+
 }

@@ -141,7 +141,7 @@ class Functions {
 	 */
 	public function getConfigBundleAndUrlUniqueMd5(ConfigBundle $configBundle, bool $ajax = false): string {
 		if ($ajax) {
-			$urlMd5 = Router::getRequest()->getParam('pass.2', 'empty');
+			$urlMd5 = Router::getRequest()->getParam('pass.1', 'empty');
 		} else {
 			$urlMd5 = md5(Router::url());
 		}
