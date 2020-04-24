@@ -72,7 +72,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testSave() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
 		$this->assertTrue($this->Cache->save('abc', $buildConfig));
 	}
 
@@ -80,7 +80,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testRead() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertEmpty($this->Cache->read('def'));
 		$this->assertInstanceOf(ConfigBundle::class, $this->Cache->read('abc'));
@@ -90,7 +90,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testDelete() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertTrue($this->Cache->delete('abc'));
 	}
@@ -99,7 +99,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testExists() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', 'main', md5('abc'));
+		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertFalse($this->Cache->exists('def'));
 		$this->assertTrue($this->Cache->exists('abc'));

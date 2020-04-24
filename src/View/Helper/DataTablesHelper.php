@@ -11,8 +11,10 @@ declare(strict_types = 1);
 namespace DataTables\View\Helper;
 
 use Cake\Core\Configure;
+use Cake\Event\EventManager;
 use Cake\View\Helper;
 use DataTables\Table\Builder;
+use DataTables\Table\ResourcesConfig\LocalResourceConfig;
 
 /**
  * Class DataTablesHelper
@@ -32,6 +34,11 @@ class DataTablesHelper extends Helper {
 	];
 
 	/**
+	 * @var bool
+	 */
+	private $_isLoaded = false;
+
+	/**
 	 * @var \DataTables\Table\ConfigBundle[]
 	 */
 	protected $_configBundles = [];
@@ -47,6 +54,13 @@ class DataTablesHelper extends Helper {
 			$this->setConfig('cache', false);
 		}
 		$this->setConfig($config);
+		EventManager::instance()->on('View.beforeLayout', function ()
+		{
+			if (!empty($this->_configBundles)) {
+				$this->getLocalResourceConfig()->requestLoad($this->getView());
+			}
+		});
+
 	}
 
 	/**
@@ -65,19 +79,22 @@ class DataTablesHelper extends Helper {
 	}
 
 	/**
+	 * @return \DataTables\Table\ResourcesConfig\LocalResourceConfig
+	 */
+	public function getLocalResourceConfig() {
+		return LocalResourceConfig::getInstance();
+	}
+
+	/**
 	 * Render all configBundles called.
 	 *
 	 * @return string
 	 */
 	public function renderJs(): string {
 		$result = '';
-		if ((bool)$this->setConfig('autoLoadLibraries') === true) {
-			//TODO load scripts
-		}
 		if (!empty($this->_configBundles)) {
 			$result .= $this->getView()->element('DataTables.script', ['configBundles' => $this->_configBundles]);
 		}
-
 		return $result;
 	}
 

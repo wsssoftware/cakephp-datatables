@@ -46,7 +46,7 @@ require_once $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
 Cake\Core\Configure::write('App.namespace', 'TestApp');
 
 class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
-class_alias(TestApp\DataTables\Tables\CategoriesDataTables::class, 'App\DataTables\Tables\CategoriesTables');
+class_alias(TestApp\DataTables\CategoriesDataTables::class, 'App\DataTables\CategoriesTables');
 
 if (file_exists($root . '/config/bootstrap.php')) {
 	require $root . '/config/bootstrap.php';

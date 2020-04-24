@@ -19,9 +19,28 @@ use Cake\Core\Configure;
 final class LocalResourceConfig extends ResourcesConfigAbstract {
 
 	/**
+	 * Storage a instance of object.
+	 *
+	 * @var self
+	 */
+	public static $instance;
+
+	/**
+	 * Return a instance of builder object.
+	 *
+	 * @return \DataTables\Table\ResourcesConfig\LocalResourceConfig
+	 */
+	public static function getInstance(): LocalResourceConfig {
+		if (static::$instance === null) {
+			static::$instance = new self();
+		}
+		return static::$instance;
+	}
+	/**
 	 * LocalResourceConfig constructor.
 	 */
 	public function __construct() {
+		parent::__construct();
 		Configure::load('DataTables.local_resource', 'default', true);
 	}
 

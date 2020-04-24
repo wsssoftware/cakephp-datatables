@@ -9,7 +9,7 @@
  */
 declare(strict_types = 1);
 
-namespace TestApp\DataTables\Tables;
+namespace TestApp\DataTables;
 
 use DataTables\Table\ConfigBundle;
 use DataTables\Table\DataTables;

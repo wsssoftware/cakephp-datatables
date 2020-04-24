@@ -72,16 +72,16 @@ final class MainCallBack {
 	 * MainCallBack constructor.
 	 *
 	 * @param string $callbackName
-	 * @param string $tablesName
+	 * @param string $dataTablesName
 	 * @param string $config
 	 */
-	public function __construct(string $callbackName, string $tablesName, string $config) {
+	public function __construct(string $callbackName, string $dataTablesName, string $config) {
 		$basePath = Configure::read('DataTables.resources.templates');
 		if (substr($basePath, -1, 1) !== DS) {
 			$basePath .= DS;
 		}
 		$this->_callbackName = $this->_callbackNamePrefix . $callbackName . $this->_ext;
-		$this->_appTemplateFolder = $basePath . $tablesName . DS . $config . DS;
+		$this->_appTemplateFolder = $basePath . $dataTablesName . DS . $config . DS;
 		$this->_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'twig' . DS . 'js' . DS . 'functions' . DS;
 		$this->_twigLoader = new FilesystemLoader();
 		$this->_twig = new Environment($this->_twigLoader);
@@ -133,16 +133,15 @@ final class MainCallBack {
 	 * @link https://twig.symfony.com/doc/3.x/api.html
 	 */
 	public function render($bodyOrParams = []) {
-		$bodyParamsType = getType($bodyOrParams);
-		if ($bodyParamsType === 'array') {
+		if (is_array($bodyOrParams)) {
 			$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_callbackName);
 			Validator::getInstance()->checkKeysValueTypesOrFail($bodyOrParams, 'string', '*');
 			$this->_twigLoader->setPaths($this->_appTemplateFolder);
 			$body = $this->_twig->render($this->_callbackName, $bodyOrParams);
-		} elseif ($bodyParamsType === 'string') {
+		} elseif (is_string($bodyOrParams)) {
 			$body = $bodyOrParams;
 		} else {
-			throw new InvalidArgumentException("$bodyOrParams must be 'string' or 'array'. Found: $bodyParamsType.");
+			throw new InvalidArgumentException("$bodyOrParams must be 'string' or 'array'. Found: " . getType($bodyOrParams) . '.');
 		}
 		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_callbackName);
 		$this->_twigLoader->setPaths($this->_pluginTemplateFolder);

@@ -9,11 +9,18 @@
 
 namespace DataTables\Table\ResourcesConfig;
 
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
 use Cake\Utility\Text;
 use Cake\View\View;
 use InvalidArgumentException;
 
 abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
+
+	/**
+	 * @var bool
+	 */
+	private $_enabled = true;
 
 	/**
 	 * @var string
@@ -23,7 +30,7 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	/**
 	 * @var string
 	 */
-	private $_jsBlock = 'script';
+	private $_scriptBlock = 'script';
 
 	/**
 	 * @var string
@@ -104,6 +111,34 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 * @var bool
 	 */
 	private $_loadPluginSelect = false;
+
+	/**
+	 * ResourcesConfigAbstract constructor.
+	 */
+	public function __construct() {
+		$configure = Configure::read('DataTables.libraries');
+		if (empty($configure)) {
+			$configure = [];
+		}
+		$this->setEnabled(Hash::get($configure, 'enabled', true));
+		$this->setCssBlock(Hash::get($configure, 'cssBlock', 'css'));
+		$this->setScriptBlock(Hash::get($configure, 'scriptBlock', 'script'));
+		$this->setTheme(Hash::get($configure, 'theme', static::THEME_BASE));
+		$this->setLoadThemeLibrary(Hash::get($configure, 'loadThemeLibrary', false));
+		$this->setJquery(Hash::get($configure, 'jquery', static::JQUERY_NONE));
+		$this->setLoadPluginAutoFill(Hash::get($configure, 'plugins.autoFill', false));
+		$this->setLoadPluginButtons(Hash::get($configure, 'plugins.buttons', false));
+		$this->setLoadPluginColReorder(Hash::get($configure, 'plugins.colReorder', false));
+		$this->setLoadPluginFixedColumns(Hash::get($configure, 'plugins.fixedColumns', false));
+		$this->setLoadPluginFixedHeader(Hash::get($configure, 'plugins.fixedHeader', false));
+		$this->setLoadPluginKeyTable(Hash::get($configure, 'plugins.keyTable', false));
+		$this->setLoadPluginResponsive(Hash::get($configure, 'plugins.responsive', false));
+		$this->setLoadPluginRowGroup(Hash::get($configure, 'plugins.rowGroup', false));
+		$this->setLoadPluginRowReorder(Hash::get($configure, 'plugins.rowReorder', false));
+		$this->setLoadPluginScroller(Hash::get($configure, 'plugins.scroller', false));
+		$this->setLoadPluginSearchPanes(Hash::get($configure, 'plugins.searchPanes', false));
+		$this->setLoadPluginSelect(Hash::get($configure, 'plugins.select', false));
+	}
 
 	/**
 	 * Return the array with files to load in html.
@@ -197,13 +232,31 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 * @return void
 	 */
 	public function requestLoad(View $view): void {
+		if ($this->_enabled === false) {
+			return;
+		}
 		$toRender = $this->getList();
 		foreach ($toRender['css'] as $css) {
 			$view->Html->css("DataTables.{$this->_dataTablesVersion}/$css", ['block' => $this->_cssBlock]);
 		}
 		foreach ($toRender['js'] as $js) {
-			$view->Html->script("DataTables.{$this->_dataTablesVersion}/$js", ['block' => $this->_jsBlock]);
+			$view->Html->script("DataTables.{$this->_dataTablesVersion}/$js", ['block' => $this->_scriptBlock]);
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isEnabled(): bool {
+		return $this->_enabled;
+	}
+
+	/**
+	 * @param bool $enabled
+	 * @return void
+	 */
+	public function setEnabled(bool $enabled): void {
+		$this->_enabled = $enabled;
 	}
 
 	/**
@@ -239,16 +292,16 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	/**
 	 * @return string
 	 */
-	public function getJsBlock(): string {
-		return $this->_jsBlock;
+	public function getScriptBlock(): string {
+		return $this->_scriptBlock;
 	}
 
 	/**
 	 * @param string $jsBlock
 	 * @return void
 	 */
-	public function setJsBlock(string $jsBlock): void {
-		$this->_jsBlock = $jsBlock;
+	public function setScriptBlock(string $jsBlock): void {
+		$this->_scriptBlock = $jsBlock;
 	}
 
 	/**

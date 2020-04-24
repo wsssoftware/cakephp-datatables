@@ -41,7 +41,6 @@ final class Builder {
 		if (static::$instance === null) {
 			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
@@ -202,7 +201,7 @@ final class Builder {
 	 * @return string
 	 */
 	private function parseClassNameToFQN(string $dataTablesName): string {
-		$expectedPath = Configure::read('App.namespace') . '\\DataTables\\Tables\\';
+		$expectedPath = Configure::read('App.namespace') . '\\DataTables\\';
 		if (count(explode('\\', $dataTablesName)) === 1) {
 			$dataTablesName = $expectedPath . $dataTablesName . 'DataTables';
 		}
