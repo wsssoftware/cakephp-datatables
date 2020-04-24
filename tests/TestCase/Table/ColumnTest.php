@@ -57,6 +57,7 @@ class ColumnTest extends TestCase {
 			],
 		]);
 		$this->Columns = new Columns($tables);
+		$this->Columns->addDatabaseColumn('Users.id');
 	}
 
 	/**
@@ -74,7 +75,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testSimple() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(true, $col->isDatabase());
 		static::assertEquals('Users.id', $col->getName());
 		$col = $this->Columns->addNonDatabaseColumn('test');
@@ -85,7 +86,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testCellType() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		$col->setCellType('th');
 		static::assertEquals('th', $col->getCellType());
 		$col->setCellType('td');
@@ -98,7 +99,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testClassName() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getClassName());
 		$col->setClassName('abc');
 		static::assertEquals('abc', $col->getClassName());
@@ -108,7 +109,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testContentPadding() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getContentPadding());
 		$col->setContentPadding('abcdfghi');
 		static::assertEquals('abcdfghi', $col->getContentPadding());
@@ -118,7 +119,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testCreatedCell() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getCreatedCell());
 		$col->setCreatedCell();
 		static::assertEquals([], $col->getCreatedCell());
@@ -134,7 +135,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testOrderDataArray() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getOrderData());
 		$col->setOrderData([]);
 		static::assertEquals([], $col->getOrderData());
@@ -148,7 +149,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testOrderDataInteger() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		$col->setOrderData(1);
 		static::assertEquals(1, $col->getOrderData());
 		$this->expectException(InvalidArgumentException::class);
@@ -159,7 +160,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testOrderDataInvalid() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		$this->expectException(InvalidArgumentException::class);
 		$col->setOrderData(32.21);
 	}
@@ -168,7 +169,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testOrderDataType() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getOrderDataType());
 		foreach (Column::VALID_ORDER_DATA_TYPES as $type) {
 			$col->setOrderDataType($type);
@@ -182,7 +183,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testOrderSequence() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getOrderSequence());
 		$col->setOrderSequence(['asc']);
 		static::assertEquals(['asc'], $col->getOrderSequence());
@@ -196,7 +197,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testOrderable() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->isOrderable());
 		$col->setOrderable(true);
 		static::assertEquals(true, $col->isOrderable());
@@ -210,7 +211,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testSearchable() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->isSearchable());
 		$col->setSearchable(true);
 		static::assertEquals(true, $col->isSearchable());
@@ -224,7 +225,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testTitle() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals('Id', $col->getTitle());
 		$col->setTitle('abc');
 		static::assertEquals('abc', $col->getTitle());
@@ -236,7 +237,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testType() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		$columnType = null;
 		if (!empty($col->getColumnSchema()['type']) && !empty(Column::DATA_TABLES_TYPE_MAP[$col->getColumnSchema()['type']])) {
 			$columnType = Column::DATA_TABLES_TYPE_MAP[$col->getColumnSchema()['type']];
@@ -254,7 +255,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testVisible() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->isVisible());
 		$col->setVisible(true);
 		static::assertEquals(true, $col->isVisible());
@@ -268,7 +269,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testWidth() {
-		$col = $this->Columns->addDatabaseColumn('Users.id');
+		$col = $this->Columns->getColumnByIndex(0);
 		static::assertEquals(null, $col->getWidth());
 		$col->setWidth('10px');
 		static::assertEquals('10px', $col->getWidth());

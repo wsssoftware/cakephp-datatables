@@ -11,9 +11,8 @@ namespace DataTables\Table\ResourcesConfig;
 
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
-use Cake\Utility\Text;
 use Cake\View\View;
-use InvalidArgumentException;
+use DataTables\Tools\Validator;
 
 abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 
@@ -153,7 +152,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 				break;
 			case static::JQUERY_3:
 				$result = $this->putInArray($result, $this->getJQuery3Library());
-				break;
 		}
 		if ($this->_theme !== static::THEME_NONE) {
 			$themeFunction = static::THEME_GET_FUNCTIONS[$this->_theme];
@@ -199,7 +197,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 		if ($this->isLoadPluginSelect()) {
 			$result = $this->putInArray($result, $this->getSelectPlugin());
 		}
-
 		ksort($result['css']);
 		ksort($result['js']);
 		return $result;
@@ -316,10 +313,7 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 * @return $this
 	 */
 	public function setTheme(string $theme): self {
-		$themesText = str_replace(' and ', ' or ', Text::toList(static::VALID_THEMES));
-		if (!in_array($theme, static::VALID_THEMES)) {
-			throw new InvalidArgumentException("\$theme must be $themesText. Found: $theme.");
-		}
+		Validator::getInstance()->inArrayOrFail($theme, static::VALID_THEMES);
 		$this->_theme = $theme;
 
 		return $this;
@@ -354,12 +348,8 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 * @return $this
 	 */
 	public function setJquery(int $jquery): self {
-		$statusText = str_replace(' and ', ' or ', Text::toList(static::VALID_JQUERY_STATUS));
-		if (!in_array($jquery, static::VALID_JQUERY_STATUS)) {
-			throw new InvalidArgumentException("\$jquery must be $statusText. Found: $jquery.");
-		}
+		Validator::getInstance()->inArrayOrFail($jquery, static::VALID_JQUERY_STATUS);
 		$this->_jquery = $jquery;
-
 		return $this;
 	}
 
@@ -376,7 +366,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginAutoFill(bool $loadPluginAutoFill): self {
 		$this->_loadPluginAutoFill = $loadPluginAutoFill;
-
 		return $this;
 	}
 
@@ -393,7 +382,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginButtons(bool $loadPluginButtons): self {
 		$this->_loadPluginButtons = $loadPluginButtons;
-
 		return $this;
 	}
 
@@ -410,7 +398,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginColReorder(bool $loadPluginColReorder): self {
 		$this->_loadPluginColReorder = $loadPluginColReorder;
-
 		return $this;
 	}
 
@@ -427,7 +414,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginFixedColumns(bool $loadPluginFixedColumns): self {
 		$this->_loadPluginFixedColumns = $loadPluginFixedColumns;
-
 		return $this;
 	}
 
@@ -444,7 +430,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginFixedHeader(bool $loadPluginFixedHeader): self {
 		$this->_loadPluginFixedHeader = $loadPluginFixedHeader;
-
 		return $this;
 	}
 
@@ -461,7 +446,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginKeyTable(bool $loadPluginKeyTable): self {
 		$this->_loadPluginKeyTable = $loadPluginKeyTable;
-
 		return $this;
 	}
 
@@ -478,7 +462,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginResponsive(bool $loadPluginResponsive): self {
 		$this->_loadPluginResponsive = $loadPluginResponsive;
-
 		return $this;
 	}
 
@@ -495,7 +478,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginRowGroup(bool $loadPluginRowGroup): self {
 		$this->_loadPluginRowGroup = $loadPluginRowGroup;
-
 		return $this;
 	}
 
@@ -512,7 +494,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginRowReorder(bool $loadPluginRowReorder): self {
 		$this->_loadPluginRowReorder = $loadPluginRowReorder;
-
 		return $this;
 	}
 
@@ -529,7 +510,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginScroller(bool $loadPluginScroller): self {
 		$this->_loadPluginScroller = $loadPluginScroller;
-
 		return $this;
 	}
 
@@ -546,7 +526,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginSearchPanes(bool $loadPluginSearchPanes): self {
 		$this->_loadPluginSearchPanes = $loadPluginSearchPanes;
-
 		return $this;
 	}
 
@@ -563,7 +542,6 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setLoadPluginSelect(bool $loadPluginSelect): self {
 		$this->_loadPluginSelect = $loadPluginSelect;
-
 		return $this;
 	}
 

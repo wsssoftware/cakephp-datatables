@@ -65,12 +65,11 @@ class ProviderController extends AppController {
 	 * Index method
 	 *
 	 * @param string $tablesCass
-	 * @param string $configBundle
-	 * @param string|null $urlMd5
 	 * @return \Cake\Http\Response|null|void Renders view
 	 * @throws \ReflectionException
+	 * @noinspection PhpUnused
 	 */
-	public function getTablesData(string $tablesCass, string $configBundle, string $urlMd5 = null) {
+	public function getTablesData(string $tablesCass) {
 		$this->_configBundle = Builder::getInstance()->getConfigBundle(Inflector::camelize($tablesCass), $this->_cache);
 		$pageSize = (int)$this->getData('length');
 		$page = (int)($this->getData('start') + $pageSize) / $pageSize;

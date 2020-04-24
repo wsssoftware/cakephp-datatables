@@ -10,10 +10,11 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Datasource\EntityInterface;
 use Cake\I18n\Number;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Association\HasMany;
-use Cake\ORM\Entity;
+use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use DataTables\Tools\Functions;
@@ -44,6 +45,8 @@ final class Renderer {
 	}
 
 	/**
+	 * Add a custom print for a column.
+	 *
 	 * @param string $columnName
 	 * @param mixed $value
 	 * @return $this
@@ -59,41 +62,18 @@ final class Renderer {
 	}
 
 	/**
-	 * @param \Cake\ORM\Entity $entity
+	 * Render the table row. This method is called for each row.
+	 *
+	 * @param \Cake\Datasource\EntityInterface $entity
 	 * @return array
 	 */
-	public function renderRow(Entity $entity): array {
+	public function renderRow(EntityInterface $entity): array {
 		$result = [];
 		foreach ($this->_columns->getColumns() as $columnName => $column) {
 			if (!empty($this->_cache[$columnName])) {
 				$value = $this->_cache[$columnName];
 			} else {
-				$exploded = explode('.', $columnName);
-				if (count($exploded) === 2) {
-					$value = $this->getPropertyUsingPath($column->getAssociationPath(), $entity, $exploded[1]);
-					switch ($column->getColumnSchema('type')) {
-						case 'tinyinteger':
-						case 'smallinteger':
-						case 'integer':
-						case 'biginteger':
-						case 'decimal':
-						case 'float':
-							$value = Number::format($value);
-							break;
-						case 'text':
-							$value = Text::truncate($value, 60);
-							break;
-						default:
-							$value = h($value);
-							break;
-					}
-
-					$column->getColumnSchema('type');
-				} else {
-					$value = __d('datatables', 'NOT CONFIGURED YET');
-
-				}
-				$value = "<span style='color: red;'>" . $value . '</span>';
+				$value = $this->getFormattedColumn($columnName, $column, $entity);
 			}
 			$result[] = $value;
 		}
@@ -101,17 +81,71 @@ final class Renderer {
 	}
 
 	/**
+	 * Choose the right formatter for the entity property type.
+	 *
+	 * @param string $columnName
+	 * @param \DataTables\Table\Column $column
+	 * @param \Cake\Datasource\EntityInterface $entity
+	 * @return string
+	 */
+	private function getFormattedColumn(string $columnName, Column $column, EntityInterface $entity): string {
+		$exploded = explode('.', $columnName);
+		if (count($exploded) === 2) {
+			$value = $this->getPropertyUsingPath($column->getAssociationPath(), $entity, $exploded[1]);
+			$integersTypes = ['tinyinteger', 'smallinteger', 'integer', 'biginteger', 'decimal', 'float'];
+			if (in_array($column->getColumnSchema('type'), $integersTypes)) {
+				$value = Number::format($value);
+			} elseif ($column->getColumnSchema('type') === 'text') {
+				$value = Text::truncate($value, 60);
+			} else {
+				$value = h($value);
+			}
+			$column->getColumnSchema('type');
+		} else {
+			$value = __d('datatables', 'NOT CONFIGURED YET');
+		}
+		return "<span style='color: red;'>" . $value . '</span>';
+	}
+
+	/**
+	 * Get a property using it path.
+	 *
 	 * @param string $path
-	 * @param \Cake\ORM\Entity $entity
+	 * @param \Cake\Datasource\EntityInterface $entity
 	 * @param string $property
 	 * @return mixed
 	 */
-	public function getPropertyUsingPath(string $path, Entity $entity, string $property) {
+	public function getPropertyUsingPath(string $path, EntityInterface $entity, string $property) {
 		$table = $this->_columns->getDataTables()->getOrmTable();
 		if ($path === $table->getAlias()) {
 			return $entity->{$property};
 		}
 		$path = substr_replace($path, '', 0, strlen($table->getAlias()) + 1);
+		$propertyPath = $this->getPropertyPath($path, $table);
+		$result = $entity;
+		foreach ($propertyPath as $item) {
+			if (!empty($result->{$item})) {
+				$result = $result->{$item};
+			}
+		}
+		if (is_array($result)) {
+			$lastProperty = $propertyPath[Functions::getInstance()->arrayKeyLast($propertyPath)];
+			return $this->returnArrayCountWithLabel($result, $lastProperty);
+		}
+		if (!empty($result->{$property})) {
+			return $result->{$property};
+		}
+		return '';
+	}
+
+	/**
+	 * Get the path of properties that are need to call until get the final value.
+	 *
+	 * @param string $path
+	 * @param \Cake\ORM\Table $table
+	 * @return array
+	 */
+	private function getPropertyPath(string $path, Table $table): array {
 		$associationNames = explode('.', $path);
 		$propertyPath = [];
 		$association = $table;
@@ -123,25 +157,22 @@ final class Renderer {
 				$propertyPath[] = Inflector::underscore(Inflector::pluralize($association->getAlias()));
 			}
 		}
-		$result = $entity;
-		foreach ($propertyPath as $item) {
-			if (empty($result->{$item})) {
-				return '';
-			}
-			$result = $result->{$item};
+		return $propertyPath;
+	}
+
+	/**
+	 * Return a pretty output for an array result.
+	 *
+	 * @param array $array
+	 * @param string $name
+	 * @return string
+	 */
+	private function returnArrayCountWithLabel(array $array, string $name): string {
+		$count = count($array);
+		if ($count === 1) {
+			return $count . ' ' . Inflector::humanize(Inflector::singularize($name));
 		}
-		$lastProperty = $propertyPath[Functions::getInstance()->arrayKeyLast($propertyPath)];
-		if (is_array($result)) {
-			$count = count($result);
-			if ($count === 1) {
-				return $count . ' ' . Inflector::humanize(Inflector::singularize($lastProperty));
-			}
-			return $count . ' ' . Inflector::humanize($lastProperty);
-		}
-		if (empty($result->{$property})) {
-			return '';
-		}
-		return $result->{$property};
+		return $count . ' ' . Inflector::humanize($name);
 	}
 
 }
