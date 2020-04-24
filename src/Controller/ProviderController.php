@@ -98,7 +98,7 @@ class ProviderController extends AppController {
 	 * @return mixed
 	 */
 	private function getData(?string $name = null, $default = null) {
-		if ($this->_configBundle->Options->Ajax->getRequestType() === 'POST') {
+		if ($this->_configBundle->Options->getAjaxRequestType() === 'POST') {
 			return $this->getRequest()->getData($name, $default);
 		}
 

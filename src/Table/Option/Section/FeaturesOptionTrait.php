@@ -12,42 +12,14 @@ declare(strict_types = 1);
 namespace DataTables\Table\Option\Section;
 
 use Cake\Error\FatalErrorException;
-use DataTables\Table\Option\ChildOptionAbstract;
-use DataTables\Table\Option\MainOption;
 
 /**
- * Class FeaturesOption
+ * Trait FeaturesOptionTrait
  *
- * Created by allancarvalho in abril 17, 2020
+ * @method mixed|void _getConfig(?string $field = null, $default = null)
+ * @method void _setConfig(string $field, $value, bool $mustPrint = true)
  */
-final class FeaturesOption extends ChildOptionAbstract {
-
-	/**
-	 * @var array
-	 * @inheritDoc
-	 */
-	protected $_mustPrint = [
-		'serverSide' => true,
-	];
-
-	/**
-	 * @var array
-	 * @inheritDoc
-	 */
-	protected $_config = [
-		'autoWidth' => true,
-		'deferRender' => false,
-		'info' => true,
-		'lengthChange' => true,
-		'ordering' => true,
-		'paging' => true,
-		'processing' => false,
-		'scrollX' => false,
-		'scrollY' => null,
-		'searching' => true,
-		'serverSide' => true,
-		'stateSave' => false,
-	];
+trait FeaturesOptionTrait {
 
 	/**
 	 * Checker method.
@@ -67,13 +39,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * amount of time to calculate the widths) if the tables widths are passed in using.
 	 *
 	 * @param bool $autoWidth
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/autoWidth
 	 */
-	public function setAutoWidth(bool $autoWidth): MainOption {
+	public function setAutoWidth(bool $autoWidth): self {
 		$this->_setConfig('autoWidth', $autoWidth);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -116,13 +88,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * how to use jQuery delegated events to handle such a situation.
 	 *
 	 * @param bool $deferRender
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/deferRender
 	 */
-	public function setDeferRender(bool $deferRender): MainOption {
+	public function setDeferRender(bool $deferRender): self {
 		$this->_setConfig('deferRender', $deferRender);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -149,13 +121,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * using dom and CSS).
 	 *
 	 * @param bool $info
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/info
 	 */
-	public function setInfo(bool $info): MainOption {
+	public function setInfo(bool $info): self {
 		$this->_setConfig('info', $info);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -198,13 +170,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * has no relevance when there is no pagination.
 	 *
 	 * @param bool $lengthChange
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/lengthChange
 	 */
-	public function setLengthChange(bool $lengthChange): MainOption {
+	public function setLengthChange(bool $lengthChange): self {
 		$this->_setConfig('lengthChange', $lengthChange);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -235,13 +207,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * by DataTables at all.
 	 *
 	 * @param bool $ordering
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/ordering
 	 */
-	public function setOrdering(bool $ordering): MainOption {
+	public function setOrdering(bool $ordering): self {
 		$this->_setConfig('ordering', $ordering);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -266,13 +238,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * may do so with this parameter.
 	 *
 	 * @param bool $paging
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/paging
 	 */
-	public function setPaging(bool $paging): MainOption {
+	public function setPaging(bool $paging): self {
 		$this->_setConfig('paging', $paging);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -295,13 +267,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * sort the entries.
 	 *
 	 * @param bool $processing
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/processing
 	 */
-	public function setProcessing(bool $processing): MainOption {
+	public function setProcessing(bool $processing): self {
 		$this->_setConfig('processing', $processing);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -330,13 +302,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * CSS unit, or a number (in which case it will be treated as a pixel measurement).
 	 *
 	 * @param bool $scrollX
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/scrollX
 	 */
-	public function setScrollX(bool $scrollX): MainOption {
+	public function setScrollX(bool $scrollX): self {
 		$this->_setConfig('scrollX', $scrollX);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -367,13 +339,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * and is applied to the table body (i.e. it does not take into account the header or footer height directly).
 	 *
 	 * @param string $scrollY
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/scrollY
 	 */
-	public function setScrollY(?string $scrollY): MainOption {
+	public function setScrollY(?string $scrollY): self {
 		$this->_setConfig('scrollY', $scrollY);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -414,13 +386,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * dom option.
 	 *
 	 * @param bool $searching
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/searching
 	 */
-	public function setSearching(bool $searching): MainOption {
+	public function setSearching(bool $searching): self {
 		$this->_setConfig('searching', $searching);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -467,16 +439,16 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * uses is detailed in the DataTables documentation.
 	 *
 	 * @param bool $serverSide
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/serverSide
 	 */
-	public function setServerSide(bool $serverSide): MainOption {
+	public function setServerSide(bool $serverSide): self {
 		if ($serverSide === false) {
 			throw new FatalErrorException("By the plugin business rule, you can't change this option.");
 		}
 		$this->_setConfig('serverSide', $serverSide);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 	/**
@@ -523,13 +495,13 @@ final class FeaturesOption extends ChildOptionAbstract {
 	 * state on the server through Ajax can be used through the stateSaveCallback and stateLoadCallback options.
 	 *
 	 * @param bool $stateSave
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 * @link https://datatables.net/reference/option/stateSave
 	 */
-	public function setStateSave(bool $stateSave): MainOption {
+	public function setStateSave(bool $stateSave): self {
 		$this->_setConfig('stateSave', $stateSave);
 
-		return $this->getMainOption();
+		return $this;
 	}
 
 }

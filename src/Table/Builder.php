@@ -113,7 +113,7 @@ final class Builder {
 		$queryBaseState = static::getInstance()->buildQueryBaseState();
 		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $dataTablesFQN);
 		$dataTables->config($configBundle);
-		$configBundle->Options->Columns->setColumns($columns);
+		$configBundle->Options->setColumns($columns);
 
 		return $configBundle;
 	}

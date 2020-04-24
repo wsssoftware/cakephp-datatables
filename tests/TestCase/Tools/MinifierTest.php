@@ -20,7 +20,7 @@ use DataTables\Tools\Minifier;
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
-class JsTest extends TestCase {
+class MinifierTest extends TestCase {
 
 	/**
 	 * @return void

@@ -12,12 +12,15 @@ declare(strict_types = 1);
 namespace DataTables\Table\Option;
 
 use Cake\Core\Configure;
+use Cake\ORM\Association\HasMany;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
-use DataTables\Table\Option\Section\AjaxOption;
-use DataTables\Table\Option\Section\ColumnsOption;
-use DataTables\Table\Option\Section\FeaturesOption;
-use DataTables\Table\Option\Section\OptionsOption;
+use DataTables\Table\Columns;
+use DataTables\Table\Option\Section\AjaxOptionTrait;
+use DataTables\Table\Option\Section\FeaturesOptionTrait;
+use DataTables\Table\Option\Section\OptionsOptionAOTrait;
+use DataTables\Table\Option\Section\OptionsOptionPZTrait;
+use DataTables\Tools\Functions;
 
 /**
  * Class MainOption
@@ -25,17 +28,80 @@ use DataTables\Table\Option\Section\OptionsOption;
  */
 final class MainOption extends OptionAbstract {
 
-	/**
-	 * @var array
-	 * @inheritDoc
-	 */
-	protected $_mustPrint = [];
+	use AjaxOptionTrait;
+	use FeaturesOptionTrait;
+	use OptionsOptionAOTrait;
+	use OptionsOptionPZTrait;
+
+	const ALLOWED_PAGING_TYPES = [
+		'numbers',
+		'simple',
+		'simple_numbers',
+		'full',
+		'full_numbers',
+		'first_last_numbers',
+	];
 
 	/**
 	 * @var array
 	 * @inheritDoc
 	 */
-	protected $_config = [];
+	protected $_mustPrint = [
+		'ajax.type' => true,
+		'serverSide' => true,
+	];
+
+	/**
+	 * @var array
+	 * @inheritDoc
+	 */
+	protected $_config = [
+		'ajax' => [
+			'url' => null,
+			'type' => 'GET',
+		],
+		'columnDefs' => [],
+		'columns' => [],
+		'autoWidth' => true,
+		'deferRender' => false,
+		'info' => true,
+		'lengthChange' => true,
+		'ordering' => true,
+		'paging' => true,
+		'processing' => false,
+		'scrollX' => false,
+		'scrollY' => null,
+		'searching' => true,
+		'serverSide' => true,
+		'stateSave' => false,
+		'deferLoading' => null,
+		'destroy' => false,
+		'displayStart' => 0,
+		'dom' => 'lfrtip',
+		'lengthMenu' => [10, 25, 50, 100],
+		'order' => [[0, 'asc']],
+		'orderCellsTop' => false,
+		'orderClasses' => true,
+		'orderFixed' => null,
+		'orderMulti' => true,
+		'pageLength' => 10,
+		'pagingType' => 'simple_numbers',
+		'renderer' => null,
+		'retrieve' => false,
+		'rowId' => 'DT_RowId',
+		'scrollCollapse' => false,
+		'search' => [
+			'caseInsensitive' => true,
+			'regex' => false,
+			'search' => null,
+			'smart' => true,
+		],
+		'searchCols' => null,
+		'searchDelay' => null,
+		'stateDuration' => 7200,
+		'stripeClasses' => null,
+		'tabIndex' => 0,
+	];
 
 	/**
 	 * Define if all options will be printed or not.
@@ -45,37 +111,56 @@ final class MainOption extends OptionAbstract {
 	protected $_printAllOptions = false;
 
 	/**
-	 * @var \DataTables\Table\Option\Section\AjaxOption
-	 */
-	public $Ajax;
-
-	/**
-	 * @var \DataTables\Table\Option\Section\FeaturesOption
-	 */
-	public $Features;
-
-	/**
-	 * @var \DataTables\Table\Option\Section\OptionsOption
-	 */
-	public $Options;
-
-	/**
-	 * @var \DataTables\Table\Option\Section\ColumnsOption
-	 */
-	public $Columns;
-
-	/**
 	 * MainOption constructor.
 	 *
 	 * @param string $url
 	 */
 	public function __construct(string $url) {
 		parent::__construct();
-		$this->Ajax = new AjaxOption($this);
-		$this->Features = new FeaturesOption($this);
-		$this->Options = new OptionsOption($this);
-		$this->Columns = new ColumnsOption($this);
 		$this->setConfig('ajax.url', $url);
+	}
+
+	/**
+	 * Setter method.
+	 * Set all columns and defColumns options using a Columns class.
+	 *
+	 * @internal
+	 * @param \DataTables\Table\Columns $columns
+	 * @return $this
+	 * @link https://datatables.net/reference/option/
+	 */
+	public function setColumns(Columns $columns): self {
+		$columnDefs = [
+			'targets' => '_all',
+		];
+		foreach ($columns->Default->getConfig() as $configName => $value) {
+			if (!in_array($configName, ['title'])) {
+				$columnDefs[$configName] = $value;
+			}
+		}
+		$columnsConfig = [];
+		foreach ($columns->getColumns() as $column) {
+			if ($column->isDatabase() === false) {
+				$column->setSearchable(false);
+				$column->setOrderable(false);
+			} else {
+				$association = Functions::getInstance()->getAssociationUsingPath($columns->getDataTables()->getOrmTable(), $column->getAssociationPath());
+				if ($association instanceof HasMany) {
+					$column->setSearchable(false);
+					$column->setOrderable(false);
+				}
+			}
+			$columnItem = [];
+			foreach ($column->getConfig() as $configName => $value) {
+				$columnItem[$configName] = $value;
+			}
+			$columnsConfig[] = $columnItem;
+		}
+
+		$this->_setConfig('columnDefs', [$columnDefs]);
+		$this->_setConfig('columns', $columnsConfig);
+
+		return $this;
 	}
 
 	/**
@@ -95,7 +180,6 @@ final class MainOption extends OptionAbstract {
 	 */
 	public function setPrintAllOptions(bool $printAllOptions): self {
 		$this->_printAllOptions = $printAllOptions;
-
 		return $this;
 	}
 
@@ -109,7 +193,6 @@ final class MainOption extends OptionAbstract {
 		if (!empty($field)) {
 			return Hash::get($this->_mustPrint, $field, null);
 		}
-
 		return $this->_mustPrint;
 	}
 
@@ -122,7 +205,6 @@ final class MainOption extends OptionAbstract {
 	 */
 	public function setMustPrint(string $field, bool $must = true): MainOption {
 		$this->_mustPrint = Hash::insert($this->_mustPrint, $field, $must);
-
 		return $this;
 	}
 
