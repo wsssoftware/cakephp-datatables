@@ -14,7 +14,7 @@ namespace DataTables\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * Class UsersFixture
+ * Class CategoriesFixture
  *
  * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
  * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
