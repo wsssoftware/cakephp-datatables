@@ -141,17 +141,25 @@ final class Column {
 
 	/**
 	 * @param bool $onlyDirty
+	 * @param bool $isDefaultColumn
 	 * @return array
 	 */
-	public function getConfig(bool $onlyDirty = true): array {
-		if ($onlyDirty === false) {
-			return $this->_config;
-		}
+	public function getConfig(bool $onlyDirty = true, bool $isDefaultColumn = false): array {
 		$result = [];
-		foreach ($this->_config as $index => $item) {
-			if ($item !== null) {
-				$result[$index] = $item;
+		if ($onlyDirty === false) {
+			$result = $this->_config;
+		}
+		if (empty($result)) {
+			foreach ($this->_config as $index => $item) {
+				if ($item !== null) {
+					$result[$index] = $item;
+				}
 			}
+		}
+		if ($isDefaultColumn === true) {
+			$result['targets'] = '_all';
+			unset($result['name']);
+			unset($result['title']);
 		}
 		return $result;
 	}

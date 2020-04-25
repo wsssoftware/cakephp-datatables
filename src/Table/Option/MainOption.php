@@ -130,14 +130,6 @@ final class MainOption extends OptionAbstract {
 	 * @link https://datatables.net/reference/option/
 	 */
 	public function setColumns(Columns $columns): self {
-		$columnDefs = [
-			'targets' => '_all',
-		];
-		foreach ($columns->Default->getConfig() as $configName => $value) {
-			if (!in_array($configName, ['title'])) {
-				$columnDefs[$configName] = $value;
-			}
-		}
 		$columnsConfig = [];
 		foreach ($columns->getColumns() as $column) {
 			if ($column->isDatabase() === false) {
@@ -156,10 +148,8 @@ final class MainOption extends OptionAbstract {
 			}
 			$columnsConfig[] = $columnItem;
 		}
-
-		$this->_setConfig('columnDefs', [$columnDefs]);
+		$this->_setConfig('columnDefs', [$columns->Default->getConfig(true, true)]);
 		$this->_setConfig('columns', $columnsConfig);
-
 		return $this;
 	}
 

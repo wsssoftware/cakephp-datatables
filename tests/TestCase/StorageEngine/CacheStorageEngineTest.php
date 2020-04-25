@@ -32,6 +32,13 @@ class CacheStorageEngineTest extends TestCase {
 	use IntegrationTestTrait;
 
 	/**
+	 * @var string[]
+	 */
+	protected $fixtures = [
+		'plugin.DataTables.Categories',
+	];
+
+	/**
 	 * Test subject
 	 *
 	 * @var \DataTables\StorageEngine\CacheStorageEngine

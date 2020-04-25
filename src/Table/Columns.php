@@ -60,11 +60,21 @@ final class Columns {
 	}
 
 	/**
-	 * Return all configured columns.
+	 * Return all configured columns or all table columns if columns is empty.
 	 *
 	 * @return array
 	 */
 	public function getColumns(): array {
+		if (empty($this->_columns)) {
+			$table = $this->getDataTables()->getOrmTable();
+			$columns = [];
+			foreach ($table->getSchema()->columns() as $column) {
+				$columnInfo = $this->normalizeDataTableField("{$table->getAlias()}.$column");
+				$newColumn = new Column("{$columnInfo['table']}.{$columnInfo['column']}", true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
+				$columns[$newColumn->getName()] = $newColumn;
+			}
+			return $columns;
+		}
 		return $this->_columns;
 	}
 
@@ -75,7 +85,7 @@ final class Columns {
 	 * @return \DataTables\Table\Column
 	 */
 	public function getColumnByIndex(int $index): Column {
-		$columns = $this->_columns;
+		$columns = $this->getColumns();
 		$columns = array_values($columns);
 
 		return $columns[$index];
