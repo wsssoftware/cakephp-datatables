@@ -39,5 +39,5 @@ In `templates/layout/default.php`:
 </body>
 </html>
 ```
-> You will need fetch `css` and `script` if you are using the DataTables plugin resources autoload. If you intent load manually the files, you can skip this step. The `renderJs()` must stay at bottom of fetch script.
+> You will need fetch `css` and `script` if you are using the DataTables plugin resources autoload. If you intent load manually the files, you can skip fetch. The `renderJs()` must stay at bottom of `fetch('script')`.
 
