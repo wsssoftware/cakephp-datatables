@@ -78,7 +78,7 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testColumns() {
-		$mainOption = new MainOption('abc');
+		$mainOption = new MainOption('Categories', 'abc');
 		$this->Columns->addNonDatabaseColumn('action');
 		$mainOption->setColumns($this->Columns);
 		$this->assertEquals(2, count($mainOption->getConfig('columns')));

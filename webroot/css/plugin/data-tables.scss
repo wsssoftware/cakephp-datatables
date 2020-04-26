@@ -1,0 +1,26 @@
+/*!
+ * Copyright (c) Allan Carvalho 2020.
+ * Under Mit License
+ *
+ * link:     https://github.com/wsssoftware/cakephp-data-renderer
+ * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ */
+
+
+.data-tables-plugin.auto-loaded {
+    color: rgb(231, 172, 54);
+    font-weight: bold;
+    animation:data-tables-blinking 1.2s infinite;
+    @keyframes data-tables-blinking{
+        10% {
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 0;
+        }
+    }
+}

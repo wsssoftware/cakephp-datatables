@@ -241,6 +241,7 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 		if ($this->_enabled === false) {
 			return;
 		}
+		$view->Html->css('DataTables.plugin/data-tables.min.css', ['block' => $this->getCssBlock()]);
 		$toRender = $this->getList();
 		foreach ($toRender['css'] as $css) {
 			$view->Html->css("DataTables.{$this->getDataTablesVersion()}/$css", ['block' => $this->getCssBlock()]);

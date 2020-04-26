@@ -17,6 +17,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use DataTables\Table\Columns;
 use DataTables\Table\Option\Section\AjaxOptionTrait;
+use DataTables\Table\Option\Section\CallBacksTrait;
 use DataTables\Table\Option\Section\FeaturesOptionTrait;
 use DataTables\Table\Option\Section\OptionsOptionAOTrait;
 use DataTables\Table\Option\Section\OptionsOptionPZTrait;
@@ -29,6 +30,7 @@ use DataTables\Tools\Functions;
 final class MainOption extends OptionAbstract {
 
 	use AjaxOptionTrait;
+	use CallBacksTrait;
 	use FeaturesOptionTrait;
 	use OptionsOptionAOTrait;
 	use OptionsOptionPZTrait;
@@ -41,6 +43,11 @@ final class MainOption extends OptionAbstract {
 		'full_numbers',
 		'first_last_numbers',
 	];
+
+	/**
+	 * @var string
+	 */
+	protected $_dataTableName = '';
 
 	/**
 	 * @var array
@@ -111,12 +118,19 @@ final class MainOption extends OptionAbstract {
 	protected $_printAllOptions = false;
 
 	/**
+	 * @var array
+	 */
+	protected $_callbackReplaces = [];
+
+	/**
 	 * MainOption constructor.
 	 *
+	 * @param string $dataTablesName
 	 * @param string $url
 	 */
-	public function __construct(string $url) {
+	public function __construct(string $dataTablesName, string $url) {
 		parent::__construct();
+		$this->_dataTableName = $dataTablesName;
 		$this->setConfig('ajax.url', $url);
 	}
 
@@ -235,7 +249,13 @@ final class MainOption extends OptionAbstract {
 			$options = JSON_PRETTY_PRINT;
 		}
 
-		return json_encode($this->getConfigAsArray($printAllOptions), $options);
+		$json = json_encode($this->getConfigAsArray($printAllOptions), $options);
+		foreach ($this->_callbackReplaces as $key => $callbackReplace) {
+			$start = strpos($json, $key) - 1;
+			$length = strlen($key) + 2;
+			$json = substr_replace($json, $callbackReplace, $start, $length);
+		}
+		return $json;
 	}
 
 	/**

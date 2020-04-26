@@ -14,6 +14,7 @@ namespace DataTables\Table\Option\CallBack;
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
+use DataTables\Tools\Functions;
 use DataTables\Tools\Validator;
 use InvalidArgumentException;
 use Twig\Environment;
@@ -73,15 +74,14 @@ final class MainCallBack {
 	 *
 	 * @param string $callbackName
 	 * @param string $dataTablesName
-	 * @param string $config
 	 */
-	public function __construct(string $callbackName, string $dataTablesName, string $config) {
+	public function __construct(string $callbackName, string $dataTablesName) {
 		$basePath = Configure::read('DataTables.resources.templates');
 		if (substr($basePath, -1, 1) !== DS) {
 			$basePath .= DS;
 		}
 		$this->_callbackName = $this->_callbackNamePrefix . $callbackName . $this->_ext;
-		$this->_appTemplateFolder = $basePath . $dataTablesName . DS . $config . DS;
+		$this->_appTemplateFolder = $basePath . $dataTablesName . DS;
 		$this->_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'twig' . DS . 'js' . DS . 'functions' . DS;
 		$this->_twigLoader = new FilesystemLoader();
 		$this->_twig = new Environment($this->_twigLoader);
@@ -96,17 +96,15 @@ final class MainCallBack {
 	 * Return a instance of builder object.
 	 *
 	 * @param string $callBack
-	 * @param string $tablesName
-	 * @param string $config
+	 * @param string $dataTablesName
 	 * @return \DataTables\Table\Option\CallBack\MainCallBack
 	 */
-	public static function getInstance(string $callBack, string $tablesName, string $config): MainCallBack {
+	public static function getInstance(string $callBack, string $dataTablesName): MainCallBack {
 		$callBack = Inflector::underscore($callBack);
-		$tablesName = Inflector::camelize($tablesName);
-		$config = Inflector::underscore($config);
-		$md5 = md5($callBack . $tablesName . $config);
+		$dataTablesName = Inflector::camelize($dataTablesName);
+		$md5 = md5($callBack . $dataTablesName);
 		if (empty(static::$instance[$md5])) {
-			static::$instance[$md5] = new self($callBack, $tablesName, $config);
+			static::$instance[$md5] = new self($callBack, $dataTablesName);
 		}
 		return static::$instance[$md5];
 	}
@@ -132,7 +130,7 @@ final class MainCallBack {
 	 * @throws \Twig\Error\SyntaxError
 	 * @link https://twig.symfony.com/doc/3.x/api.html
 	 */
-	public function render($bodyOrParams = []) {
+	public function render($bodyOrParams = []): string {
 		if (is_array($bodyOrParams)) {
 			$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_callbackName);
 			Validator::getInstance()->checkKeysValueTypesOrFail($bodyOrParams, 'string', '*');
@@ -145,7 +143,8 @@ final class MainCallBack {
 		}
 		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_callbackName);
 		$this->_twigLoader->setPaths($this->_pluginTemplateFolder);
-		return $this->_twig->render($this->_callbackName, compact('body'));
+		$result = $this->_twig->render($this->_callbackName, compact('body'));
+		return Functions::getInstance()->increaseTabOnString($result, 1, true);
 	}
 
 	/**

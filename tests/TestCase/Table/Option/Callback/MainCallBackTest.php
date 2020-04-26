@@ -56,7 +56,7 @@ class MainCallBackTest extends TestCase {
 	 */
 	public function testWithFile() {
 		MainCallBack::destroyAllInstances();
-		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories', 'main');
+		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories');
 		$this->assertNotEmpty($createdCellCallback->render());
 	}
 
@@ -68,7 +68,7 @@ class MainCallBackTest extends TestCase {
 	 */
 	public function testWithBody() {
 		MainCallBack::destroyAllInstances();
-		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories', 'main');
+		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories');
 		$this->assertNotEmpty($createdCellCallback->render('abc'));
 	}
 
@@ -81,7 +81,7 @@ class MainCallBackTest extends TestCase {
 	public function testWithCache() {
 		MainCallBack::destroyAllInstances();
 		Configure::write('debug', false);
-		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories', 'main');
+		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories');
 		$this->assertNotEmpty($createdCellCallback->render('abc'));
 	}
 
@@ -94,7 +94,7 @@ class MainCallBackTest extends TestCase {
 	public function testAppTemplateNotFound() {
 		MainCallBack::destroyAllInstances();
 		$this->expectException(FatalErrorException::class);
-		MainCallBack::getInstance('abc', 'Categories', 'main')->render();
+		MainCallBack::getInstance('abc', 'Categories')->render();
 	}
 
 	/**
@@ -106,7 +106,7 @@ class MainCallBackTest extends TestCase {
 	public function testPluginTemplateNotFound() {
 		MainCallBack::destroyAllInstances();
 		$this->expectException(FatalErrorException::class);
-		MainCallBack::getInstance('abc', 'Categories', 'main')->render('abc');
+		MainCallBack::getInstance('abc', 'Categories')->render('abc');
 	}
 
 	/**
@@ -118,7 +118,7 @@ class MainCallBackTest extends TestCase {
 	public function testInvalidBodyOrParams1() {
 		MainCallBack::destroyAllInstances();
 		$this->expectException(InvalidArgumentException::class);
-		MainCallBack::getInstance('createdCell', 'Categories', 'main')->render(3);
+		MainCallBack::getInstance('createdCell', 'Categories')->render(3);
 	}
 
 	/**
@@ -130,7 +130,7 @@ class MainCallBackTest extends TestCase {
 	public function testInvalidBodyOrParams2() {
 		MainCallBack::destroyAllInstances();
 		$this->expectException(InvalidArgumentException::class);
-		MainCallBack::getInstance('createdCell', 'Categories', 'main')->render(true);
+		MainCallBack::getInstance('createdCell', 'Categories')->render(true);
 	}
 
 }

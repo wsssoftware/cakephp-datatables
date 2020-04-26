@@ -109,7 +109,7 @@ final class Builder {
 			'plugin' => 'DataTables',
 			'prefix' => false,
 		]);
-		$options = static::getInstance()->buildOptions($url);
+		$options = static::getInstance()->buildOptions($dataTables->getAlias(), $url);
 		$queryBaseState = static::getInstance()->buildQueryBaseState();
 		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $dataTablesFQN);
 		$dataTables->config($configBundle);
@@ -178,11 +178,12 @@ final class Builder {
 	/**
 	 * Get the JsOptions class used in the DataTables table.
 	 *
+	 * @param string $dataTablesName
 	 * @param string $url
 	 * @return \DataTables\Table\Option\MainOption
 	 */
-	private function buildOptions(string $url): MainOption {
-		return new MainOption($url);
+	private function buildOptions(string $dataTablesName, string $url): MainOption {
+		return new MainOption($dataTablesName, $url);
 	}
 
 	/**

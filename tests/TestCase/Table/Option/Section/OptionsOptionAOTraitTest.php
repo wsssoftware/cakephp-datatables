@@ -38,7 +38,7 @@ class OptionsOptionAOTraitTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$this->MainOption = new MainOption('abc');
+		$this->MainOption = new MainOption('Categories', 'abc');
 	}
 
 	/**
