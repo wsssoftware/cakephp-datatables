@@ -14,7 +14,7 @@ use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
-use DataTables\Table\Option\CallBack\MainCallBack;
+use DataTables\Table\Option\CallBack\CallBackFactory;
 use InvalidArgumentException;
 use TestApp\Application;
 
@@ -55,8 +55,8 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testWithFile() {
-		MainCallBack::destroyAllInstances();
-		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories');
+		CallBackFactory::destroyAllInstances();
+		$createdCellCallback = CallBackFactory::getInstance('createdCell', 'Categories');
 		$this->assertNotEmpty($createdCellCallback->render());
 	}
 
@@ -67,8 +67,8 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testWithBody() {
-		MainCallBack::destroyAllInstances();
-		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories');
+		CallBackFactory::destroyAllInstances();
+		$createdCellCallback = CallBackFactory::getInstance('createdCell', 'Categories');
 		$this->assertNotEmpty($createdCellCallback->render('abc'));
 	}
 
@@ -79,9 +79,9 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testWithCache() {
-		MainCallBack::destroyAllInstances();
+		CallBackFactory::destroyAllInstances();
 		Configure::write('debug', false);
-		$createdCellCallback = MainCallBack::getInstance('createdCell', 'Categories');
+		$createdCellCallback = CallBackFactory::getInstance('createdCell', 'Categories');
 		$this->assertNotEmpty($createdCellCallback->render('abc'));
 	}
 
@@ -92,9 +92,9 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testAppTemplateNotFound() {
-		MainCallBack::destroyAllInstances();
+		CallBackFactory::destroyAllInstances();
 		$this->expectException(FatalErrorException::class);
-		MainCallBack::getInstance('abc', 'Categories')->render();
+		CallBackFactory::getInstance('abc', 'Categories')->render();
 	}
 
 	/**
@@ -104,9 +104,9 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testPluginTemplateNotFound() {
-		MainCallBack::destroyAllInstances();
+		CallBackFactory::destroyAllInstances();
 		$this->expectException(FatalErrorException::class);
-		MainCallBack::getInstance('abc', 'Categories')->render('abc');
+		CallBackFactory::getInstance('abc', 'Categories')->render('abc');
 	}
 
 	/**
@@ -116,9 +116,9 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testInvalidBodyOrParams1() {
-		MainCallBack::destroyAllInstances();
+		CallBackFactory::destroyAllInstances();
 		$this->expectException(InvalidArgumentException::class);
-		MainCallBack::getInstance('createdCell', 'Categories')->render(3);
+		CallBackFactory::getInstance('createdCell', 'Categories')->render(3);
 	}
 
 	/**
@@ -128,9 +128,9 @@ class MainCallBackTest extends TestCase {
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testInvalidBodyOrParams2() {
-		MainCallBack::destroyAllInstances();
+		CallBackFactory::destroyAllInstances();
 		$this->expectException(InvalidArgumentException::class);
-		MainCallBack::getInstance('createdCell', 'Categories')->render(true);
+		CallBackFactory::getInstance('createdCell', 'Categories')->render(true);
 	}
 
 }

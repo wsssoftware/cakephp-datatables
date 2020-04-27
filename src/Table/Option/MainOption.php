@@ -16,8 +16,8 @@ use Cake\ORM\Association\HasMany;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use DataTables\Table\Columns;
+use DataTables\Table\Option\CallBack\CallBacksTrait;
 use DataTables\Table\Option\Section\AjaxOptionTrait;
-use DataTables\Table\Option\Section\CallBacksTrait;
 use DataTables\Table\Option\Section\FeaturesOptionTrait;
 use DataTables\Table\Option\Section\OptionsOptionAOTrait;
 use DataTables\Table\Option\Section\OptionsOptionPZTrait;
@@ -67,42 +67,43 @@ final class MainOption extends OptionAbstract {
 			'url' => null,
 			'type' => 'GET',
 		],
+		'autoWidth' => true,
+		'createdRow' => null,
 		'columnDefs' => [],
 		'columns' => [],
-		'autoWidth' => true,
-		'deferRender' => false,
-		'info' => true,
-		'lengthChange' => true,
-		'ordering' => true,
-		'paging' => true,
-		'processing' => false,
-		'scrollX' => false,
-		'scrollY' => null,
-		'searching' => true,
-		'serverSide' => true,
-		'stateSave' => false,
 		'deferLoading' => null,
+		'deferRender' => false,
 		'destroy' => false,
 		'displayStart' => 0,
 		'dom' => 'lfrtip',
+		'info' => true,
+		'lengthChange' => true,
 		'lengthMenu' => [10, 25, 50, 100],
 		'order' => [[0, 'asc']],
 		'orderCellsTop' => false,
 		'orderClasses' => true,
 		'orderFixed' => null,
+		'ordering' => true,
 		'orderMulti' => true,
 		'pageLength' => 10,
+		'paging' => true,
 		'pagingType' => 'simple_numbers',
+		'processing' => false,
 		'renderer' => null,
 		'retrieve' => false,
 		'rowId' => 'DT_RowId',
-		'scrollCollapse' => false,
+		'scrollX' => false,
+		'scrollY' => null,
 		'search' => [
 			'caseInsensitive' => true,
 			'regex' => false,
 			'search' => null,
 			'smart' => true,
 		],
+		'searching' => true,
+		'serverSide' => true,
+		'stateSave' => false,
+		'scrollCollapse' => false,
 		'searchCols' => null,
 		'searchDelay' => null,
 		'stateDuration' => 7200,
@@ -253,6 +254,7 @@ final class MainOption extends OptionAbstract {
 		foreach ($this->_callbackReplaces as $key => $callbackReplace) {
 			$start = strpos($json, $key) - 1;
 			$length = strlen($key) + 2;
+			$callbackReplace = Functions::getInstance()->increaseTabOnString($callbackReplace, 1, true);
 			$json = substr_replace($json, $callbackReplace, $start, $length);
 		}
 		return $json;

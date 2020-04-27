@@ -9,10 +9,9 @@
  */
 declare(strict_types = 1);
 
-namespace DataTables\Table\Option\Section;
+namespace DataTables\Table\Option\CallBack;
 
 use Cake\Utility\Inflector;
-use DataTables\Table\Option\CallBack\MainCallBack;
 
 /**
  * Trait CallBacksTrait
@@ -46,7 +45,7 @@ trait CallBacksTrait {
 	 * @return $this
 	 */
 	public function callbackCreatedRow($bodyOrParams = []): self {
-		$result = MainCallBack::getInstance('createdRow', $this->_dataTableName)->render($bodyOrParams);
+		$result = CallBackFactory::getInstance('createdRow', $this->_dataTableName)->render($bodyOrParams);
 		$callBackTag = $this->getCallBackReplaceTag(__FUNCTION__);
 		$this->_callbackReplaces[$callBackTag] = $result;
 		$this->_setConfig('createdRow', $callBackTag);

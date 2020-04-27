@@ -14,7 +14,6 @@ namespace DataTables\Table\Option\CallBack;
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
-use DataTables\Tools\Functions;
 use DataTables\Tools\Validator;
 use InvalidArgumentException;
 use Twig\Environment;
@@ -25,7 +24,7 @@ use Twig\Loader\FilesystemLoader;
  *
  * Created by allancarvalho in abril 17, 2020
  */
-final class MainCallBack {
+final class CallBackFactory {
 
 	/**
 	 * @var string
@@ -97,9 +96,9 @@ final class MainCallBack {
 	 *
 	 * @param string $callBack
 	 * @param string $dataTablesName
-	 * @return \DataTables\Table\Option\CallBack\MainCallBack
+	 * @return \DataTables\Table\Option\CallBack\CallBackFactory
 	 */
-	public static function getInstance(string $callBack, string $dataTablesName): MainCallBack {
+	public static function getInstance(string $callBack, string $dataTablesName): CallBackFactory {
 		$callBack = Inflector::underscore($callBack);
 		$dataTablesName = Inflector::camelize($dataTablesName);
 		$md5 = md5($callBack . $dataTablesName);
@@ -143,8 +142,7 @@ final class MainCallBack {
 		}
 		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_callbackName);
 		$this->_twigLoader->setPaths($this->_pluginTemplateFolder);
-		$result = $this->_twig->render($this->_callbackName, compact('body'));
-		return Functions::getInstance()->increaseTabOnString($result, 1, true);
+		return $this->_twig->render($this->_callbackName, compact('body'));
 	}
 
 	/**
