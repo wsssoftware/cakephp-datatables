@@ -17,6 +17,8 @@ use Cake\Utility\Hash;
  * Class OptionAbstract
  *
  * Created by allancarvalho in abril 17, 2020
+ *
+ * @method mixed|void setMustPrint(string $field, bool $must = true)
  */
 abstract class OptionAbstract {
 
@@ -48,9 +50,6 @@ abstract class OptionAbstract {
 	 * @return mixed|void A value if exists or null.
 	 */
 	protected function _getConfig(?string $field = null, $default = null) {
-		if ($this instanceof ChildOptionAbstract) {
-			return $this->getMainOption()->getConfig($field, $default);
-		}
 		if (!empty($field)) {
 			return Hash::get($this->_config, $field, $default);
 		}
@@ -66,13 +65,9 @@ abstract class OptionAbstract {
 	 * @return void
 	 */
 	protected function _setConfig(string $field, $value, bool $mustPrint = true): void {
-		if ($this instanceof MainOption) {
-			$this->_config = Hash::insert($this->_config, $field, $value);
-			if ($mustPrint === true) {
-				$this->setMustPrint($field, true);
-			}
-		} elseif ($this instanceof ChildOptionAbstract) {
-			$this->getMainOption()->setConfig($field, $value, $mustPrint);
+		$this->_config = Hash::insert($this->_config, $field, $value);
+		if ($mustPrint === true) {
+			$this->setMustPrint($field, true);
 		}
 	}
 

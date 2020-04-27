@@ -35,6 +35,7 @@ class ArticlesDataTables extends DataTables {
 	 * @inheritDoc
 	 */
 	public function config(ConfigBundle $configBundle): void {
+		parent::config($configBundle);
 		$configBundle->Columns->addDatabaseColumn('Articles.id');
 		$configBundle->Columns->addDatabaseColumn('Articles.title');
 		$configBundle->Columns->addDatabaseColumn('Articles.message');
@@ -48,6 +49,7 @@ class ArticlesDataTables extends DataTables {
 	 * @inheritDoc
 	 */
 	public function rowRenderer(DataTablesView $appView, EntityInterface $entity, Renderer $renderer) {
+		parent::rowRenderer($appView, $entity, $renderer);
 		$renderer->add('Users.name', $entity->user->name);
 		$renderer->add('Articles.id', $entity->id);
 		$renderer->add('Articles.modified', $entity->modified);

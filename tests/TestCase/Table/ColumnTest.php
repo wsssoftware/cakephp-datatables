@@ -50,11 +50,11 @@ class ColumnTest extends TestCase {
 		parent::setUp();
 		/** @var \DataTables\Table\DataTables $tables */
 		$tables = $this->getMockBuilder(DataTables::class)
-			->setMockClassName('ArticlesDataTables')
+			->setMockClassName('UsersDataTables')
 			->getMockForAbstractClass();
 		$tables->getOrmTable()->addAssociations([
-			'belongsTo' => [
-				'Users',
+			'hasMany' => [
+				'Articles',
 			],
 		]);
 		$this->Columns = new Columns($tables);
@@ -78,10 +78,11 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testColumns() {
-		$mainOption = new MainOption('Categories', 'abc');
+		$mainOption = new MainOption('Users', 'abc');
 		$this->Columns->addNonDatabaseColumn('action');
+		$this->Columns->addDatabaseColumn('Articles.id');
 		$mainOption->setColumns($this->Columns);
-		$this->assertEquals(2, count($mainOption->getConfig('columns')));
+		$this->assertEquals(3, count($mainOption->getConfig('columns')));
 	}
 
 	/**

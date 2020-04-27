@@ -80,6 +80,7 @@ class RendererTest extends TestCase {
 	 * setUp method
 	 *
 	 * @return void
+	 * @throws \ReflectionException
 	 */
 	public function setUp(): void {
 		parent::setUp();

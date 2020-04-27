@@ -36,6 +36,7 @@ class UsersDataTables extends DataTables {
 	 * @return void
 	 */
 	public function config(ConfigBundle $configBundle): void {
+		parent::config($configBundle);
 		$configBundle->Columns->addDatabaseColumn('Users.id');
 		$configBundle->Columns->addDatabaseColumn('Users.name');
 		$configBundle->Columns->addDatabaseColumn('Articles.id');
@@ -47,6 +48,7 @@ class UsersDataTables extends DataTables {
 	 * @inheritDoc
 	 */
 	public function rowRenderer(DataTablesView $appView, EntityInterface $entity, Renderer $renderer) {
+		parent::rowRenderer($appView, $entity, $renderer);
 		$renderer->add('Users.id', $entity->id);
 		$renderer->add('Articles.id', count($entity->articles));
 	}

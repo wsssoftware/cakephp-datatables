@@ -60,6 +60,77 @@ final class Columns {
 	}
 
 	/**
+	 * Add a database column to DataTables table.
+	 *
+	 * @param string $dataBaseField Database field name.
+	 * @param int|null $index Position to insert new column.
+	 * @return \DataTables\Table\Column
+	 */
+	public function addDatabaseColumn(string $dataBaseField, ?int $index = null): Column {
+		$columnInfo = $this->normalizeDataTableField($dataBaseField);
+		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
+		return $this->saveColumn($column, $index);
+	}
+
+	/**
+	 * Add a non database column to DataTables table.
+	 *
+	 * @param string $label
+	 * @param int|null $index Position to insert new column.
+	 * @return \DataTables\Table\Column
+	 */
+	public function addNonDatabaseColumn(string $label, ?int $index = null): Column {
+		if (preg_match('/[^A-Za-z0-9]+/', $label)) {
+			throw new InvalidArgumentException("On non databases fields, you must use only alphanumeric chars. Found: $label.");
+		}
+		$column = new Column($label, false);
+
+		return $this->saveColumn($column, $index);
+	}
+
+	/**
+	 * Save the column on array.
+	 *
+	 * @param \DataTables\Table\Column $column
+	 * @param int|null $index Position to insert new column.
+	 * @return \DataTables\Table\Column
+	 */
+	private function saveColumn(Column $column, ?int $index = null): Column {
+		foreach ($this->_columns as $key => $savedColumn) {
+			if ($savedColumn->getName() === $column->getName()) {
+				throw new FatalErrorException("Column '{$column->getName()}' already exist in index $key.");
+			}
+		}
+		if ($index === null) {
+			$this->_columns[$column->getName()] = $column;
+		} else {
+			$this->_columns = array_merge(array_slice($this->_columns, 0, $index), [$column->getName() => $column], array_slice($this->_columns, $index));
+		}
+
+		return $column;
+	}
+
+	/**
+	 * Change the index from some created column.
+	 *
+	 * @param string $columnName
+	 * @param int $index
+	 * @return void
+	 */
+	public function changeColumnIndex(string $columnName, int $index) {
+		if (!empty($this->_columns[$columnName])) {
+			$columnIndex = $columnName;
+		}
+		if (empty($columnIndex)) {
+			$columnInfo = $this->normalizeDataTableField($columnName);
+			$columnIndex = "{$columnInfo['table']}.{$columnInfo['column']}";
+		}
+		$column = [$this->_columns[$columnIndex]->getName() => $this->_columns[$columnIndex]];
+		unset($this->_columns[$columnIndex]);
+		$this->_columns = array_merge(array_slice($this->_columns, 0, $index), $column, array_slice($this->_columns, $index));
+	}
+
+	/**
 	 * Return all configured columns or all table columns if columns is empty.
 	 *
 	 * @return array
@@ -76,6 +147,23 @@ final class Columns {
 			return $columns;
 		}
 		return $this->_columns;
+	}
+
+	/**
+	 * Return a column if exists.
+	 *
+	 * @param string $columnName
+	 * @return \DataTables\Table\Column
+	 */
+	public function getColumn(string $columnName): Column {
+		if (!empty($this->_columns[$columnName])) {
+			$columnIndex = $columnName;
+		}
+		if (empty($columnIndex)) {
+			$columnInfo = $this->normalizeDataTableField($columnName);
+			$columnIndex = "{$columnInfo['table']}.{$columnInfo['column']}";
+		}
+		return $this->_columns[$columnIndex];
 	}
 
 	/**
@@ -102,47 +190,29 @@ final class Columns {
 	}
 
 	/**
-	 * Add a database column to DataTables table.
+	 * Delete a columns with provided name.
 	 *
-	 * @param string $dataBaseField
-	 * @return \DataTables\Table\Column
+	 * @param string $columnName
+	 * @return void
 	 */
-	public function addDatabaseColumn(string $dataBaseField): Column {
-		$columnInfo = $this->normalizeDataTableField($dataBaseField);
-		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
-		return $this->saveColumn($column);
+	public function deleteColumn(string $columnName): void {
+		if (!empty($this->_columns[$columnName])) {
+			$columnIndex = $columnName;
+		}
+		if (empty($columnIndex)) {
+			$columnInfo = $this->normalizeDataTableField($columnName);
+			$columnIndex = "{$columnInfo['table']}.{$columnInfo['column']}";
+		}
+		unset($this->_columns[$columnIndex]);
 	}
 
 	/**
-	 * Add a non database column to DataTables table.
+	 * Delete all configured columns
 	 *
-	 * @param string $label
-	 * @return \DataTables\Table\Column
+	 * @return void
 	 */
-	public function addNonDatabaseColumn(string $label): Column {
-		if (preg_match('/[^A-Za-z0-9]+/', $label)) {
-			throw new InvalidArgumentException("On non databases fields, you must use only alphanumeric chars. Found: $label.");
-		}
-		$column = new Column($label, false);
-
-		return $this->saveColumn($column);
-	}
-
-	/**
-	 * Save the column on array.
-	 *
-	 * @param \DataTables\Table\Column $column
-	 * @return \DataTables\Table\Column
-	 */
-	private function saveColumn(Column $column): Column {
-		foreach ($this->_columns as $key => $savedColumn) {
-			if ($savedColumn->getName() === $column->getName()) {
-				throw new FatalErrorException("Column '{$column->getName()}' already exist in index $key.");
-			}
-		}
-		$this->_columns[$column->getName()] = $column;
-
-		return $column;
+	public function deleteAllColumns(): void {
+		$this->_columns = [];
 	}
 
 	/**
@@ -156,10 +226,10 @@ final class Columns {
 		$explodedDataBaseField = explode('.', $dataBaseField);
 		if (count($explodedDataBaseField) === 2) {
 			$table = Inflector::camelize($explodedDataBaseField[0]);
-			$column = Inflector::dasherize($explodedDataBaseField[1]);
+			$column = Inflector::underscore($explodedDataBaseField[1]);
 		} elseif (count($explodedDataBaseField) == 1) {
 			$table = Inflector::camelize($ormTable->getAlias());
-			$column = Inflector::dasherize($explodedDataBaseField[0]);
+			$column = Inflector::underscore($explodedDataBaseField[0]);
 		} else {
 			throw new InvalidArgumentException("$dataBaseField is a invalid \$dataBaseField.");
 		}

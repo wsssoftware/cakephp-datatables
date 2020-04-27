@@ -33,6 +33,7 @@ class CategoriesDataTables extends DataTables {
 	 * @return void
 	 */
 	public function config(ConfigBundle $configBundle): void {
+		parent::config($configBundle);
 		$configBundle->Columns->addDatabaseColumn('Categories.id');
 		$configBundle->Columns->addDatabaseColumn('Categories.name');
 		$configBundle->Columns->addDatabaseColumn('Categories.created');

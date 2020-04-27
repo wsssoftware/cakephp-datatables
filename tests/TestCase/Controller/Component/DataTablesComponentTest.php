@@ -8,6 +8,8 @@ use Cake\Controller\Controller;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\ORM\Query;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -72,36 +74,16 @@ class DataTablesComponentTest extends TestCase {
 	 * @return void
 	 * @throws \ReflectionException
 	 */
-	public function testInstanceOfColumns() {
-		static::assertInstanceOf(Columns::class, $this->DataTables->getColumns(CategoriesDataTables::class));
-	}
-
-	/**
-	 * @return void
-	 * @throws \ReflectionException
-	 */
-	public function testInstanceOfMainOption() {
-		static::assertInstanceOf(MainOption::class, $this->DataTables->getOptions(CategoriesDataTables::class));
-	}
-
-	/**
-	 * @return void
-	 * @throws \ReflectionException
-	 */
-	public function testInstanceOfQueryBaseState() {
-		static::assertInstanceOf(QueryBaseState::class, $this->DataTables->getQuery(CategoriesDataTables::class));
-	}
-
-	/**
-	 * @return void
-	 * @throws \ReflectionException
-	 */
 	public function testSaveInSessionColumns() {
+		$columns = $this->DataTables->getColumns(CategoriesDataTables::class);
+		static::assertInstanceOf(Columns::class, $columns);
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
-		$this->DataTables->getColumns(CategoriesDataTables::class)->addNonDatabaseColumn('abc');
+		$columns->addNonDatabaseColumn('abc');
 		EventManager::instance()->dispatch('Controller.beforeRender');
 		static::assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.columns.$md5"));
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
+		//$this->assertTrue($configBundle->Options->isProcessing());
 	}
 
 	/**
@@ -109,11 +91,15 @@ class DataTablesComponentTest extends TestCase {
 	 * @throws \ReflectionException
 	 */
 	public function testSaveInSessionOptions() {
+		$options = $this->DataTables->getOptions(CategoriesDataTables::class);
+		static::assertInstanceOf(MainOption::class, $options);
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
-		$this->DataTables->getOptions(CategoriesDataTables::class)->setProcessing(true);
+		$options->setProcessing(true);
 		EventManager::instance()->dispatch('Controller.beforeRender');
 		static::assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.options.$md5"));
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
+		$this->assertTrue($configBundle->Options->isProcessing());
 	}
 
 	/**
@@ -121,11 +107,17 @@ class DataTablesComponentTest extends TestCase {
 	 * @throws \ReflectionException
 	 */
 	public function testSaveInSessionQuery() {
+		$query = $this->DataTables->getQuery(CategoriesDataTables::class);
+		static::assertInstanceOf(QueryBaseState::class, $query);
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
-		$this->DataTables->getQuery(CategoriesDataTables::class)->where(['id' => 1]);
+		$query->contain(['Abc']);
 		EventManager::instance()->dispatch('Controller.beforeRender');
 		static::assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.query.$md5"));
+		$query = TableRegistry::getTableLocator()->get('Categories')->find();
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
+		$configBundle->Query->mergeWithQuery($query);
+		$this->assertTrue(isset($query->getContain()['Abc']));
 	}
 
 }

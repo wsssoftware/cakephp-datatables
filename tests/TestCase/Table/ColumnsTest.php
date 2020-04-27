@@ -11,10 +11,15 @@
 namespace DataTables\Test\TestCase\Table;
 
 use Cake\Error\FatalErrorException;
+use Cake\Http\ServerRequest;
+use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
+use DataTables\Plugin;
+use DataTables\Table\Builder;
 use DataTables\Table\Columns;
-use DataTables\Table\DataTables;
 use InvalidArgumentException;
+use TestApp\Application;
 
 /**
  * Class ColumnsTest
@@ -47,16 +52,17 @@ class ColumnsTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		/** @var \DataTables\Table\DataTables $tables */
-		$tables = $this->getMockBuilder(DataTables::class)
-			->setMockClassName('ArticlesDataTables')
-			->getMockForAbstractClass();
-		$tables->getOrmTable()->addAssociations([
+		$plugin = new Plugin();
+		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
+		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
 			'belongsTo' => [
 				'Users',
 			],
 		]);
-		$this->Columns = new Columns($tables);
+		$articles = Builder::getInstance()->getConfigBundle('Articles');
+		$this->Columns = $articles->Columns;
 	}
 
 	/**
@@ -74,10 +80,12 @@ class ColumnsTest extends TestCase {
 	 * @return void
 	 */
 	public function testNonDatabaseColumn() {
+		$count = count($this->Columns->getColumns()) + 4;
 		$this->Columns->addNonDatabaseColumn('abc');
 		$this->Columns->addNonDatabaseColumn('abc2');
 		$this->Columns->addNonDatabaseColumn('abc3');
-		$this->assertEquals(3, count($this->Columns->getColumns()));
+		$this->Columns->addDatabaseColumn('modified');
+		$this->assertEquals($count, count($this->Columns->getColumns()));
 		$this->expectException(FatalErrorException::class);
 		$this->Columns->addNonDatabaseColumn('abc');
 	}
@@ -86,10 +94,6 @@ class ColumnsTest extends TestCase {
 	 * @return void
 	 */
 	public function testDatabaseColumn() {
-		$this->loadFixtures();
-		$this->Columns->addDatabaseColumn('Articles.id');
-		$this->Columns->addDatabaseColumn('created');
-		$this->Columns->addDatabaseColumn('Articles.title');
 		$this->expectException(InvalidArgumentException::class);
 		$this->Columns->addDatabaseColumn('Articles.abc');
 	}
@@ -97,8 +101,14 @@ class ColumnsTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testGetColumnNameByIndex() {
+		$this->assertEquals('Articles.id', $this->Columns->getColumnNameByIndex(0));
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testInvalidColumn1() {
-		$this->loadFixtures();
 		$this->expectException(InvalidArgumentException::class);
 		$this->Columns->addDatabaseColumn('Articles.id.id');
 	}
@@ -107,7 +117,6 @@ class ColumnsTest extends TestCase {
 	 * @return void
 	 */
 	public function testInvalidColumn2() {
-		$this->loadFixtures();
 		$this->expectException(InvalidArgumentException::class);
 		$this->Columns->addDatabaseColumn('Abc.id');
 	}
@@ -116,8 +125,6 @@ class ColumnsTest extends TestCase {
 	 * @return void
 	 */
 	public function testInvalidColumn3() {
-		$this->loadFixtures();
-		$this->Columns->addDatabaseColumn('Users.id');
 		$this->expectException(InvalidArgumentException::class);
 		$this->Columns->addDatabaseColumn('Abc.id');
 	}
@@ -126,10 +133,70 @@ class ColumnsTest extends TestCase {
 	 * @return void
 	 */
 	public function testInvalidColumn4() {
-		$this->loadFixtures();
-		$this->Columns->addDatabaseColumn('Users.id');
 		$this->expectException(InvalidArgumentException::class);
 		$this->Columns->addDatabaseColumn('Users.test');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testInvalidColumn5() {
+		$this->expectException(InvalidArgumentException::class);
+		$this->Columns->addNonDatabaseColumn('^&^&@#');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testEmptyColumns() {
+		$this->Columns->deleteAllColumns();
+		$columns = $this->Columns->getColumns();
+
+		$this->assertGreaterThan(0, count($columns));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testGetColumn() {
+		$column = $this->Columns->getColumn('action');
+		$this->assertEquals('action', $column->getName());
+		$column = $this->Columns->getColumn('id');
+		$this->assertEquals('Articles.id', $column->getName());
+		$this->expectException(InvalidArgumentException::class);
+		$this->Columns->getColumn('abc');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDeleteColumn() {
+		$count = count($this->Columns->getColumns()) - 2;
+		$this->Columns->deleteColumn('id');
+		$this->Columns->deleteColumn('action');
+		$this->assertEquals($count, count($this->Columns->getColumns()));
+		$this->expectException(InvalidArgumentException::class);
+		$this->Columns->deleteColumn('abc');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testAddNewColumnWithIndex() {
+		$this->Columns->addNonDatabaseColumn('abc', 0);
+		$this->assertEquals('abc', $this->Columns->getColumnByIndex(0)->getName());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testChangeColumnIndex() {
+		$this->Columns->changeColumnIndex('action', 0);
+		$this->Columns->changeColumnIndex('created', 1);
+		$this->assertEquals('action', $this->Columns->getColumnByIndex(0)->getName());
+		$this->assertEquals('Articles.created', $this->Columns->getColumnByIndex(1)->getName());
+		$this->expectException(InvalidArgumentException::class);
+		$this->Columns->changeColumnIndex('abc', 2);
 	}
 
 }

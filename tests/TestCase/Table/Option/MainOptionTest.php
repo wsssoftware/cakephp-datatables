@@ -10,10 +10,14 @@
 
 namespace DataTables\Test\TestCase\Table\Option;
 
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use const JSON_ERROR_NONE;
+use DataTables\Plugin;
 use DataTables\Table\Option\MainOption;
 use Exception;
+use TestApp\Application;
 
 /**
  * Class MainOptionTest
@@ -38,6 +42,10 @@ class MainOptionTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
+		$plugin = new Plugin();
+		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
 		$this->MainOption = new MainOption('Categories', 'abc');
 	}
 
@@ -90,8 +98,13 @@ class MainOptionTest extends TestCase {
 	 * Check if array and json getter is working
 	 *
 	 * @return void
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function testArrayJson() {
+		$this->MainOption->callbackCreatedRow('console.log("ok");');
+
 		$this->MainOption->setConfig('abc', '1234', false);
 		$this->MainOption->setPrintAllOptions(true);
 		$allConfig = $this->MainOption->getConfigAsArray();
