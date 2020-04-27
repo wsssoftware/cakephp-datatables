@@ -38,4 +38,26 @@ class FunctionsTest extends TestCase {
 		$this->assertEquals('z', $result);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testIncreaseTabOnString() {
+		$string = "abc\nabc\nabc";
+		$this->assertEquals(11, strlen($string));
+		$string = Functions::getInstance()->increaseTabOnString($string);
+		$this->assertEquals(23, strlen($string));
+		$string = "abc\nabc\nabc";
+		$this->assertEquals(11, strlen($string));
+		$string = Functions::getInstance()->increaseTabOnString($string, 2, true);
+		$this->assertEquals(27, strlen($string));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCheckRegexFormat() {
+		$this->assertTrue(Functions::getInstance()->checkRegexFormat('^a'));
+		$this->assertFalse(Functions::getInstance()->checkRegexFormat('[121!#@'));
+	}
+
 }

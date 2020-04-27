@@ -9,11 +9,11 @@ use Cake\Event\EventManager;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DataTables\Table\Builder;
+use DataTables\Table\Columns;
 use DataTables\Table\ConfigBundle;
 use DataTables\Table\Option\MainOption;
 use DataTables\Table\QueryBaseState;
 use DataTables\Tools\Functions;
-use InvalidArgumentException;
 
 /**
  * DataTables component
@@ -41,38 +41,56 @@ class DataTablesComponent extends Component {
 		}
 		$md5 = md5(Router::url());
 		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.options.$md5");
+		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.options.$md5");
 		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.query.$md5");
 	}
 
 	/**
-	 * @param string $dataTables
+	 * Get Columns object, and set a event to save it on session if have changes. This will overwrite the
+	 * original ConfigBundle Columns configuration on table render.
+	 *
+	 * @param string $dataTablesName
+	 * @return \DataTables\Table\Columns
+	 * @throws \ReflectionException
+	 */
+	public function getColumns(string $dataTablesName): Columns {
+		return $this->setEventAndGetObject($dataTablesName, 'Columns');
+	}
+
+	/**
+	 * Get MainOption object, and set a event to save it on session if have changes. This will overwrite the
+	 * original ConfigBundle MainOption configuration on table render.
+	 *
+	 * @param string $dataTablesName
 	 * @return \DataTables\Table\Option\MainOption
 	 * @throws \ReflectionException
 	 */
-	public function getOptions(string $dataTables): MainOption {
-		return $this->setEventAndGetObject($dataTables, 'Options');
+	public function getOptions(string $dataTablesName): MainOption {
+		return $this->setEventAndGetObject($dataTablesName, 'Options');
 	}
 
 	/**
-	 * @param string $dataTables
+	 * Get QueryBaseState object, and set a event to save it on session if have changes. This will overwrite the
+	 * original ConfigBundle QueryBaseState configuration on table render.
+	 *
+	 * @param string $dataTablesName
 	 * @return \DataTables\Table\QueryBaseState
 	 * @throws \ReflectionException
 	 */
-	public function getQuery(string $dataTables): QueryBaseState {
-		return $this->setEventAndGetObject($dataTables, 'Query');
+	public function getQuery(string $dataTablesName): QueryBaseState {
+		return $this->setEventAndGetObject($dataTablesName, 'Query');
 	}
 
 	/**
-	 * @param string $dataTables
+	 * Get Columns, Options or Query, and set a event to save it on session if have changes.
+	 *
+	 * @param string $dataTablesName
 	 * @param string $objectName
-	 * @return \DataTables\Table\QueryBaseState|\DataTables\Table\Option\MainOption
+	 * @return \DataTables\Table\QueryBaseState|\DataTables\Table\Option\MainOption|\DataTables\Table\Columns
 	 * @throws \ReflectionException
 	 */
-	private function setEventAndGetObject(string $dataTables, string $objectName) {
-		$configBundle = $this->getConfigBundle($dataTables);
-		if (!in_array($objectName, ['Query', 'Options'])) {
-			throw new InvalidArgumentException("\$objectName must be 'Query' or 'Options'. Found: $objectName.");
-		}
+	private function setEventAndGetObject(string $dataTablesName, string $objectName) {
+		$configBundle = $this->getConfigBundle($dataTablesName);
 		$object = $configBundle->{$objectName};
 		$classMd5 = $this->getClassMd5($object);
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
@@ -90,6 +108,8 @@ class DataTablesComponent extends Component {
 	}
 
 	/**
+	 * Get a ConfigBundle instance using its name or FQN.
+	 *
 	 * @param string $dataTables
 	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
@@ -103,6 +123,8 @@ class DataTablesComponent extends Component {
 	}
 
 	/**
+	 * Get the md5 from a class instance to compare changes.
+	 *
 	 * @param object $class
 	 * @return string
 	 */

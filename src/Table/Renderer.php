@@ -95,13 +95,14 @@ final class Renderer {
 			$value = $this->getPropertyUsingPath($column->getAssociationPath(), $entity, $exploded[1]);
 			$integersTypes = ['tinyinteger', 'smallinteger', 'integer', 'biginteger', 'decimal', 'float'];
 			if (in_array($column->getColumnSchema('type'), $integersTypes)) {
-				$value = Number::format($value);
+				if (is_numeric($value)) {
+					$value = Number::format($value);
+				}
 			} elseif ($column->getColumnSchema('type') === 'text') {
 				$value = Text::truncate($value, 60);
 			} else {
 				$value = h($value);
 			}
-			$column->getColumnSchema('type');
 		} else {
 			$value = __d('datatables', 'NOT CONFIGURED YET');
 		}

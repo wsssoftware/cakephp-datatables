@@ -51,15 +51,13 @@ final class Builder {
 	 */
 	public function getStorageEngine(): StorageEngineInterface {
 		$class = Configure::read('DataTables.StorageEngine.class');
-
 		return new $class();
 	}
 
 	/**
-	 * Get or build a ConfigBundle.
+	 * Get a ConfigBundle if it exists in cache or build a new.
 	 *
 	 * @param string $dataTables  DataTables class FQN or name.
-	 *     Eg.: 'Foo::main'.
 	 * @param bool $cache If true will try to get from cache.
 	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
@@ -71,25 +69,23 @@ final class Builder {
 		$storageEngine = $this->getStorageEngine();
 		$md5 = Functions::getInstance()->getClassAndVersionMd5($dataTables);
 		$cacheKey = Inflector::underscore($dataTablesName);
-
 		$configBundle = null;
 		if ($cache === true && $storageEngine->exists($cacheKey)) {
 			/** @var \DataTables\Table\ConfigBundle $configBundle */
 			$configBundle = $storageEngine->read($cacheKey);
 		}
-		if (empty($configBundle) && !$configBundle instanceof ConfigBundle) {
+		if (empty($configBundle) || $configBundle->getCheckMd5() !== $md5) {
 			$configBundle = $this->buildConfigBundle($dataTables, $md5);
 			if ($cache && !$storageEngine->save($cacheKey, $configBundle)) {
 				throw new FatalErrorException('Unable to save the ConfigBundle cache.');
 			}
 		}
 		$configBundle = $this->checkIfHaveCustomItemsInSession($configBundle);
-
 		return $configBundle;
 	}
 
 	/**
-	 * Build a ConfigBundle class
+	 * Build a ConfigBundle class with its dependencies.
 	 *
 	 * @param string $dataTablesFQN Tables FQN class.
 	 * @param string $md5 Md5 verifier used in the cache.
@@ -100,8 +96,12 @@ final class Builder {
 		string $md5
 	): ConfigBundle {
 		$dataTablesFQN = $this->parseClassNameToFQN($dataTablesFQN);
-		$dataTables = static::getInstance()->buildDataTables($dataTablesFQN);
-		$columns = static::getInstance()->buildColumns($dataTables);
+		/** @var \DataTables\Table\DataTables $dataTables */
+		$dataTables = new $dataTablesFQN();
+		if (!$dataTables instanceof DataTables) {
+			throw new FatalErrorException("Class '$dataTablesFQN' must be an inheritance of 'DataTables'.");
+		}
+		$columns = new Columns($dataTables);
 		$url = Router::url([
 			'controller' => 'Provider',
 			'action' => 'getTablesData',
@@ -109,33 +109,16 @@ final class Builder {
 			'plugin' => 'DataTables',
 			'prefix' => false,
 		]);
-		$options = static::getInstance()->buildOptions($dataTables->getAlias(), $url);
-		$queryBaseState = static::getInstance()->buildQueryBaseState();
-		$configBundle = new ConfigBundle($md5, $columns, $options, $queryBaseState, $dataTablesFQN);
+		$options = new MainOption($dataTables->getAlias(), $url);
+		$configBundle = new ConfigBundle($md5, $columns, $options, new QueryBaseState(), $dataTablesFQN);
 		$dataTables->config($configBundle);
 		$configBundle->Options->setColumns($columns);
-
 		return $configBundle;
 	}
 
 	/**
-	 * Get the Tables class.
-	 *
-	 * @param string $dataTablesFQN Tables class with full namespace.
-	 * @return \DataTables\Table\DataTables
-	 */
-	public function buildDataTables(string $dataTablesFQN): DataTables {
-		/** @var \DataTables\Table\DataTables $dataTables */
-		$dataTables = new $dataTablesFQN();
-		if (!$dataTables instanceof DataTables) {
-			throw new FatalErrorException("Class '$dataTablesFQN' must be an inheritance of 'DataTables'.");
-		}
-		return $dataTables;
-	}
-
-	/**
-	 * Check if exists a custom Query and Options config for an specific url. If exists, the method will overwrite the
-	 * original Options and Query.
+	 * Check if exists a custom Columns, Options and/or Query config for a specific url. If exists, the method will
+	 * overwrite the original Options and Query.
 	 *
 	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 * @return \DataTables\Table\ConfigBundle
@@ -145,20 +128,21 @@ final class Builder {
 			Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle),
 			Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle, true),
 		];
+		$foundCustomColumns = false;
 		$foundCustomOptions = false;
 		$foundCustomQuery = false;
 		$session = Router::getRequest()->getSession();
 		foreach ($md5s as $md5) {
+			if ($foundCustomColumns === false && $session->check("DataTables.configs.columns.$md5")) {
+				$configBundle->Columns = $session->read("DataTables.configs.columns.$md5");
+				$foundCustomColumns = true;
+			}
 			if ($foundCustomOptions === false && $session->check("DataTables.configs.options.$md5")) {
-				/** @var \DataTables\Table\Option\MainOption $options */
-				$options = $session->read("DataTables.configs.options.$md5");
-				$configBundle->Options = $options;
+				$configBundle->Options = $session->read("DataTables.configs.options.$md5");
 				$foundCustomOptions = true;
 			}
 			if ($foundCustomQuery === false && $session->check("DataTables.configs.query.$md5")) {
-				/** @var \DataTables\Table\QueryBaseState $query */
-				$query = $session->read("DataTables.configs.query.$md5");
-				$configBundle->Query = $query;
+				$configBundle->Query = $session->read("DataTables.configs.query.$md5");
 				$foundCustomQuery = true;
 			}
 		}
@@ -166,37 +150,7 @@ final class Builder {
 	}
 
 	/**
-	 * Get the Columns class used in the DataTables table.
-	 *
-	 * @param \DataTables\Table\DataTables $dataTables Tables class instance.
-	 * @return \DataTables\Table\Columns
-	 */
-	private function buildColumns(DataTables $dataTables): Columns {
-		return new Columns($dataTables);
-	}
-
-	/**
-	 * Get the JsOptions class used in the DataTables table.
-	 *
-	 * @param string $dataTablesName
-	 * @param string $url
-	 * @return \DataTables\Table\Option\MainOption
-	 */
-	private function buildOptions(string $dataTablesName, string $url): MainOption {
-		return new MainOption($dataTablesName, $url);
-	}
-
-	/**
-	 * Get the QueryBaseState class used in the DataTables table.
-	 *
-	 * @return \DataTables\Table\QueryBaseState
-	 */
-	private function buildQueryBaseState() {
-		return new QueryBaseState();
-	}
-
-	/**
-	 * Return the tables class FQN.
+	 * Return the DataTables class FQN.
 	 *
 	 * @param string $dataTablesName
 	 * @return string

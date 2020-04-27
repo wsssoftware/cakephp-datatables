@@ -11,9 +11,15 @@ declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\View\Helper;
 
+use Cake\Event\EventManager;
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use DataTables\Plugin;
+use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
 use DataTables\View\Helper\DataTablesHelper;
+use TestApp\Application;
 
 /**
  * Class DataTablesHelperTest
@@ -38,6 +44,10 @@ class DataTablesHelperTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
+		$plugin = new Plugin();
+		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
 		$view = new View();
 		$this->DataTables = new DataTablesHelper($view);
 	}
@@ -57,10 +67,13 @@ class DataTablesHelperTest extends TestCase {
 	 * Test renderTable method
 	 *
 	 * @return void
+	 * @throws \ReflectionException
 	 */
 	public function testRenderTable(): void {
-		$this->assertEquals(1, 1);
-		//$this->markTestIncomplete('Not implemented yet.');
+		$this->assertNotEmpty($this->DataTables->renderTable('Categories'));
+		$this->assertNotEmpty($this->DataTables->renderJs());
+		LocalResourcesConfig::getInstance(true);
+		EventManager::instance()->dispatch('View.beforeLayout');
 	}
 
 }

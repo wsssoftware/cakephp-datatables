@@ -11,6 +11,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Test\Fixture;
 
+use Cake\I18n\Time;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
@@ -31,7 +32,6 @@ class CategoriesFixture extends TestFixture {
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'name' => ['type' => 'string', 'length' => 45, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
-        'active' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'precision' => null, 'null' => false, 'default' => null, 'comment' => ''],
         'modified' => ['type' => 'datetime', 'length' => null, 'precision' => null, 'null' => false, 'default' => null, 'comment' => ''],
         '_constraints' => [
@@ -52,13 +52,43 @@ class CategoriesFixture extends TestFixture {
 		$this->records = [
 			[
 				'id' => 1,
-				'name' => 'Lorem ipsum dolor sit amet',
-				'active' => 1,
-				'created' => '2020-04-13 22:33:28',
-				'modified' => '2020-04-13 22:33:28',
+				'name' => 'Cars',
+				'created' => $this->getRandTime(),
+				'modified' => $this->getRandTime(),
+			],
+			[
+				'id' => 2,
+				'name' => 'Trucks',
+				'created' => $this->getRandTime(),
+				'modified' => $this->getRandTime(),
+			],
+			[
+				'id' => 3,
+				'name' => 'Bikes',
+				'created' => $this->getRandTime(),
+				'modified' => $this->getRandTime(),
+			],
+			[
+				'id' => 4,
+				'name' => 'Pickups',
+				'created' => $this->getRandTime(),
+				'modified' => $this->getRandTime(),
 			],
 		];
 		parent::init();
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getRandTime(): string {
+		$time = Time::now();
+		$time->modify('-' . rand(1, 10000) . ' minutes');
+		$time->modify('-' . rand(1, 10000) . ' hours');
+		$time->modify('-' . rand(1, 700) . ' days');
+		$time->modify('-' . rand(1, 4) . ' years');
+
+		return $time->format('Y-m-d H:i:s');
 	}
 
 }

@@ -1,18 +1,13 @@
 <?php
-declare(strict_types = 1);
-
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * Copyright (c) Allan Carvalho 2020.
+ * Under Mit License
  *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     3.0.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * link:     https://github.com/wsssoftware/cakephp-data-renderer
+ * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
+declare(strict_types = 1);
 
 namespace DataTables\View;
 

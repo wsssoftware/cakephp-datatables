@@ -52,7 +52,7 @@ class UsersFixture extends TestFixture {
 		$this->records = [
 			[
 				'id' => 1,
-				'name' => 'Lorem ipsum dolor sit amet',
+				'name' => 'Foo User',
 				'active' => 1,
 				'created' => '2020-04-13 22:33:28',
 				'modified' => '2020-04-13 22:33:28',

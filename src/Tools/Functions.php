@@ -77,9 +77,8 @@ class Functions {
 	 */
 	public function getClassAndVersionMd5(string $classWithNameSpace): string {
 		$classMd5 = $this->getClassMd5($classWithNameSpace);
-		$versionMd5 = md5($this->getPluginCurrentVersion());
-
-		return md5($classMd5 . $versionMd5);
+		$pluginCurrentHash = $this->getPluginCurrentCommit();
+		return md5($classMd5 . $pluginCurrentHash);
 	}
 
 	/**
@@ -94,20 +93,30 @@ class Functions {
 	}
 
 	/**
-	 * Return current package version.
+	 * Return DataTables plugin current commit hash.
 	 *
 	 * @return string
 	 */
-	public function getPluginCurrentVersion(): string {
-		$version = '0';
-		$packages = json_decode(file_get_contents(ROOT . DS . 'vendor' . DS . 'composer' . DS . 'installed.json'));
-		foreach ($packages as $package) {
-			if ($package->name === 'allanmcarvalho/cakephp-datatables') {
-				$version = $package->version;
+	public function getPluginCurrentCommit(): string {
+		$subPath = 'composer' . DS . 'installed.json';
+		$filePaths = [
+			ROOT . DS . 'vendor' . DS,
+			DATA_TABLES_ROOT . DS . '..' . DS . '..' . DS,
+		];
+		foreach ($filePaths as $filePath) {
+			$filePath = $filePath . $subPath;
+			if (is_file($filePath)) {
+				$packages = json_decode(file_get_contents($filePath));
+			} else {
+				continue;
+			}
+			foreach ($packages as $package) {
+				if ($package->name === 'wsssoftware/cakephp-datatables') {
+					return $package->dist->reference;
+				}
 			}
 		}
-
-		return $version;
+		return md5((string)time());
 	}
 
 	/**
