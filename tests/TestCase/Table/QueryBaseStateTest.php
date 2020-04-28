@@ -6,11 +6,15 @@
  * link:     https://github.com/wsssoftware/cakephp-data-renderer
  * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
  * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ *
+ * @noinspection SqlNoDataSourceInspection
+ * @noinspection SqlDialectInspection
  */
 
 namespace DataTables\Test\TestCase\Table;
 
 use Cake\Http\ServerRequest;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
@@ -24,9 +28,14 @@ use TestApp\Application;
 class QueryBaseStateTest extends TestCase {
 
 	/**
-	 * @var \DataTables\Table\ConfigBundle
+	 * @var \DataTables\Table\QueryBaseState
 	 */
-	private $BuildConfig;
+	private $QueryBaseState;
+
+	/**
+	 * @var \Cake\ORM\Query
+	 */
+	private $Query;
 
 	/**
 	 * setUp method
@@ -40,14 +49,204 @@ class QueryBaseStateTest extends TestCase {
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
-		$this->BuildConfig = Builder::getInstance()->getConfigBundle('Articles');
+		$this->QueryBaseState = Builder::getInstance()->getConfigBundle('Articles')->Query;
+		$this->Query = TableRegistry::getTableLocator()->get('Articles')->find();
 	}
 
 	/**
 	 * @return void
 	 */
-	public function test() {
-		static::markTestIncomplete();
+	public function testContain() {
+		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
+			'belongsTo' => [
+				'Users',
+			],
+		]);
+		$this->QueryBaseState->select(['id'], true);
+		$this->QueryBaseState->contain('Users', function ($q) {
+			     return $q->where(['id' => 1]);
+		});
+		$this->QueryBaseState->contain('Users', true);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles LEFT JOIN users Users ON Users.id = (Articles.user_id)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSelect() {
+		$this->QueryBaseState->select(['id'], true);
+		$this->QueryBaseState->select(['created'], false);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id, Articles.created AS Articles__created FROM articles Articles';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSelectAllExcept() {
+		$table = TableRegistry::getTableLocator()->get('Articles');
+		$this->QueryBaseState->selectAllExcept($table, ['id', 'user_id', 'title', 'message'], true);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.created AS Articles__created, Articles.modified AS Articles__modified FROM articles Articles';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testLeftJoinWith() {
+		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
+			'belongsTo' => [
+				'Users',
+			],
+		]);
+		$this->QueryBaseState->select(['id', 'Users.id']);
+		$this->QueryBaseState->leftJoinWith('Users');
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles LEFT JOIN users Users ON Users.id = (Articles.user_id)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testInnerJoinWith() {
+		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
+			'belongsTo' => [
+				'Users',
+			],
+		]);
+		$this->QueryBaseState->select(['id', 'Users.id']);
+		$this->QueryBaseState->innerJoinWith('Users');
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles INNER JOIN users Users ON Users.id = (Articles.user_id)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testNotMatching() {
+		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
+			'belongsTo' => [
+				'Users',
+			],
+		]);
+		$this->QueryBaseState->select(['id', 'Users.id']);
+		$this->QueryBaseState->notMatching('Users', function ($q)
+		{
+			return $q->where(['name' => 'cake']);
+		});
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles LEFT JOIN users Users ON (name = :c0 AND Users.id = (Articles.user_id)) WHERE (Users.id) IS NULL';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testOrder() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->order(false, true);
+		$this->QueryBaseState->order(['id' => 'desc']);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id desc';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testOrderAsc() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->orderAsc('created');
+		$this->QueryBaseState->orderAsc('id', true);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id ASC';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testOrderDesc() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->orderDesc('created');
+		$this->QueryBaseState->orderDesc('id', true);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id DESC';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWhere() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->where(['created' => 1]);
+		$this->QueryBaseState->where(['id' => 2], [], true);
+		$this->QueryBaseState->where(['title' => 'abc']);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id = :c0 AND title = :c1)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWhereInList() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->whereInList('id', [1, 2, 3]);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE id in (:c0,:c1,:c2)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWhereNotNull() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->whereNotNull(['id', 'title']);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE ((id) IS NOT NULL AND (title) IS NOT NULL)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWhereNotInList() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->whereNotInList('id', [1, 2, 3]);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE id not in (:c0,:c1,:c2)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWhereNull() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->whereNull(['id']);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id) IS NULL';
+		$this->assertEquals($expectedSql, $this->Query->sql());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testAndWhere() {
+		$this->QueryBaseState->select(['id']);
+		$this->QueryBaseState->andWhere(['id' => 1, 'created' => 2]);
+		$this->QueryBaseState->mergeWithQuery($this->Query);
+		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id = :c0 AND created = :c1)';
+		$this->assertEquals($expectedSql, $this->Query->sql());
 	}
 
 }

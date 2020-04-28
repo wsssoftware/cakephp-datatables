@@ -18,7 +18,7 @@ $minify = !(bool)Configure::read('debug');
 $body = '';
 foreach ($configBundles as $configBundle) {
 	$bodyJson = Functions::getInstance()->increaseTabOnString($configBundle->Options->getConfigAsJson(), 3, true);
-	$body .= "            $('#{$configBundle->getUniqueId()}') . DataTable($bodyJson);\n";
+	$body .= "            $('#{$configBundle->getUniqueId()}').DataTable($bodyJson);\n";
 }
 ?>
 

@@ -40,7 +40,7 @@ class DataTablesComponent extends Component {
 			$this->_cache = false;
 		}
 		$md5 = md5(Router::url());
-		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.options.$md5");
+		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.columns.$md5");
 		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.options.$md5");
 		$this->getController()->getRequest()->getSession()->delete("DataTables.configs.query.$md5");
 	}

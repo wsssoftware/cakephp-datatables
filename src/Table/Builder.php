@@ -134,7 +134,10 @@ final class Builder {
 		$session = Router::getRequest()->getSession();
 		foreach ($md5s as $md5) {
 			if ($foundCustomColumns === false && $session->check("DataTables.configs.columns.$md5")) {
-				$configBundle->Columns = $session->read("DataTables.configs.columns.$md5");
+				/** @var \DataTables\Table\Columns $columns */
+				$columns = $session->read("DataTables.configs.columns.$md5");
+				$configBundle->Columns = $columns;
+				$configBundle->Options->setColumns($columns);
 				$foundCustomColumns = true;
 			}
 			if ($foundCustomOptions === false && $session->check("DataTables.configs.options.$md5")) {
