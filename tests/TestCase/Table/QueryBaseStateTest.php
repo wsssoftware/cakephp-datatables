@@ -14,6 +14,7 @@
 namespace DataTables\Test\TestCase\Table;
 
 use Cake\Http\ServerRequest;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
@@ -54,6 +55,18 @@ class QueryBaseStateTest extends TestCase {
 	}
 
 	/**
+	 * @param \Cake\ORM\Query $query
+	 * @param string $sql
+	 * @return void
+	 */
+	private function compareSql(Query $query, string $sql): void {
+		$toReplace = ['"', '\'', ' '];
+		$sql = str_replace($toReplace, '', $sql);
+		$querySql = str_replace($toReplace, '', $query->sql($query->getValueBinder()));
+		$this->assertEquals($sql, $querySql);
+	}
+
+	/**
 	 * @return void
 	 */
 	public function testContain() {
@@ -68,8 +81,10 @@ class QueryBaseStateTest extends TestCase {
 		});
 		$this->QueryBaseState->contain('Users', true);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles LEFT JOIN users Users ON Users.id = (Articles.user_id)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles LEFT JOIN users Users ON Users.id = (Articles.user_id)'
+		);
 	}
 
 	/**
@@ -79,8 +94,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id'], true);
 		$this->QueryBaseState->select(['created'], false);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id, Articles.created AS Articles__created FROM articles Articles';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id, Articles.created AS Articles__created FROM articles Articles'
+		);
 	}
 
 	/**
@@ -90,8 +107,10 @@ class QueryBaseStateTest extends TestCase {
 		$table = TableRegistry::getTableLocator()->get('Articles');
 		$this->QueryBaseState->selectAllExcept($table, ['id', 'user_id', 'title', 'message'], true);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.created AS Articles__created, Articles.modified AS Articles__modified FROM articles Articles';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.created AS Articles__created, Articles.modified AS Articles__modified FROM articles Articles'
+		);
 	}
 
 	/**
@@ -106,8 +125,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id', 'Users.id']);
 		$this->QueryBaseState->leftJoinWith('Users');
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles LEFT JOIN users Users ON Users.id = (Articles.user_id)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles LEFT JOIN users Users ON Users.id = (Articles.user_id)'
+		);
 	}
 
 	/**
@@ -122,8 +143,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id', 'Users.id']);
 		$this->QueryBaseState->innerJoinWith('Users');
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles INNER JOIN users Users ON Users.id = (Articles.user_id)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles INNER JOIN users Users ON Users.id = (Articles.user_id)'
+		);
 	}
 
 	/**
@@ -141,8 +164,10 @@ class QueryBaseStateTest extends TestCase {
 			return $q->where(['name' => 'cake']);
 		});
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles LEFT JOIN users Users ON (name = :c0 AND Users.id = (Articles.user_id)) WHERE (Users.id) IS NULL';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id, Users.id AS Users__id FROM articles Articles LEFT JOIN users Users ON (name = :c0 AND Users.id = (Articles.user_id)) WHERE (Users.id) IS NULL'
+		);
 	}
 
 	/**
@@ -153,8 +178,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->order(false, true);
 		$this->QueryBaseState->order(['id' => 'desc']);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id desc';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id desc'
+		);
 	}
 
 	/**
@@ -165,8 +192,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->orderAsc('created');
 		$this->QueryBaseState->orderAsc('id', true);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id ASC';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id ASC'
+		);
 	}
 
 	/**
@@ -177,8 +206,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->orderDesc('created');
 		$this->QueryBaseState->orderDesc('id', true);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id DESC';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles ORDER BY id DESC'
+		);
 	}
 
 	/**
@@ -190,8 +221,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->where(['id' => 2], [], true);
 		$this->QueryBaseState->where(['title' => 'abc']);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id = :c0 AND title = :c1)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id = :c0 AND title = :c1)'
+		);
 	}
 
 	/**
@@ -201,8 +234,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id']);
 		$this->QueryBaseState->whereInList('id', [1, 2, 3]);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE id in (:c0,:c1,:c2)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles WHERE id in (:c0,:c1,:c2)'
+		);
 	}
 
 	/**
@@ -212,8 +247,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id']);
 		$this->QueryBaseState->whereNotNull(['id', 'title']);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE ((id) IS NOT NULL AND (title) IS NOT NULL)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles WHERE ((id) IS NOT NULL AND (title) IS NOT NULL)'
+		);
 	}
 
 	/**
@@ -223,8 +260,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id']);
 		$this->QueryBaseState->whereNotInList('id', [1, 2, 3]);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE id not in (:c0,:c1,:c2)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles WHERE id not in (:c0,:c1,:c2)'
+		);
 	}
 
 	/**
@@ -234,8 +273,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id']);
 		$this->QueryBaseState->whereNull(['id']);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id) IS NULL';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id) IS NULL'
+		);
 	}
 
 	/**
@@ -245,8 +286,10 @@ class QueryBaseStateTest extends TestCase {
 		$this->QueryBaseState->select(['id']);
 		$this->QueryBaseState->andWhere(['id' => 1, 'created' => 2]);
 		$this->QueryBaseState->mergeWithQuery($this->Query);
-		$expectedSql = 'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id = :c0 AND created = :c1)';
-		$this->assertEquals($expectedSql, $this->Query->sql());
+		$this->compareSql(
+			$this->Query,
+			'SELECT Articles.id AS Articles__id FROM articles Articles WHERE (id = :c0 AND created = :c1)'
+		);
 	}
 
 }
