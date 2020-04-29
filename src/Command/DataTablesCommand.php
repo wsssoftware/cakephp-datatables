@@ -116,8 +116,11 @@ class DataTablesCommand extends SimpleBakeCommand {
 				}
 				return static::CODE_SUCCESS;
 			}
-			if (empty($this->_callback)) {
-				$io->warning(sprintf('You must pass callback argument on bake callbacks.'));
+			if (empty($this->_callback) || !in_array($this->_callback, $this->getValidCallbacks())) {
+				$io->warning(sprintf('You must choose a valid callback name like:'));
+				foreach ($this->getValidCallbacks() as $validCallback) {
+					$io->out(" - $validCallback");
+				}
 				return static::CODE_SUCCESS;
 			}
 			$this->bakeCallbackBody($args, $io);
@@ -250,7 +253,6 @@ class DataTablesCommand extends SimpleBakeCommand {
 			'help' => sprintf(
 				'The name of callback that will baked.'
 			),
-			'choices' => $this->getValidCallbacks(),
 		]);
 
 		$parser->addOption('table', [

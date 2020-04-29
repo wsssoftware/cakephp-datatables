@@ -1,0 +1,17 @@
+/**
+ * {{ callback }} callback
+ *
+ * The content of this file will be putted inside of DataTables callback function {{ callbackFunction }}(...).
+ * @link https://datatables.net/reference/option/infoCallback
+ *
+ * To use a var that was set on params, put var name inside or double parentheses. Eg.: '{{ varName }}'.
+ * @link https://twig.symfony.com/doc/3.x/templates.html#variables to learn more about variables usage.
+ *
+ * @var {DataTables.Settings} settings DataTables settings object.
+ * @var {integer} start Starting position in data for the draw.
+ * @var {integer} end End position in data for the draw.
+ * @var {integer} max Total number of rows in the table (regardless of filtering.
+ * @var {integer} total Total number of rows in the data set, after filtering.
+ * @var {string} pre The string that DataTables has formatted using its own rules.
+ */
+return start +" to "+ end;

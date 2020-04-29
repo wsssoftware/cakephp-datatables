@@ -136,11 +136,7 @@ class Validator {
 	 */
 	public function validateBodyOrParams($bodyOrParams) {
 		$bodyOrParamsType = gettype($bodyOrParams);
-		$validTypes = [
-			'string',
-			'array',
-			'NULL',
-		];
+		$validTypes = ['string', 'array'];
 		static::getInstance()->inArrayOrFail($bodyOrParamsType, $validTypes);
 	}
 

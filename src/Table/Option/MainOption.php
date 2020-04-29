@@ -256,9 +256,12 @@ final class MainOption extends OptionAbstract {
 
 		$json = json_encode($this->getConfigAsArray($printAllOptions), $options);
 		foreach ($this->_callbackReplaces as $key => $callbackReplace) {
-			$start = strpos($json, $key) - 1;
+			$start = strpos($json, $key);
 			$length = strlen($key) + 2;
-			$json = substr_replace($json, $callbackReplace, $start, $length);
+			if ($start !== false) {
+				$start -= 1;
+				$json = substr_replace($json, $callbackReplace, $start, $length);
+			}
 		}
 		return $json;
 	}

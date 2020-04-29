@@ -286,32 +286,6 @@ final class Column {
 	}
 
 	/**
-	 * Getter method.
-	 * This is a callback function that is executed whenever a cell is created (Ajax source, etc) or read from a DOM
-	 * source. It can be used as a complement to columns.render allowing modification of the cell's DOM element (add
-	 * background colour for example) when the element is created (cells may not be immediately created on table
-	 * initialisation if deferRender is enabled, or if rows are dynamically added using the API (rows.add()).
-	 *
-	 * This is the counterpart callback for rows, which use the createdRow option.
-	 *
-	 * Accessible parameters inside js function:
-	 *  - cell (node) - The TD node that has been created.
-	 *  - cellData (any) - Cell data. If you use columns.render to modify the data, use $(cell).html() to get and modify
-	 *    the rendered data. The information given here is the original and unmodified data from the data source.
-	 *  - rowData (any) - Data source object / array for the whole row.
-	 *  - rowIndex (integer) - DataTables' internal index for the row.
-	 *  - colIndex (integer) - DataTables' internal index for the column.
-	 *
-	 * @return string|array|null
-	 * @link   https://datatables.net/reference/option/columns.createdCell
-	 * @link   https://datatables.net/reference/type/node
-	 * @link   https://datatables.net/reference/type/integer
-	 */
-	public function getCreatedCell() {
-		return Hash::get($this->_config, 'createdCell');
-	}
-
-	/**
 	 * Setter method.
 	 * This is a callback function that is executed whenever a cell is created (Ajax source, etc) or read from a DOM
 	 * source. It can be used as a complement to columns.render allowing modification of the cell's DOM element (add
@@ -328,16 +302,16 @@ final class Column {
 	 *  - rowIndex (integer) - DataTables' internal index for the row.
 	 *  - colIndex (integer) - DataTables' internal index for the column.
 	 *
-	 * @param string|array|null $bodyOrParams To use application template file, leave blank or pass an array with params
-	 *                                        that will be used in file. To use the body mode, pass an string that will
-	 *                                        putted inside the js function.
+	 * @param array|string $bodyOrParams To use application template file, leave blank or pass an array with params
+	 *                                   that will be used in file. To use the body mode, pass an js code that will
+	 *                                   putted inside the js function.
 	 *
 	 * @return \DataTables\Table\Column
 	 * @link   https://datatables.net/reference/option/columns.createdCell
 	 * @link   https://datatables.net/reference/type/node
 	 * @link   https://datatables.net/reference/type/integer
 	 */
-	public function setCreatedCell($bodyOrParams = []): self {
+	public function callbackCreatedCell($bodyOrParams = []): self {
 		Validator::getInstance()->validateBodyOrParams($bodyOrParams);
 		$this->_config = Hash::insert($this->_config, 'createdCell', $bodyOrParams);
 		return $this;

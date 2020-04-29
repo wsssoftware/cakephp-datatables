@@ -134,15 +134,8 @@ class ColumnTest extends TestCase {
 	 */
 	public function testCreatedCell() {
 		$col = $this->Columns->getColumnByIndex(0);
-		static::assertEquals(null, $col->getCreatedCell());
-		$col->setCreatedCell();
-		static::assertEquals([], $col->getCreatedCell());
-		$col->setCreatedCell('abc');
-		static::assertEquals('abc', $col->getCreatedCell());
-		$col->setCreatedCell(['abc' => 1234]);
-		static::assertEquals(['abc' => 1234], $col->getCreatedCell());
 		$this->expectException(InvalidArgumentException::class);
-		$col->setCreatedCell(12);
+		$col->callbackCreatedCell(12);
 	}
 
 	/**

@@ -118,7 +118,7 @@ final class CallBackFactory {
 	 * Render callback js functions with application template file or body.
 	 *
 	 * @param string|array $bodyOrParams To use application template file, leave blank or pass an array with params
-	 *                                   that will be used in file. To use the body mode, pass an string that will
+	 *                                   that will be used in file. To use the body mode, pass an js code that will
 	 *                                   putted inside the js function.
 	 * @param int $tabAmount
 	 * @return string
