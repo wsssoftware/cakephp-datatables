@@ -128,4 +128,20 @@ class Validator {
 		return Text::toList($array, $and);
 	}
 
+	/**
+	 * Check if bodyOrParams has a valid content.
+	 *
+	 * @param string|array|null $bodyOrParams
+	 * @return void
+	 */
+	public function validateBodyOrParams($bodyOrParams) {
+		$bodyOrParamsType = gettype($bodyOrParams);
+		$validTypes = [
+			'string',
+			'array',
+			'NULL',
+		];
+		static::getInstance()->inArrayOrFail($bodyOrParamsType, $validTypes);
+	}
+
 }

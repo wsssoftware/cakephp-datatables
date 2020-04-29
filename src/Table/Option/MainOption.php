@@ -16,6 +16,7 @@ use Cake\ORM\Association\HasMany;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use DataTables\Table\Columns;
+use DataTables\Table\Option\CallBack\CallBackFactory;
 use DataTables\Table\Option\CallBack\CallBacksTrait;
 use DataTables\Table\Option\Section\AjaxOptionTrait;
 use DataTables\Table\Option\Section\FeaturesOptionTrait;
@@ -157,11 +158,14 @@ final class MainOption extends OptionAbstract {
 					$column->setOrderable(false);
 				}
 			}
-			$columnItem = [];
-			foreach ($column->getConfig() as $configName => $value) {
-				$columnItem[$configName] = $value;
+			$columnConfig = $column->getConfig();
+			if (!empty($columnConfig['createdCell'])) {
+				$result = CallBackFactory::getInstance('createdCell', $this->_dataTableName)->render($columnConfig['createdCell'], 3);
+				$callBackTag = Functions::getInstance()->getCallBackReplaceTag(__FUNCTION__);
+				$this->_callbackReplaces[$callBackTag] = $result;
+				$columnConfig['createdCell'] = $callBackTag;
 			}
-			$columnsConfig[] = $columnItem;
+			$columnsConfig[] = $columnConfig;
 		}
 		$this->_setConfig('columnDefs', [$columns->Default->getConfig(true, true)]);
 		$this->_setConfig('columns', $columnsConfig);
@@ -254,7 +258,6 @@ final class MainOption extends OptionAbstract {
 		foreach ($this->_callbackReplaces as $key => $callbackReplace) {
 			$start = strpos($json, $key) - 1;
 			$length = strlen($key) + 2;
-			$callbackReplace = Functions::getInstance()->increaseTabOnString($callbackReplace, 1, true);
 			$json = substr_replace($json, $callbackReplace, $start, $length);
 		}
 		return $json;

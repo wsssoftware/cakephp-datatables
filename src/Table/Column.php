@@ -338,16 +338,7 @@ final class Column {
 	 * @link   https://datatables.net/reference/type/integer
 	 */
 	public function setCreatedCell($bodyOrParams = []): self {
-		$bodyOrParamsType = gettype($bodyOrParams);
-		$validTypes = [
-			'string',
-			'array',
-			'NULL',
-		];
-		$validTypesString = str_replace(' and ', ' or ', Text::toList($validTypes));
-		if (!in_array($bodyOrParamsType, $validTypes)) {
-			throw new InvalidArgumentException("In \$bodyOrParams you can use only $validTypesString. Found: '$bodyOrParamsType'.");
-		}
+		Validator::getInstance()->validateBodyOrParams($bodyOrParams);
 		$this->_config = Hash::insert($this->_config, 'createdCell', $bodyOrParams);
 		return $this;
 	}

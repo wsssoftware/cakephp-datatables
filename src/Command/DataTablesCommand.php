@@ -11,12 +11,15 @@
 namespace DataTables\Command;
 
 use Bake\Command\SimpleBakeCommand;
+use Bake\Command\TestCommand;
 use Bake\Utility\TableScanner;
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 class DataTablesCommand extends SimpleBakeCommand {
@@ -27,15 +30,35 @@ class DataTablesCommand extends SimpleBakeCommand {
 	protected $pathFragment = 'DataTables' . DS;
 
 	/**
+	 * @var string
+	 */
+	private $_bakeType;
+
+	/**
+	 * @var string
+	 */
+	private $_configName;
+
+	/**
+	 * @var string
+	 */
+	private $_callback;
+
+	/**
 	 * @var \Cake\ORM\Table
 	 */
 	private $_table;
 
 	/**
+	 * @var string
+	 */
+	private $_template;
+
+	/**
 	 * @inheritDoc
 	 */
 	public function name(): string {
-		return 'DataTables class';
+		return 'DataTables';
 	}
 
 	/**
@@ -49,76 +72,135 @@ class DataTablesCommand extends SimpleBakeCommand {
 	 * @inheritDoc
 	 */
 	public function template(): string {
-		return 'DataTables.DataTables/DataTables';
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function templateData(Arguments $arguments): array {
-		$data = parent::templateData($arguments);
-		$data += [
-			'tableName' => $this->_table->getAlias(),
-			'entityName' => Inflector::singularize($this->_table->getAlias()),
-		];
-
-		return $data;
+		return $this->_template;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function execute(Arguments $args, ConsoleIo $io): ?int {
-		if ($args->getArgument('type') === 'config') {
-			$this->connection = $args->getOption('connection');
+		$this->_bakeType = $args->getArgument('type');
+		$this->_configName = Inflector::camelize($args->getArgument('configName'));
+		$this->_callback = $args->getArgument('callback');
+		$this->connection = $args->getOption('connection');
+		if ($this->_bakeType === 'config') {
 			/** @var \Cake\Database\Connection $connection */
 			$connection = ConnectionManager::get($this->connection);
 			$scanner = new TableScanner($connection);
 			$table = $args->getOption('table');
 			if (empty($table)) {
-				$table = $args->getArgument('name');
+				$table = $this->_configName;
 			}
-			$table = Inflector::tableize($table);
-			if (!in_array($table, $scanner->listUnskipped())) {
-				$io->warning(sprintf("You tried to use a database table '%s' that doesn't exist in the database.", Inflector::camelize($table)));
+			$this->_table = TableRegistry::getTableLocator()->get(Inflector::camelize($table));
+			if (!in_array($this->_table->getTable(), $scanner->listUnskipped())) {
+				$io->warning(sprintf("You tried to use a database table '%s' that doesn't exist in the database (connection: %s).", $this->_table->getTable(), $this->connection));
 				$io->info('Create the database table if not exists or use one of options bellow:');
 				foreach ($scanner->listUnskipped() as $item) {
 					$io->out('- ' . Inflector::camelize($item));
 				}
 				return static::CODE_SUCCESS;
 			}
+			if (!empty($this->_callback)) {
+				$io->warning(sprintf("You don't must use callback argument on bake configs."));
+				return static::CODE_SUCCESS;
+			}
+			$this->bakeConfig($args, $io);
+			$this->bakeConfigTest($args, $io);
 		} else {
-			$callback = $args->getArgument('name');
-			$validCallbacks = $this->getValidCallbacks();
-			if (!in_array($callback, $validCallbacks)) {
-				$io->warning(sprintf("You tried to use a callback '%s' that doesn't exist in plugin.", $callback));
+			$validConfigs = $this->getValidConfigs();
+			if (!in_array($this->_configName, $validConfigs)) {
+				$io->warning(sprintf("You tried to use a DataTables config '%s' that doesn't exist in your app.", $this->_configName));
 				$io->info('Use one of options bellow:');
-				foreach ($validCallbacks as $item) {
+				foreach ($validConfigs as $item) {
 					$io->out('- ' . Inflector::camelize($item));
 				}
 				return static::CODE_SUCCESS;
 			}
-
-		}
-
-		$tableObject = $this->getTableLocator()->get($table);
-		if (get_class($tableObject) === Table::class) {
-			if (empty($args->getOption('table'))) {
-				$io->warning("The name '$table' used for the DataTables class does not belong to any database table.");
-				$io->info('If this name is correct, use the option \'--table=Foo\' to enter the name of the database table that you want to use in this class.');
-			} else {
-
+			if (empty($this->_callback)) {
+				$io->warning(sprintf('You must pass callback argument on bake callbacks.'));
+				return static::CODE_SUCCESS;
 			}
+			$this->bakeCallbackBody($args, $io);
 		}
-		$this->_table = $tableObject;
-		return parent::execute($args, $io);
+		return static::CODE_SUCCESS;
+	}
+
+	/**
+	 * Bake a config class.
+	 *
+	 * @param \Cake\Console\Arguments $args
+	 * @param \Cake\Console\ConsoleIo $io
+	 * @return void
+	 */
+	public function bakeConfig(Arguments $args, ConsoleIo $io) {
+		$this->_template = 'DataTables.config';
+		$renderer = new TemplateRenderer();
+		$renderer->set('name', $this->_configName);
+		$templateData = $this->templateData($args) + ['tableName' => $this->_table->getAlias(), 'entityName' => Inflector::singularize($this->_table->getAlias())];
+		$renderer->set($templateData);
+		$contents = $renderer->generate($this->template());
+		$filename = $this->getPath($args) . $this->fileName($this->_configName);
+		$io->createFile($filename, $contents, (bool)$args->getOption('force'));
+
+		$emptyFile = $this->getPath($args) . '.gitkeep';
+		$this->deleteEmptyFile($emptyFile, $io);
+	}
+
+	/**
+	 * Bake a config class test.
+	 *
+	 * @param \Cake\Console\Arguments $args
+	 * @param \Cake\Console\ConsoleIo $io
+	 * @return void
+	 */
+	public function bakeConfigTest(Arguments $args, ConsoleIo $io) {
+		if ($args->getOption('no-test')) {
+			return;
+		}
+		$test = new TestCommand();
+		$test->plugin = $this->plugin;
+		$test->classSuffixes += [
+			'DataTables' => 'DataTables',
+		];
+		$test->classTypes += [
+			'DataTables' => 'DataTables',
+		];
+		$test->bake($this->name(), $this->_configName, $args, $io);
+	}
+
+	/**
+	 * Back a callback body file.
+	 *
+	 * @param \Cake\Console\Arguments $args
+	 * @param \Cake\Console\ConsoleIo $io
+	 * @return void
+	 */
+	public function bakeCallbackBody(Arguments $args, ConsoleIo $io) {
+		$this->_template = 'DataTables.callbacks/bodies/' . $this->_callback;
+		$basePath = Configure::read('DataTables.resources.templates');
+		if (substr($basePath, -1, 1) !== DS) {
+			$basePath .= DS;
+		}
+		$basePath .= $this->_configName . DS . 'callbacks' . DS;
+		$renderer = new TemplateRenderer();
+		$renderer->set('name', $this->_configName);
+		$templateData = $this->templateData($args) + [
+				'callback' => Inflector::humanize($this->_callback),
+				'callbackFunction' => $this->_callback,
+			];
+		$renderer->set($templateData);
+		$contents = $renderer->generate($this->template());
+		$filename = $basePath . $this->_callback . '.js';
+		$io->createFile($filename, $contents, (bool)$args->getOption('force'));
+		$emptyFile = $this->getPath($args) . '.gitkeep';
+		$this->deleteEmptyFile($emptyFile, $io);
 	}
 
 	/**
 	 * @return array
 	 */
 	private function getValidCallbacks(): array {
-		$dir = DATA_TABLES_ROOT . DS . 'templates' . DS . 'twig' . DS . 'js' . DS . 'bake' . DS;
+		$dir = DATA_TABLES_TEMPLATES . 'bake' . DS . 'callbacks' . DS . 'bodies' . DS;
 		$callbacks = scandir($dir);
 		foreach ($callbacks as $index => $callback) {
 			if (in_array($callback, ['.', '..'])) {
@@ -128,6 +210,22 @@ class DataTablesCommand extends SimpleBakeCommand {
 			}
 		}
 		return $callbacks;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getValidConfigs(): array {
+		$dir = APP . 'DataTables' . DS;
+		$configs = scandir($dir);
+		foreach ($configs as $index => $callback) {
+			if (in_array($callback, ['.', '..'])) {
+				unset($configs[$index]);
+			} else {
+				$configs[$index] = str_replace(['DataTables.php'], '', $callback);
+			}
+		}
+		return $configs;
 	}
 
 	/**
@@ -143,11 +241,16 @@ class DataTablesCommand extends SimpleBakeCommand {
 			),
 			'choices' => ['config', 'callback'],
 			'required' => true,
-		])->addArgument('name', [
+		])->addArgument('configName', [
 			'help' => sprintf(
-				'The name of config/callback that will baked.'
+				'Config name that will baked or selected.'
 			),
 			'required' => true,
+		])->addArgument('callback', [
+			'help' => sprintf(
+				'The name of callback that will baked.'
+			),
+			'choices' => $this->getValidCallbacks(),
 		]);
 
 		$parser->addOption('table', [
@@ -156,7 +259,6 @@ class DataTablesCommand extends SimpleBakeCommand {
 		]);
 		$parser->removeOption('plugin');
 		$parser->removeOption('theme');
-		$parser->removeOption('no-test');
 		return $parser;
 	}
 

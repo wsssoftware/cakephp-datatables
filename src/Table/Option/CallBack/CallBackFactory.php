@@ -14,6 +14,7 @@ namespace DataTables\Table\Option\CallBack;
 use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
+use DataTables\Tools\Functions;
 use DataTables\Tools\Validator;
 use InvalidArgumentException;
 use Twig\Environment;
@@ -29,12 +30,12 @@ final class CallBackFactory {
 	/**
 	 * @var string
 	 */
-	protected $_callbackNamePrefix = 'callback_';
+	protected $_twigCallbackName;
 
 	/**
 	 * @var string
 	 */
-	protected $_callbackName;
+	protected $_jsCallbackName;
 
 	/**
 	 * @var string
@@ -45,11 +46,6 @@ final class CallBackFactory {
 	 * @var string
 	 */
 	protected $_pluginTemplateFolder;
-
-	/**
-	 * @var string
-	 */
-	protected $_ext = '.twig';
 
 	/**
 	 * @var \Twig\Environment
@@ -79,9 +75,10 @@ final class CallBackFactory {
 		if (substr($basePath, -1, 1) !== DS) {
 			$basePath .= DS;
 		}
-		$this->_callbackName = $this->_callbackNamePrefix . $callbackName . $this->_ext;
-		$this->_appTemplateFolder = $basePath . $dataTablesName . DS;
-		$this->_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'twig' . DS . 'js' . DS . 'functions' . DS;
+		$this->_twigCallbackName = $callbackName . '.twig';
+		$this->_jsCallbackName = $callbackName . '.js';
+		$this->_appTemplateFolder = $basePath . $dataTablesName . DS . 'callbacks' . DS;
+		$this->_pluginTemplateFolder = DATA_TABLES_TEMPLATES . 'bake' . DS . 'callbacks' . DS . 'functions' . DS;
 		$this->_twigLoader = new FilesystemLoader();
 		$this->_twig = new Environment($this->_twigLoader);
 		if (Configure::read('debug') === true) {
@@ -123,26 +120,48 @@ final class CallBackFactory {
 	 * @param string|array $bodyOrParams To use application template file, leave blank or pass an array with params
 	 *                                   that will be used in file. To use the body mode, pass an string that will
 	 *                                   putted inside the js function.
+	 * @param int $tabAmount
 	 * @return string
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 * @link https://twig.symfony.com/doc/3.x/api.html
 	 */
-	public function render($bodyOrParams = []): string {
+	public function render($bodyOrParams = [], int $tabAmount = 1): string {
 		if (is_array($bodyOrParams)) {
-			$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_callbackName);
+			$this->checkIfFileExistsOfFail($this->_appTemplateFolder . $this->_jsCallbackName);
 			Validator::getInstance()->checkKeysValueTypesOrFail($bodyOrParams, 'string', '*');
 			$this->_twigLoader->setPaths($this->_appTemplateFolder);
-			$body = $this->_twig->render($this->_callbackName, $bodyOrParams);
+			$body = $this->_twig->render($this->_jsCallbackName, $bodyOrParams);
+			$body = $this->removeCommentsAndBlankLines($body);
+			$body = Functions::getInstance()->increaseTabOnString($body, 1, true);
 		} elseif (is_string($bodyOrParams)) {
 			$body = $bodyOrParams;
 		} else {
 			throw new InvalidArgumentException("$bodyOrParams must be 'string' or 'array'. Found: " . getType($bodyOrParams) . '.');
 		}
-		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_callbackName);
+		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_twigCallbackName);
 		$this->_twigLoader->setPaths($this->_pluginTemplateFolder);
-		return $this->_twig->render($this->_callbackName, compact('body'));
+		$result = $this->_twig->render($this->_twigCallbackName, compact('body'));
+		return Functions::getInstance()->increaseTabOnString($result, $tabAmount, true);
+	}
+
+	/**
+	 * Remove comments and blank lines before return the function.
+	 *
+	 * @param string $body
+	 * @return string
+	 */
+	private function removeCommentsAndBlankLines(string $body): string {
+		$pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
+		$body = preg_replace($pattern, '', $body);
+		$bodyLines = explode("\n", $body);
+		foreach ($bodyLines as $index => $bodyLine) {
+			if (empty($bodyLine)) {
+				unset($bodyLines[$index]);
+			}
+		}
+		return implode("\n", $bodyLines);
 	}
 
 	/**

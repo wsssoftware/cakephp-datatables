@@ -12,6 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\Tools;
 
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use DataTables\Table\ConfigBundle;
 use ReflectionClass;
 
@@ -221,6 +222,15 @@ class Functions {
 		}
 
 		return $association;
+	}
+
+	/**
+	 * @param string $callbackName
+	 * @return string
+	 */
+	public function getCallBackReplaceTag(string $callbackName): string {
+		$callbackName = uniqid(mb_strtoupper(Inflector::underscore($callbackName)) . '_', true);
+		return "##$callbackName##";
 	}
 
 }

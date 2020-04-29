@@ -11,7 +11,8 @@ declare(strict_types = 1);
 
 namespace DataTables\Table\Option\CallBack;
 
-use Cake\Utility\Inflector;
+use DataTables\Tools\Functions;
+use DataTables\Tools\Validator;
 
 /**
  * Trait CallBacksTrait
@@ -22,20 +23,17 @@ use Cake\Utility\Inflector;
 trait CallBacksTrait {
 
 	/**
-	 * @param string $callbackName
-	 * @return string
-	 */
-	private function getCallBackReplaceTag(string $callbackName): string {
-		$callbackName = mb_strtoupper(Inflector::underscore($callbackName)) . '_' . time();
-		return "##$callbackName##";
-	}
-
-	/**
 	 * This callback is executed when a TR element is created (and all TD child elements have been inserted), or
 	 * registered if using a DOM source, allowing manipulation of the TR element.
 	 *
 	 * This is particularly useful when using deferred rendering (deferRender) or server-side processing (serverSide)
 	 * so you can add events, class name information or otherwise format the row when it is created.
+	 *
+	 * Accessible parameters inside js function:
+	 *  - row (node) - TR row element that has just been created.
+	 *  - data (array, object) - Raw data source (array or object) for this row.
+	 *  - dataIndex (any) - The index of the row in DataTables' internal storage.
+	 *  - cells (node[]) - Since 1.10.17: The cells for the column.
 	 *
 	 * @link https://datatables.net/reference/option/createdRow
 	 * @param array $bodyOrParams
@@ -45,8 +43,9 @@ trait CallBacksTrait {
 	 * @return $this
 	 */
 	public function callbackCreatedRow($bodyOrParams = []): self {
+		Validator::getInstance()->validateBodyOrParams($bodyOrParams);
 		$result = CallBackFactory::getInstance('createdRow', $this->_dataTableName)->render($bodyOrParams);
-		$callBackTag = $this->getCallBackReplaceTag(__FUNCTION__);
+		$callBackTag = Functions::getInstance()->getCallBackReplaceTag(__FUNCTION__);
 		$this->_callbackReplaces[$callBackTag] = $result;
 		$this->_setConfig('createdRow', $callBackTag);
 		return $this;
