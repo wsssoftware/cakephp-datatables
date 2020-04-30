@@ -20,6 +20,7 @@ use DataTables\Table\Option\CallBack\CallBackFactory;
 use DataTables\Table\Option\CallBack\CallBacksTrait;
 use DataTables\Table\Option\Section\AjaxOptionTrait;
 use DataTables\Table\Option\Section\FeaturesOptionTrait;
+use DataTables\Table\Option\Section\LanguageOptionTrait;
 use DataTables\Table\Option\Section\OptionsOptionAOTrait;
 use DataTables\Table\Option\Section\OptionsOptionPZTrait;
 use DataTables\Tools\Functions;
@@ -33,6 +34,7 @@ final class MainOption extends OptionAbstract {
 	use AjaxOptionTrait;
 	use CallBacksTrait;
 	use FeaturesOptionTrait;
+	use LanguageOptionTrait;
 	use OptionsOptionAOTrait;
 	use OptionsOptionPZTrait;
 
