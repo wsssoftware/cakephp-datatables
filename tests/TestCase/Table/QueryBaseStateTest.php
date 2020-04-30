@@ -29,6 +29,14 @@ use TestApp\Application;
 class QueryBaseStateTest extends TestCase {
 
 	/**
+	 * @var string[]
+	 */
+	protected $fixtures = [
+		'plugin.DataTables.Articles',
+		'plugin.DataTables.Users',
+	];
+
+	/**
 	 * @var \DataTables\Table\QueryBaseState
 	 */
 	private $QueryBaseState;
@@ -52,6 +60,12 @@ class QueryBaseStateTest extends TestCase {
 		Router::setRequest(new ServerRequest());
 		$this->QueryBaseState = Builder::getInstance()->getConfigBundle('Articles')->Query;
 		$this->Query = TableRegistry::getTableLocator()->get('Articles')->find();
+		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
+			'belongsTo' => [
+				'Users',
+			],
+		]);
+		$this->loadFixtures();
 	}
 
 	/**
@@ -70,11 +84,6 @@ class QueryBaseStateTest extends TestCase {
 	 * @return void
 	 */
 	public function testContain() {
-		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
-			'belongsTo' => [
-				'Users',
-			],
-		]);
 		$this->QueryBaseState->select(['id'], true);
 		$this->QueryBaseState->contain('Users', function ($q) {
 			     return $q->where(['id' => 1]);
@@ -117,11 +126,6 @@ class QueryBaseStateTest extends TestCase {
 	 * @return void
 	 */
 	public function testLeftJoinWith() {
-		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
-			'belongsTo' => [
-				'Users',
-			],
-		]);
 		$this->QueryBaseState->select(['id', 'Users.id']);
 		$this->QueryBaseState->leftJoinWith('Users');
 		$this->QueryBaseState->mergeWithQuery($this->Query);
@@ -135,11 +139,6 @@ class QueryBaseStateTest extends TestCase {
 	 * @return void
 	 */
 	public function testInnerJoinWith() {
-		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
-			'belongsTo' => [
-				'Users',
-			],
-		]);
 		$this->QueryBaseState->select(['id', 'Users.id']);
 		$this->QueryBaseState->innerJoinWith('Users');
 		$this->QueryBaseState->mergeWithQuery($this->Query);
@@ -153,11 +152,6 @@ class QueryBaseStateTest extends TestCase {
 	 * @return void
 	 */
 	public function testNotMatching() {
-		TableRegistry::getTableLocator()->get('Articles')->addAssociations([
-			'belongsTo' => [
-				'Users',
-			],
-		]);
 		$this->QueryBaseState->select(['id', 'Users.id']);
 		$this->QueryBaseState->notMatching('Users', function ($q)
 		{
