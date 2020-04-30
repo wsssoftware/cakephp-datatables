@@ -15,6 +15,7 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
+use DataTables\Table\Column;
 use DataTables\Table\Columns;
 use DataTables\Table\Option\MainOption;
 use DataTables\Table\QueryBaseState;
@@ -76,14 +77,14 @@ class DataTablesComponentTest extends TestCase {
 	 */
 	public function testSaveInSessionColumns() {
 		$columns = $this->DataTables->getColumns(CategoriesDataTables::class);
-		static::assertInstanceOf(Columns::class, $columns);
+		$this->assertInstanceOf(Columns::class, $columns);
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
 		$columns->addNonDatabaseColumn('abc');
 		EventManager::instance()->dispatch('Controller.beforeRender');
-		static::assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.columns.$md5"));
+		$this->assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.columns.$md5"));
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
-		//$this->assertTrue($configBundle->Options->isProcessing());
+		$this->assertInstanceOf(Column::class, $configBundle->Columns->getColumn('abc'));
 	}
 
 	/**
