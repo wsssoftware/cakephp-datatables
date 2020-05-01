@@ -12,6 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\Table\Option\Section;
 
 use Cake\Routing\Router;
+use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
 
 /**
@@ -707,15 +708,22 @@ trait LanguageOptionTrait {
 	 * That is to say that the table will not be drawn until the Ajax request as completed. As such, any actions that
 	 * require the table to have completed its initialisation should be placed into the initComplete callback.
 	 *
-	 * @param string|array $url
+	 * @param string|array|int $url
 	 * @return $this
 	 * @link https://datatables.net/reference/option/language.url
 	 */
 	public function setLanguageUrl($url): self {
-		if (!in_array(getType($url), ['string', 'array'])) {
+		if (!in_array(getType($url), ['string', 'array']) && $url !== MainOption::I18N_TRANSLATION) {
 			throw new InvalidArgumentException('Url must be a string or a array with params.');
 		} elseif (is_array($url)) {
 			$url = Router::url($url);
+		} elseif ($url === MainOption::I18N_TRANSLATION) {
+			$url = Router::url([
+				'controller' => 'Provider',
+				'action' => 'getI18nTranslation',
+				'plugin' => 'DataTables',
+				'prefix' => false,
+			]);
 		}
 		$this->_setConfig('language.url', $url);
 		return $this;

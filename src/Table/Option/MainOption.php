@@ -47,6 +47,8 @@ final class MainOption extends OptionAbstract {
 		'first_last_numbers',
 	];
 
+	const I18N_TRANSLATION = -1;
+
 	/**
 	 * @var string
 	 */

@@ -62,6 +62,69 @@ class ProviderController extends AppController {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function getI18nTranslation() {
+		$json = [
+			'oAria' => [
+				'sSortAscending' => __d('data_tables', '{0} activate to sort column ascending', ':'),
+				'sSortDescending' => __d('data_tables', '{0} activate to sort column descending', ':'),
+			],
+			'sEmptyTable' => __d('data_tables', 'No data available in table'),
+			'sDecimal' => __d('data_tables', '.'),
+			'sInfo' => __d('data_tables', 'Showing {0} to {1} of {2} entries', '_START_', '_END_', '_TOTAL_'),
+			'sInfoEmpty' => __d('data_tables', 'Showing {0} to {1} of {2} entries', '0', '0', '0'),
+			'sInfoFiltered' => '(' . __d('data_tables', 'filtered from {0} total entries', '_MAX_') . ')',
+			'sLengthMenu' => __d('data_tables', 'Show {0} entries', '_MENU_'),
+			'sLoadingRecords' => __d('data_tables', 'Loading') . '...',
+			'oPaginate' => [
+				'sNext' => __d('data_tables', 'Next'),
+				'sPrevious' => __d('data_tables', 'Previous'),
+				'sFirst' => __d('data_tables', 'First'),
+				'sLast' => __d('data_tables', 'Last'),
+			],
+			'sProcessing' => __d('data_tables', 'Processing') . '...',
+			'sSearch' => __d('data_tables', 'Search:'),
+			'sSearchPlaceholder' => __d('data_tables', 'Search records'),
+			'sThousands' => __d('data_tables', ','),
+			'sZeroRecords' => __d('data_tables', 'No matching records found'),
+			'oAutoFill' => [
+				'sButton' => __d('data_tables', 'Go!'),
+				'sCancel' => __d('data_tables', 'Cancel'),
+				'sFill' => __d('data_tables', 'Fill all cells with {0}', '>i<{data}>/i<'),
+				'sFillHorizontal' => __d('data_tables', 'Fill cells horizontally'),
+				'sFillVertical' => __d('data_tables', 'Fill cells vertically'),
+				'sIncrement' => __d('data_tables', 'Increment / decrement each cell by: {0}', '>input type=\'number\' value=\'1\'<'),
+				'sInfo' => __d('data_tables', 'Select a data fill type:'),
+			],
+			'oButtons' => [
+				'sCopy' => __d('data_tables', 'Copy'),
+				'sColvis' => __d('data_tables', 'Visibility'),
+			],
+			'oSelect' => [
+				'sRows' => [
+					'_' => __d('data_tables', 'Selected {0} cells', '%d'),
+					'0' => __d('data_tables', 'Click a cell to select it'),
+					'1' => __d('data_tables', 'Selected 1 cell'),
+				],
+			],
+			'oSearchPanes' => [
+				'sCount' => __d('data_tables', '{0} found', '{total}'),
+				'sCountFiltered' => __d('data_tables', '{0} ({1})', '{shown}', '{total}'),
+				'sEmptyPanes' => __d('data_tables', 'No searchPanes'),
+				'sTitle' => [
+					'_' => __d('data_tables', 'Filters Selected - {0}', '%d'),
+					'0' => __d('data_tables', 'No Filters Selected'),
+					'1' => __d('data_tables', 'One Filter Selected'),
+				],
+			],
+		];
+		$this->viewBuilder()->setClassName(DataTablesView::class);
+		$this->set(compact('json'));
+		$this->set('_serialize', 'json');
+	}
+
+	/**
 	 * Index method
 	 *
 	 * @param string $tablesCass
@@ -129,6 +192,7 @@ class ProviderController extends AppController {
 			}
 		}
 		$this->doSearch($query);
+
 		return $query->contain($contains)->select($select);
 	}
 

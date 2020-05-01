@@ -200,11 +200,13 @@ class LanguageOptionTraitTest extends TestCase {
 		$this->assertEquals('abc', $this->MainOption->getLanguageUrl());
 		$this->MainOption->setLanguageUrl([
 			'controller' => 'Provider',
-			'action' => 'getTablesData',
+			'action' => 'getI18nTranslation',
 			'plugin' => 'DataTables',
 			'prefix' => false,
 		]);
-		$this->assertEquals('/data-tables/provider/get-tables-data', $this->MainOption->getLanguageUrl());
+		$this->assertEquals('/data-tables/provider/get-i18n-translation', $this->MainOption->getLanguageUrl());
+		$this->MainOption->setLanguageUrl(MainOption::I18N_TRANSLATION);
+		$this->assertEquals('/data-tables/provider/get-i18n-translation', $this->MainOption->getLanguageUrl());
 		$this->expectException(InvalidArgumentException::class);
 		$this->MainOption->setLanguageUrl(true);
 	}
