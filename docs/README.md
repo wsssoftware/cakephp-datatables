@@ -1,9 +1,9 @@
 # CakePHP DataTables Plugin Documentation
 
 ## Topics
-* [How it works](HOW_IT_WORKS.md) - Understanding the plugin.
+* [How it works (NOT READY)](HOW_IT_WORKS.md) - Understanding the plugin.
 * [Installation](INSTALLATION.md) - Basic plugin setup.
-* [Defaults](DEFAULTS.md) - Defaults configurations and options.
+* [Defaults (NOT READY)](DEFAULTS.md) - Defaults configurations and options.
 * [Bake](BAKE.md) - Bake plugin needed classes.
 * Setup Table - Setup your table options, columns and configurations.
     * [Columns](SETUP_COLUMNS.md) - Choose columns that your table will show, and it options.

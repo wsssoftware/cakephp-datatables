@@ -1,7 +1,23 @@
-# CakePHP DataTables Plugin Documentation
+# Query - [(Back)](README.md)
 
+## Adding some DataTables options.
 
-## Query
+```php
+/**
+ * @param \DataTables\Table\ConfigBundle $configBundle
+ * @return void
+ */
+public function config(ConfigBundle $configBundle): void {
 
-#### UNDER CONSTRUCTION
+    ...
+
+    $configBundle->Query->where(['Categories.id >=' => 2]);
+
+    ...
+
+}
+```
+
+> Query options have almost all `where` clauses of CakePHP Query class.  
+
 
