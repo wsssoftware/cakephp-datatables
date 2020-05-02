@@ -1,9 +1,9 @@
-# CakePHP DataTables Plugin Documentation
+# CakePHP DataTables Plugin Documentation - [(Back)](README.md)
 
 
 ## Installation
 #### 1. Load the plugin using composer.
-```shell script
+```shell
 composer require wsssoftware/cakephp-datatables:^2.0
 ```
 
@@ -15,7 +15,7 @@ $this->addPlugin('DataTables');
 $this->addPlugin(\DataTables\Plugin::class);
 ```
 OR using cake shell in `bin folder`:
-```shell script
+```shell
 cake plugin load DataTables
 ```
 
