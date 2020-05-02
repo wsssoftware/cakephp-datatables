@@ -12,6 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\Table\Option;
 
 use Cake\Core\Configure;
+use Cake\I18n\Number;
 use Cake\ORM\Association\HasMany;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
@@ -24,6 +25,7 @@ use DataTables\Table\Option\Section\LanguageOptionTrait;
 use DataTables\Table\Option\Section\OptionsOptionAOTrait;
 use DataTables\Table\Option\Section\OptionsOptionPZTrait;
 use DataTables\Tools\Functions;
+use NumberFormatter;
 
 /**
  * Class MainOption
@@ -138,6 +140,8 @@ final class MainOption extends OptionAbstract {
 		parent::__construct();
 		$this->_dataTableName = $dataTablesName;
 		$this->setConfig('ajax.url', $url);
+		$this->setLanguageThousands(Number::formatter()->getSymbol(NumberFormatter::DECIMAL));
+		$this->setLanguageDecimal(Number::formatter()->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL));
 	}
 
 	/**

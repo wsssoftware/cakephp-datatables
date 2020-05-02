@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-05-01 23:29+0000\n"
+"POT-Creation-Date: 2020-05-02 15:20+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,146 +14,110 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Controller/ProviderController.php:70
+#: Controller/ProviderController.php:63
 msgid "{0} activate to sort column ascending"
 msgstr ""
 
-#: Controller/ProviderController.php:71
+#: Controller/ProviderController.php:64
 msgid "{0} activate to sort column descending"
 msgstr ""
 
-#: Controller/ProviderController.php:73
+#: Controller/ProviderController.php:66
 msgid "No data available in table"
 msgstr ""
 
-#: Controller/ProviderController.php:74
-msgid "."
-msgstr ""
-
-#: Controller/ProviderController.php:75
-#: Controller/ProviderController.php:76
+#: Controller/ProviderController.php:67
+#: Controller/ProviderController.php:68
 msgid "Showing {0} to {1} of {2} entries"
 msgstr ""
 
-#: Controller/ProviderController.php:77
+#: Controller/ProviderController.php:69
 msgid "filtered from {0} total entries"
 msgstr ""
 
-#: Controller/ProviderController.php:78
+#: Controller/ProviderController.php:70
 msgid "Show {0} entries"
 msgstr ""
 
-#: Controller/ProviderController.php:79
+#: Controller/ProviderController.php:71
 #: View/Cell/DataTablesCell.php:36
 msgid "Loading"
 msgstr ""
 
-#: Controller/ProviderController.php:81
+#: Controller/ProviderController.php:73
 msgid "Next"
 msgstr ""
 
-#: Controller/ProviderController.php:82
+#: Controller/ProviderController.php:74
 msgid "Previous"
 msgstr ""
 
-#: Controller/ProviderController.php:83
+#: Controller/ProviderController.php:75
 msgid "First"
 msgstr ""
 
-#: Controller/ProviderController.php:84
+#: Controller/ProviderController.php:76
 msgid "Last"
 msgstr ""
 
-#: Controller/ProviderController.php:86
+#: Controller/ProviderController.php:78
 msgid "Processing"
 msgstr ""
 
-#: Controller/ProviderController.php:87
+#: Controller/ProviderController.php:79
 msgid "Search:"
 msgstr ""
 
-#: Controller/ProviderController.php:88
-msgid "Search records"
-msgstr ""
-
-#: Controller/ProviderController.php:89
-msgid ","
-msgstr ""
-
-#: Controller/ProviderController.php:90
+#: Controller/ProviderController.php:80
 msgid "No matching records found"
 msgstr ""
 
-#: Controller/ProviderController.php:92
-msgid "Go!"
-msgstr ""
-
-#: Controller/ProviderController.php:93
+#: Controller/ProviderController.php:82
 msgid "Cancel"
 msgstr ""
 
-#: Controller/ProviderController.php:94
+#: Controller/ProviderController.php:83
 msgid "Fill all cells with {0}"
 msgstr ""
 
-#: Controller/ProviderController.php:95
+#: Controller/ProviderController.php:84
 msgid "Fill cells horizontally"
 msgstr ""
 
-#: Controller/ProviderController.php:96
+#: Controller/ProviderController.php:85
 msgid "Fill cells vertically"
 msgstr ""
 
-#: Controller/ProviderController.php:97
+#: Controller/ProviderController.php:86
 msgid "Increment / decrement each cell by: {0}"
 msgstr ""
 
-#: Controller/ProviderController.php:98
-msgid "Select a data fill type:"
-msgstr ""
-
-#: Controller/ProviderController.php:101
-msgid "Copy"
-msgstr ""
-
-#: Controller/ProviderController.php:102
-msgid "Visibility"
-msgstr ""
-
-#: Controller/ProviderController.php:106
-msgid "Selected {0} cells"
-msgstr ""
-
-#: Controller/ProviderController.php:107
-msgid "Click a cell to select it"
-msgstr ""
-
-#: Controller/ProviderController.php:108
-msgid "Selected 1 cell"
-msgstr ""
-
-#: Controller/ProviderController.php:112
-msgid "{0} found"
-msgstr ""
-
-#: Controller/ProviderController.php:113
-msgid "{0} ({1})"
-msgstr ""
-
-#: Controller/ProviderController.php:114
+#: Controller/ProviderController.php:89
 msgid "No searchPanes"
 msgstr ""
 
-#: Controller/ProviderController.php:116
+#: Controller/ProviderController.php:91
 msgid "Filters Selected - {0}"
 msgstr ""
 
-#: Controller/ProviderController.php:117
+#: Controller/ProviderController.php:92
 msgid "No Filters Selected"
 msgstr ""
 
-#: Controller/ProviderController.php:118
+#: Controller/ProviderController.php:93
 msgid "One Filter Selected"
+msgstr ""
+
+#: Controller/ProviderController.php:98
+msgid "Selected {0} cells"
+msgstr ""
+
+#: Controller/ProviderController.php:99
+msgid "Click a cell to select it"
+msgstr ""
+
+#: Controller/ProviderController.php:100
+msgid "Selected 1 cell"
 msgstr ""
 
 #: Table/Renderer.php:107

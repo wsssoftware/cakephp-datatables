@@ -5,47 +5,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2020-05-02 15:20+0000\n"
-"PO-Revision-Date: 2020-05-02 12:20-0300\n"
+"PO-Revision-Date: 2020-05-02 12:21-0300\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
-"Language: pt_BR\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
 #: Controller/ProviderController.php:63
 msgid "{0} activate to sort column ascending"
-msgstr "{0} ordenar colunas de forma ascendente"
+msgstr "{0} Activar para ordenar la columna de manera ascendente"
 
 #: Controller/ProviderController.php:64
 msgid "{0} activate to sort column descending"
-msgstr "{0} ordenar colunas de forma descendente"
+msgstr "{0} Activar para ordenar la columna de manera descendente"
 
 #: Controller/ProviderController.php:66
 msgid "No data available in table"
-msgstr "Nenhum registro encontrado"
+msgstr "Ningún dato disponible en esta tabla"
 
 #: Controller/ProviderController.php:67 Controller/ProviderController.php:68
 msgid "Showing {0} to {1} of {2} entries"
-msgstr "Mostrando de {0} até {1} de {2} registros"
+msgstr "Mostrando registros del {0} al {1} de un total de {2} registros"
 
 #: Controller/ProviderController.php:69
 msgid "filtered from {0} total entries"
-msgstr "filtrados de {0} registros"
+msgstr "filtrado de un total de {0} registros"
 
 #: Controller/ProviderController.php:70
 msgid "Show {0} entries"
-msgstr "{0} resultados por página"
+msgstr "Mostrar {0} registros"
 
 #: Controller/ProviderController.php:71 View/Cell/DataTablesCell.php:36
 msgid "Loading"
-msgstr "Carregando"
+msgstr "Cargando"
 
 #: Controller/ProviderController.php:73
 msgid "Next"
-msgstr "Próximo"
+msgstr "Siguiente"
 
 #: Controller/ProviderController.php:74
 msgid "Previous"
@@ -53,7 +53,7 @@ msgstr "Anterior"
 
 #: Controller/ProviderController.php:75
 msgid "First"
-msgstr "Primeiro"
+msgstr "Primero"
 
 #: Controller/ProviderController.php:76
 msgid "Last"
@@ -61,15 +61,15 @@ msgstr "Último"
 
 #: Controller/ProviderController.php:78
 msgid "Processing"
-msgstr "Processando"
+msgstr "Procesando"
 
 #: Controller/ProviderController.php:79
 msgid "Search:"
-msgstr "Pesquisar:"
+msgstr "Buscar:"
 
 #: Controller/ProviderController.php:80
 msgid "No matching records found"
-msgstr "Nenhum registro encontrado"
+msgstr "No se encontraron resultados"
 
 #: Controller/ProviderController.php:82
 msgid "Cancel"
@@ -77,86 +77,86 @@ msgstr "Cancelar"
 
 #: Controller/ProviderController.php:83
 msgid "Fill all cells with {0}"
-msgstr "Encha todas as células com {0}"
+msgstr "Llenar todas las celdas con {0}"
 
 #: Controller/ProviderController.php:84
 msgid "Fill cells horizontally"
-msgstr "Encha células horizontalmente"
+msgstr "Llenar celdas horizontalmente"
 
 #: Controller/ProviderController.php:85
 msgid "Fill cells vertically"
-msgstr "Preencha as células verticalmente"
+msgstr "Llenar celdas verticalmente"
 
 #: Controller/ProviderController.php:86
 msgid "Increment / decrement each cell by: {0}"
-msgstr "Incremento / decrementar de cada célula por: {0}"
+msgstr "Incremento / disminución de cada celda por: {0}"
 
 #: Controller/ProviderController.php:89
 msgid "No searchPanes"
-msgstr "Sem searchPanes"
+msgstr "Sin searchPanes"
 
 #: Controller/ProviderController.php:91
 msgid "Filters Selected - {0}"
-msgstr "Filtros selecionados - {0}"
+msgstr "Filtros seleccionados - {0}"
 
 #: Controller/ProviderController.php:92
 msgid "No Filters Selected"
-msgstr "Sem filtros selecionados"
+msgstr "No se han seleccionado filtros"
 
 #: Controller/ProviderController.php:93
 msgid "One Filter Selected"
-msgstr "Um filtro selecionado"
+msgstr "Un filtro seleccionado"
 
 #: Controller/ProviderController.php:98
 msgid "Selected {0} cells"
-msgstr "Selecionado {0} linhas"
+msgstr "Celdas {0} seleccionadas"
 
 #: Controller/ProviderController.php:99
 msgid "Click a cell to select it"
-msgstr "Nenhuma linha selecionada"
+msgstr "Haga clic en una celda para seleccionarla"
 
 #: Controller/ProviderController.php:100
 msgid "Selected 1 cell"
-msgstr "Selecionado 1 linha"
+msgstr "Seleccionado 1 celda"
 
 #: Table/Renderer.php:107
 msgid "NOT CONFIGURED YET"
-msgstr "NÃO CONFIGURADO AINDA"
+msgstr "AÚN NO CONFIGURADO"
 
 #: Table/Renderer.php:111
 msgid "this column data was auto generated."
-msgstr "estes dados da coluna foram gerados automaticamente."
+msgstr "estos datos de columna se generaron automáticamente."
 
 #: View/Cell/DataTablesCell.php:40
 msgid "Loading {0} data"
-msgstr "Carregando dados de {0}"
+msgstr "Carga de datos {0}"
 
 #~ msgid "."
-#~ msgstr ","
+#~ msgstr "."
 
 #~ msgid "Search records"
 #~ msgstr "Buscar registros"
 
 #~ msgid ","
-#~ msgstr "."
+#~ msgstr ","
 
 #~ msgid "Go!"
-#~ msgstr "Ir!"
+#~ msgstr "¡Vamos!"
 
 #~ msgid "Select a data fill type:"
-#~ msgstr "Selecione um tipo de preenchimento de dados:"
+#~ msgstr "Seleccione un tipo de relleno de datos:"
 
 #~ msgid "Copy"
 #~ msgstr "Copiar"
 
 #~ msgid "Visibility"
-#~ msgstr "Visibilidade"
+#~ msgstr "Visibilidad"
 
 #~ msgid "{0} found"
 #~ msgstr "{0} encontrado"
 
 #~ msgid "{0} ({1})"
-#~ msgstr "{0} ({1})"
+#~ msgstr "{0}: {1}"
 
 #~ msgid "loading"
-#~ msgstr "carregando"
+#~ msgstr "Cargando"
