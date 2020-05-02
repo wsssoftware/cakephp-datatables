@@ -1,4 +1,4 @@
-# CakePHP DataTables Plugin Documentation
+# CakePHP DataTables Plugin Documentation - [(Back)](README.md)
 
 
 ## Installation
