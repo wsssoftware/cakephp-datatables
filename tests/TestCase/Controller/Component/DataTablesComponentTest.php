@@ -8,7 +8,6 @@ use Cake\Controller\Controller;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
-use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -54,7 +53,6 @@ class DataTablesComponentTest extends TestCase {
 		$plugin = new Plugin();
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
-		Router::setRequest(new ServerRequest());
 		$controller = new Controller(new ServerRequest(), new Response(), 'Provider', EventManager::instance(), new ComponentRegistry());
 		Router::setRequest($controller->getRequest());
 		$controller->loadComponent('DataTables.DataTables');
