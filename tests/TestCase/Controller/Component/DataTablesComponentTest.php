@@ -55,7 +55,8 @@ class DataTablesComponentTest extends TestCase {
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
-		$controller = new Controller(Router::getRequest(), new Response(), 'Provider', EventManager::instance(), new ComponentRegistry());
+		$controller = new Controller(new ServerRequest(), new Response(), 'Provider', EventManager::instance(), new ComponentRegistry());
+		Router::setRequest($controller->getRequest());
 		$controller->loadComponent('DataTables.DataTables');
 		$this->DataTables = $controller->DataTables;
 	}
@@ -82,7 +83,7 @@ class DataTablesComponentTest extends TestCase {
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
 		$columns->addNonDatabaseColumn('abc');
 		EventManager::instance()->dispatch('Controller.beforeRender');
-		$this->assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.columns.$md5"));
+		$this->assertNotEmpty($this->getSession()->read("DataTables.configs.columns.$md5"));
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$this->assertInstanceOf(Column::class, $configBundle->Columns->getColumn('abc'));
 	}
@@ -98,7 +99,7 @@ class DataTablesComponentTest extends TestCase {
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
 		$options->setProcessing(true);
 		EventManager::instance()->dispatch('Controller.beforeRender');
-		static::assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.options.$md5"));
+		static::assertNotEmpty($this->getSession()->read("DataTables.configs.options.$md5"));
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$this->assertTrue($configBundle->Options->isProcessing());
 	}
@@ -114,7 +115,7 @@ class DataTablesComponentTest extends TestCase {
 		$md5 = Functions::getInstance()->getConfigBundleAndUrlUniqueMd5($configBundle);
 		$query->contain(['Abc']);
 		EventManager::instance()->dispatch('Controller.beforeRender');
-		static::assertNotEmpty(Router::getRequest()->getSession()->read("DataTables.configs.query.$md5"));
+		static::assertNotEmpty($this->getSession()->read("DataTables.configs.query.$md5"));
 		$query = TableRegistry::getTableLocator()->get('Categories')->find();
 		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
 		$configBundle->Query->mergeWithQuery($query);
