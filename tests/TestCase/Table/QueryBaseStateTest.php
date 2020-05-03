@@ -58,7 +58,6 @@ class QueryBaseStateTest extends TestCase {
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
-		$this->QueryBaseState = Builder::getInstance()->getConfigBundle('Articles')->Query;
 		$Articles = TableRegistry::getTableLocator()->get('Articles');
 		$Articles->addAssociations([
 			'belongsTo' => [
@@ -66,6 +65,7 @@ class QueryBaseStateTest extends TestCase {
 			],
 		]);
 		$this->Query = $Articles->find();
+		$this->QueryBaseState = Builder::getInstance()->getConfigBundle('Articles')->Query;
 		$this->loadFixtures();
 	}
 
