@@ -1,4 +1,12 @@
 <?php
+/**
+ * Copyright (c) Allan Carvalho 2020.
+ * Under Mit License
+ *
+ * link:     https://github.com/wsssoftware/cakephp-data-renderer
+ * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ */
 declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\Controller\Component;
@@ -12,7 +20,6 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
-use Cake\TestSuite\TestSession;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
 use DataTables\Table\Column;
@@ -69,13 +76,6 @@ class DataTablesComponentTest extends TestCase {
 		unset($this->DataTables);
 
 		parent::tearDown();
-	}
-
-	/**
-	 * @return \Cake\TestSuite\TestSession
-	 */
-	protected function getSession(): TestSession {
-		return new TestSession($_SESSION);
 	}
 
 	/**
