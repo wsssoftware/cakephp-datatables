@@ -1,0 +1,6 @@
+{# help menu fragment for header/footer #}
+<li class="menu-title"><i class="fa fa-menu-title fa-comments-o"></i>Help &amp; Support</li>
+
+{% for alias, url in community | dictsort %}
+<li><a href="{{ url }}"><i class="fa fa-menu fa-chevron-right"></i>{{ alias }}</a></li>
+{% endfor %}

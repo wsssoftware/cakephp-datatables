@@ -1,20 +1,22 @@
-# -*- coding: utf-8 -*-
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+#-*- coding: utf-8 -*-
+import datetime
+import os
+import sys
+import cakephp_theme
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Sphinx-Themes template'
-copyright = '2018, sphinx-themes.org'
-author = 'sphinx-themes.org'
-
-# The short X.Y version
-version = ''
-# The full version, including alpha/beta/rc tags
-release = '1'
+maintainer = u'wsssoftware'
+project = u'cakephp-upload'
+project_pretty_name = u'CakePHP Upload'
+copyright = u'%d, WSS Software' % datetime.datetime.now().year
+version = '4.0.0'
+release = '4.0.0'
+html_title = 'CakePHP DataTables'
+author = 'WSS Software'
+htmlhelp_basename = 'cakephp-datatables'
+branch = 'master'
 
 
 # -- General configuration ---------------------------------------------------
@@ -87,15 +89,19 @@ html_static_path = ['_static']
 html_sidebars = {
     '**': ['globaltoc.html', 'localtoc.html']
 }
-import cakephp_theme
 html_theme_path = [cakephp_theme.get_html_theme_path()]
 html_theme = 'cakephp_theme'
 extensions = ['cakephp_theme']
 html_context = {
-    'maintainer': 'wsssoftware',
-    'project_pretty_name': 'CakePHP DataTables',
+    'maintainer': maintainer,
+    'project_pretty_name': project_pretty_name,
     'projects': {
         'CakePHP Book': 'https://book.cakephp.org/',
-        'Some other project': 'https://example.com/',
-    }
+    },
+    'community': {
+        'Stack Overflow': 'http://stackoverflow.com/tags/cakephp',
+        'Slack': 'http://cakesf.herokuapp.com/',
+        'Email Support': 'mailto:allan@wsssoftware.com.br?subject=CakePHP DataTables Support',
+        'GitHub repo': 'https://github.com/wsssoftware/cakephp-datatables',
+    },
 }
