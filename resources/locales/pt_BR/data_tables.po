@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-05-02 15:20+0000\n"
-"PO-Revision-Date: 2020-05-02 12:20-0300\n"
+"POT-Creation-Date: 2020-05-02 22:53+0000\n"
+"PO-Revision-Date: 2020-05-02 19:54-0300\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -91,34 +91,6 @@ msgstr "Preencha as células verticalmente"
 msgid "Increment / decrement each cell by: {0}"
 msgstr "Incremento / decrementar de cada célula por: {0}"
 
-#: Controller/ProviderController.php:89
-msgid "No searchPanes"
-msgstr "Sem searchPanes"
-
-#: Controller/ProviderController.php:91
-msgid "Filters Selected - {0}"
-msgstr "Filtros selecionados - {0}"
-
-#: Controller/ProviderController.php:92
-msgid "No Filters Selected"
-msgstr "Sem filtros selecionados"
-
-#: Controller/ProviderController.php:93
-msgid "One Filter Selected"
-msgstr "Um filtro selecionado"
-
-#: Controller/ProviderController.php:98
-msgid "Selected {0} cells"
-msgstr "Selecionado {0} linhas"
-
-#: Controller/ProviderController.php:99
-msgid "Click a cell to select it"
-msgstr "Nenhuma linha selecionada"
-
-#: Controller/ProviderController.php:100
-msgid "Selected 1 cell"
-msgstr "Selecionado 1 linha"
-
 #: Table/Renderer.php:107
 msgid "NOT CONFIGURED YET"
 msgstr "NÃO CONFIGURADO AINDA"
@@ -130,6 +102,27 @@ msgstr "estes dados da coluna foram gerados automaticamente."
 #: View/Cell/DataTablesCell.php:40
 msgid "Loading {0} data"
 msgstr "Carregando dados de {0}"
+
+#~ msgid "No searchPanes"
+#~ msgstr "Sem searchPanes"
+
+#~ msgid "Filters Selected - {0}"
+#~ msgstr "Filtros selecionados - {0}"
+
+#~ msgid "No Filters Selected"
+#~ msgstr "Sem filtros selecionados"
+
+#~ msgid "One Filter Selected"
+#~ msgstr "Um filtro selecionado"
+
+#~ msgid "Selected {0} cells"
+#~ msgstr "Selecionado {0} linhas"
+
+#~ msgid "Click a cell to select it"
+#~ msgstr "Nenhuma linha selecionada"
+
+#~ msgid "Selected 1 cell"
+#~ msgstr "Selecionado 1 linha"
 
 #~ msgid "."
 #~ msgstr ","

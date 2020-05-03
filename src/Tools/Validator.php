@@ -121,7 +121,7 @@ class Validator {
 	 * @param string|null $and
 	 * @return string
 	 */
-	private function arrayToStringMessage(array $array, ?string $and = 'or'): string {
+	public function arrayToStringMessage(array $array, ?string $and = 'or'): string {
 		foreach ($array as $index => $item) {
 			$array[$index] = "'$item'";
 		}

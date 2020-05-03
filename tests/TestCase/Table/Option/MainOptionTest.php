@@ -15,9 +15,12 @@ use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use const JSON_ERROR_NONE;
 use DataTables\Plugin;
+use DataTables\Table\Columns;
 use DataTables\Table\Option\MainOption;
+use DataTables\Tools\Minifier;
 use Exception;
 use TestApp\Application;
+use TestApp\DataTables\CategoriesDataTables;
 
 /**
  * Class MainOptionTest
@@ -36,6 +39,13 @@ class MainOptionTest extends TestCase {
 	protected $MainOption;
 
 	/**
+	 * Test subject
+	 *
+	 * @var \DataTables\Table\Columns
+	 */
+	protected $Columns;
+
+	/**
 	 * setUp method
 	 *
 	 * @return void
@@ -47,6 +57,7 @@ class MainOptionTest extends TestCase {
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
 		$this->MainOption = new MainOption('Categories', 'abc');
+		$this->Columns = new Columns(new CategoriesDataTables());
 	}
 
 	/**
@@ -121,6 +132,19 @@ class MainOptionTest extends TestCase {
 		} finally {
 			$this->assertEquals(true, json_last_error() === JSON_ERROR_NONE);
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSetColumns() {
+		$this->Columns->addDatabaseColumn('id')
+		              ->callbackCreatedCell('alert("ok");');
+		$this->Columns->addNonDatabaseColumn('action');
+		$this->MainOption->setColumns($this->Columns);
+		$json = Minifier::js($this->MainOption->getConfigAsJson());
+		$expected = '"columns":[{"createdCell":function(cell,cellData,rowData,rowIndex,colIndex){alert("ok")},"name":"Categories.id","title":"Id","type":"num"},{"name":"action","orderable":!1,"searchable":!1,"title":"Action"}]';
+		$this->assertTextContains($expected, $json);
 	}
 
 }

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-05-02 15:20+0000\n"
+"POT-Creation-Date: 2020-05-02 22:53+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -90,34 +90,6 @@ msgstr ""
 
 #: Controller/ProviderController.php:86
 msgid "Increment / decrement each cell by: {0}"
-msgstr ""
-
-#: Controller/ProviderController.php:89
-msgid "No searchPanes"
-msgstr ""
-
-#: Controller/ProviderController.php:91
-msgid "Filters Selected - {0}"
-msgstr ""
-
-#: Controller/ProviderController.php:92
-msgid "No Filters Selected"
-msgstr ""
-
-#: Controller/ProviderController.php:93
-msgid "One Filter Selected"
-msgstr ""
-
-#: Controller/ProviderController.php:98
-msgid "Selected {0} cells"
-msgstr ""
-
-#: Controller/ProviderController.php:99
-msgid "Click a cell to select it"
-msgstr ""
-
-#: Controller/ProviderController.php:100
-msgid "Selected 1 cell"
 msgstr ""
 
 #: Table/Renderer.php:107

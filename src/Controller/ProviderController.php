@@ -85,21 +85,6 @@ class ProviderController extends AppController {
 				'sFillVertical' => __d('data_tables', 'Fill cells vertically'),
 				'sIncrement' => __d('data_tables', 'Increment / decrement each cell by: {0}', '>input type=\'number\' value=\'1\'<'),
 			],
-			'oSearchPanes' => [
-				'sEmptyPanes' => __d('data_tables', 'No searchPanes'),
-				'sTitle' => [
-					'_' => __d('data_tables', 'Filters Selected - {0}', '%d'),
-					'0' => __d('data_tables', 'No Filters Selected'),
-					'1' => __d('data_tables', 'One Filter Selected'),
-				],
-			],
-			'oSelect' => [
-				'sRows' => [
-					'_' => __d('data_tables', 'Selected {0} cells', '%d'),
-					'0' => __d('data_tables', 'Click a cell to select it'),
-					'1' => __d('data_tables', 'Selected 1 cell'),
-				],
-			],
 		];
 		$this->viewBuilder()->setClassName(DataTablesView::class);
 		$this->set(compact('json'));

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-05-02 15:20+0000\n"
-"PO-Revision-Date: 2020-05-02 12:21-0300\n"
+"POT-Creation-Date: 2020-05-02 22:53+0000\n"
+"PO-Revision-Date: 2020-05-02 19:54-0300\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -91,34 +91,6 @@ msgstr "Llenar celdas verticalmente"
 msgid "Increment / decrement each cell by: {0}"
 msgstr "Incremento / disminución de cada celda por: {0}"
 
-#: Controller/ProviderController.php:89
-msgid "No searchPanes"
-msgstr "Sin searchPanes"
-
-#: Controller/ProviderController.php:91
-msgid "Filters Selected - {0}"
-msgstr "Filtros seleccionados - {0}"
-
-#: Controller/ProviderController.php:92
-msgid "No Filters Selected"
-msgstr "No se han seleccionado filtros"
-
-#: Controller/ProviderController.php:93
-msgid "One Filter Selected"
-msgstr "Un filtro seleccionado"
-
-#: Controller/ProviderController.php:98
-msgid "Selected {0} cells"
-msgstr "Celdas {0} seleccionadas"
-
-#: Controller/ProviderController.php:99
-msgid "Click a cell to select it"
-msgstr "Haga clic en una celda para seleccionarla"
-
-#: Controller/ProviderController.php:100
-msgid "Selected 1 cell"
-msgstr "Seleccionado 1 celda"
-
 #: Table/Renderer.php:107
 msgid "NOT CONFIGURED YET"
 msgstr "AÚN NO CONFIGURADO"
@@ -130,6 +102,27 @@ msgstr "estos datos de columna se generaron automáticamente."
 #: View/Cell/DataTablesCell.php:40
 msgid "Loading {0} data"
 msgstr "Carga de datos {0}"
+
+#~ msgid "No searchPanes"
+#~ msgstr "Sin searchPanes"
+
+#~ msgid "Filters Selected - {0}"
+#~ msgstr "Filtros seleccionados - {0}"
+
+#~ msgid "No Filters Selected"
+#~ msgstr "No se han seleccionado filtros"
+
+#~ msgid "One Filter Selected"
+#~ msgstr "Un filtro seleccionado"
+
+#~ msgid "Selected {0} cells"
+#~ msgstr "Celdas {0} seleccionadas"
+
+#~ msgid "Click a cell to select it"
+#~ msgstr "Haga clic en una celda para seleccionarla"
+
+#~ msgid "Selected 1 cell"
+#~ msgstr "Seleccionado 1 celda"
 
 #~ msgid "."
 #~ msgstr "."

@@ -37,7 +37,7 @@ class DataTablesCell extends Cell {
 		}
 		$tableContent .= '</tr><thead>';
 		$tableContent .= '<tbody><tr><td style="text-align: center" colspan="' . count($configBundle->Columns->getColumns()) . '">';
-		$tableContent .= __d('data_tables', 'Loading {0} data', 'DataTables') . '...';
+		$tableContent .= __d('data_tables', 'Loading {0} data', $configBundle->Columns->getDataTables()->getAlias()) . '...';
 		$tableContent .= '</td></tr></tbody>';
 		$this->set(compact('configBundle', 'options', 'tableContent'));
 	}

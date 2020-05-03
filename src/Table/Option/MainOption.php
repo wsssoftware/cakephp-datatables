@@ -24,6 +24,7 @@ use DataTables\Table\Option\Section\FeaturesOptionTrait;
 use DataTables\Table\Option\Section\LanguageOptionTrait;
 use DataTables\Table\Option\Section\OptionsOptionAOTrait;
 use DataTables\Table\Option\Section\OptionsOptionPZTrait;
+use DataTables\Table\Option\Section\PluginSelectTrait;
 use DataTables\Tools\Functions;
 use NumberFormatter;
 
@@ -39,6 +40,7 @@ final class MainOption extends OptionAbstract {
 	use LanguageOptionTrait;
 	use OptionsOptionAOTrait;
 	use OptionsOptionPZTrait;
+	use PluginSelectTrait;
 
 	const ALLOWED_PAGING_TYPES = [
 		'numbers',
