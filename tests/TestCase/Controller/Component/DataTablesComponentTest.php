@@ -12,6 +12,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\TestSuite\TestSession;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
 use DataTables\Table\Column;
@@ -68,6 +69,13 @@ class DataTablesComponentTest extends TestCase {
 		unset($this->DataTables);
 
 		parent::tearDown();
+	}
+
+	/**
+	 * @return \Cake\TestSuite\TestSession
+	 */
+	protected function getSession(): TestSession {
+		return new TestSession($_SESSION);
 	}
 
 	/**
