@@ -23,4 +23,4 @@ The plugin is an attempt to provide a basic, simple and friendly way to implemen
 DataTables library in order to be connected with CakePHP features and requirements.
 
 ## Installation and Usage
-See [Documentation](https://wsssoftware.github.io/cakephp-datatables/).
+See [Documentation](https://cakephp-datatables.readthedocs.io/en/latest/).
