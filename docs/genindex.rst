@@ -12,6 +12,8 @@ Contents
    :maxdepth: 3
    :caption: Getting Started
 
-    Installation <installation>
+   Installation <installation>
+   Configuration <configuration>
+   Component <component>
 
 
