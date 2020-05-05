@@ -5,7 +5,7 @@ CakePHP DataTables plugin follows the same principles of CakePHP, it  is designe
 simple, and easy. It was developed to be light, clean code, fast and easy to use.
 
 The goal of this overview is to introduce the general concepts and conventions of the plugin, and also explain how
-DataTables library params, configurations, functions and others items are implemented in CakePHP.
+DataTables library params, configurations, functions and others items are implemented in the plugin.
 
 Conventions Over Configuration
 ==============================

@@ -23,7 +23,7 @@ Basically if you understand how CakePHP and DataTables library works and underst
 DataTables, you will able to use the plugin without large problems. It's easy! So it's recommended that you read
 :doc:`CakePHP DataTables at a Glance </intro>` and after this the :doc:`Installation Guide </installation>`.
 
-After you've finished the Installation Guide, you can learn more abouts specifics items:
+After you've finished the Installation Guide, you can learn more about specifics items:
 
 * :doc:`Baking DataTables </intro>`.
 * :doc:`Configuring a DataTable table </intro>`.
