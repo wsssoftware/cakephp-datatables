@@ -14,6 +14,7 @@ Contents
 
    Installation <installation>
    Configuration <configuration>
-   Component <component>
+   datatables
+   Local Resources <resources>
 
 

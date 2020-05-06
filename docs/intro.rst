@@ -49,7 +49,7 @@ The plugin request cycle starts with a user requesting a page that contain a tab
 At a high level each plugin request goes through the following steps:
 
 * Request 1 - Rendering the table structure.
-    #. If user pass a :doc:`configuration </component>` for ``options``, ``columns`` and/or ``query`` in ``Controller``
+    #. If user pass a :doc:`configuration </datatables/customizing>` for ``options``, ``columns`` and/or ``query`` in ``Controller``
        action, the plugin ``Component`` will get the original objects, overwrite it and store on session with a unique key
        for that url.
     #. On ``View``, in the place that the user call the table render, the plugin will render a primitive html table
