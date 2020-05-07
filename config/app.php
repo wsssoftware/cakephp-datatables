@@ -16,9 +16,9 @@ return [
 			'enabled' => true,
 			'cssBlock' => 'css',
 			'scriptBlock' => 'script',
-			'theme' => \DataTables\Table\ResourcesConfig\ResourcesConfigAbstract::THEME_BASE,
+			'theme' => \DataTables\Table\ResourcesConfig\LocalResourcesConfig::THEME_BASE,
 			'loadThemeLibrary' => false,
-			'jquery' => \DataTables\Table\ResourcesConfig\ResourcesConfigAbstract::JQUERY_NONE,
+			'jquery' => \DataTables\Table\ResourcesConfig\LocalResourcesConfig::JQUERY_NONE,
 			'plugins' => [
 				'autoFill' => false,
 				'buttons' => false,

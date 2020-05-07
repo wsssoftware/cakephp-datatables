@@ -21,7 +21,6 @@ interface ResourcesConfigInterface {
 	const THEME_SEMANTIC_UI = 'semanticui';
 
 	const VALID_THEMES = [
-		self::THEME_NONE,
 		self::THEME_BASE,
 		self::THEME_BOOTSTRAP3,
 		self::THEME_BOOTSTRAP4,
