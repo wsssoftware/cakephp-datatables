@@ -10,7 +10,7 @@ CakePHP DataTables plugins has a few requirements:
 
 .. tip::
 
-    You can use the plugin :doc:`Local Resources </resources>` to load all the DataTables libraries dependencies and
+    You can use the :doc:`Local Resources </resources>` to load all the DataTables libraries dependencies and
     jQuery.
 
 .. note::

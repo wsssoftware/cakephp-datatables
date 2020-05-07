@@ -2,7 +2,7 @@ DataTables
 ##########
 
 Classes inherited from **\\DataTables\\Table\\DataTables** is the classes that has two methods very important that is
-used to apply the application business rules to a **ConfigBundle** form a table. When debug is disabled, this step is
+used to apply the application business rules to a **ConfigBundle** from a table. When debug is disabled, this step is
 done only on first request, after this, the plugin will pack all configurations inside a `ConfigBundle` object and save
 it on cache. In the next time, if cache exists and it is valid yet, it will be read instead of generate a new `ConfigBundle`
 object. If the developer do some change on the class, or the plugin is updated, the cache is automatic invalidated.
