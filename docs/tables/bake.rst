@@ -1,5 +1,5 @@
-Baking Class
-############
+Baking DataTables Classes
+#########################
 
 The plugin provide the bake command to create the `DataTables` class files that you will need to create and customize
 your table. As default the class name will be the same as database table name, but you can change this passing the

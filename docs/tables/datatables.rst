@@ -4,11 +4,7 @@ DataTables
 Classes inherited from **\\DataTables\\Table\\DataTables** is the classes that has two methods very important that is
 called to apply the application business rules to a :doc:`ConfigBundle </tables/config-bundle>` from a table. They
 are saved on ``src/DataTables/`` folder and are postfixed with `DataTables`, so, Categories DataTables class will be
-named `CategoriesDataTables`. When debug is disabled, they will be called only on first request, after this, the plugin
-will pack all configurations inside a `ConfigBundle` object and save it on cache. In the next time, if cache exists and
-it is valid yet, it will be read and will return a `ConfigBundle` that was generated. The plugin uses md5 to check
-plugin version and class content, so if the developer do some change on the class, or the plugin is updated, the cache
-is automatic invalidated.
+named `CategoriesDataTables`. You can easily :doc:`bake </tables/bake>` this class using the CakePHP bake shell.
 
 Methods
 -------
@@ -19,8 +15,8 @@ Config
 ^^^^^^
 
 **DataTables::config()** - This method has a :doc:`ConfigBundle </tables/config-bundle>` passed as param. Inside it
-the developer will be able to set the columns, DataTables library options and special Query conditions for the table.
-Its structure is::
+you will be able to set the columns, DataTables library options and special Query conditions for the table. Its
+structure is::
 
     /**
      * Will implements all the table configuration.
