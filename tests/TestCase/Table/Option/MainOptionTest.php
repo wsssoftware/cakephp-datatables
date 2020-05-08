@@ -13,6 +13,7 @@ namespace DataTables\Test\TestCase\Table\Option;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
+use DataTables\Table\Builder;
 use const JSON_ERROR_NONE;
 use DataTables\Plugin;
 use DataTables\Table\Columns;
@@ -56,8 +57,9 @@ class MainOptionTest extends TestCase {
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
-		$this->MainOption = new MainOption('Categories', 'abc');
-		$this->Columns = new Columns(new CategoriesDataTables());
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class, false);
+		$this->MainOption = $configBundle->Options;
+		$this->Columns = $configBundle->Columns;
 	}
 
 	/**
@@ -138,12 +140,12 @@ class MainOptionTest extends TestCase {
 	 * @return void
 	 */
 	public function testSetColumns() {
-		$this->Columns->addDatabaseColumn('id')
+		$this->Columns->getColumn('Categories.id')
 		              ->callbackCreatedCell('alert("ok");');
 		$this->Columns->addNonDatabaseColumn('action');
 		$this->MainOption->setColumns($this->Columns);
 		$json = Minifier::js($this->MainOption->getConfigAsJson());
-		$expected = '"columns":[{"createdCell":function(cell,cellData,rowData,rowIndex,colIndex){alert("ok")},"name":"Categories.id","title":"Id","type":"num"},{"name":"action","orderable":!1,"searchable":!1,"title":"Action"}]';
+		$expected = '{"ajax":{"type":"GET","url":"\/data-tables\/provider\/get-tables-data\/categories\/6666cd76f96956469e7be39d750cc7d9"},"serverSide":!0,"language":{"thousands":",","decimal":"."},"columnDefs":[{"targets":"_all"}],"columns":[{"createdCell":function(cell,cellData,rowData,rowIndex,colIndex){alert("ok")},"name":"Categories.id","title":"Id","type":"num"},{"name":"Categories.name","title":"Name","type":"string"},{"name":"Categories.created","title":"Created","type":"date"},{"name":"action","orderable":!1,"searchable":!1,"title":"Action"}]}';
 		$this->assertTextContains($expected, $json);
 	}
 

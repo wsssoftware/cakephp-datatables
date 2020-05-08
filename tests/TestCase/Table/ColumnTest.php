@@ -10,12 +10,19 @@
 
 namespace DataTables\Test\TestCase\Table;
 
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
+use DataTables\Plugin;
+use DataTables\Table\Builder;
 use DataTables\Table\Column;
 use DataTables\Table\Columns;
+use DataTables\Table\ConfigBundle;
 use DataTables\Table\DataTables;
 use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
+use TestApp\Application;
+use TestApp\DataTables\UsersDataTables;
 
 /**
  * Class ColumnTest
@@ -48,6 +55,10 @@ class ColumnTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
+		$plugin = new Plugin();
+		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
 		/** @var \DataTables\Table\DataTables $tables */
 		$tables = $this->getMockBuilder(DataTables::class)
 			->setMockClassName('UsersDataTables')
@@ -57,8 +68,8 @@ class ColumnTest extends TestCase {
 				'Articles',
 			],
 		]);
-		$this->Columns = new Columns($tables);
-		$this->Columns->addDatabaseColumn('Users.id');
+		$configBundle = Builder::getInstance()->getConfigBundle(UsersDataTables::class, false);
+		$this->Columns = $configBundle->Columns;
 	}
 
 	/**
@@ -80,9 +91,9 @@ class ColumnTest extends TestCase {
 	public function testColumns() {
 		$mainOption = new MainOption('Users', 'abc');
 		$this->Columns->addNonDatabaseColumn('action');
-		$this->Columns->addDatabaseColumn('Articles.id');
 		$mainOption->setColumns($this->Columns);
-		$this->assertEquals(3, count($mainOption->getConfig('columns')));
+		$expected = count($this->Columns->getColumns());
+		$this->assertEquals($expected, count($mainOption->getConfig('columns')));
 	}
 
 	/**

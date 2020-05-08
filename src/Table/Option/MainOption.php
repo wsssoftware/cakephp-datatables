@@ -162,7 +162,7 @@ final class MainOption extends OptionAbstract {
 				$column->setSearchable(false);
 				$column->setOrderable(false);
 			} else {
-				$association = Functions::getInstance()->getAssociationUsingPath($columns->getDataTables()->getOrmTable(), $column->getAssociationPath());
+				$association = Functions::getInstance()->getAssociationUsingPath($columns->getConfigBundle()->getDataTables()->getOrmTable(), $column->getAssociationPath());
 				if ($association instanceof HasMany) {
 					$column->setSearchable(false);
 					$column->setOrderable(false);

@@ -100,12 +100,12 @@ class RendererTest extends TestCase {
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
-		$buildConfig = Builder::getInstance()->getConfigBundle('Articles');
-		$this->ArticlesRenderer = new Renderer($buildConfig->Columns);
-		$this->ArticlesDataTables = $buildConfig->Columns->getDataTables();
-		$buildConfig = Builder::getInstance()->getConfigBundle('Users');
-		$this->UsersRenderer = new Renderer($buildConfig->Columns);
-		$this->UsersDataTables = $buildConfig->Columns->getDataTables();
+		$configBundle = Builder::getInstance()->getConfigBundle('Articles');
+		$this->ArticlesRenderer = new Renderer($configBundle);
+		$this->ArticlesDataTables = $configBundle->getDataTables();
+		$configBundle = Builder::getInstance()->getConfigBundle('Users');
+		$this->UsersRenderer = new Renderer($configBundle);
+		$this->UsersDataTables = $configBundle->getDataTables();
 	}
 
 	/**

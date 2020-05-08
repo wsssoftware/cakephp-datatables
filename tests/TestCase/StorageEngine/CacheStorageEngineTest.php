@@ -10,6 +10,7 @@
 
 namespace DataTables\Test\TestCase\StorageEngine;
 
+use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -19,6 +20,7 @@ use DataTables\Table\Builder;
 use DataTables\Table\ConfigBundle;
 use InvalidArgumentException;
 use TestApp\Application;
+use TestApp\DataTables\CategoriesDataTables;
 
 /**
  * Class CacheStorageEngineTest
@@ -55,6 +57,7 @@ class CacheStorageEngineTest extends TestCase {
 		$plugin = new Plugin();
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
 		$this->Cache = new CacheStorageEngine();
 	}
 
@@ -79,7 +82,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testSave() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
+		$buildConfig = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class, false);
 		$this->assertTrue($this->Cache->save('abc', $buildConfig));
 	}
 
@@ -87,7 +90,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testRead() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
+		$buildConfig = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class, false);
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertEmpty($this->Cache->read('def'));
 		$this->assertInstanceOf(ConfigBundle::class, $this->Cache->read('abc'));
@@ -97,7 +100,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testDelete() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
+		$buildConfig = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class, false);
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertTrue($this->Cache->delete('abc'));
 	}
@@ -106,7 +109,7 @@ class CacheStorageEngineTest extends TestCase {
 	 * @return void
 	 */
 	public function testExists() {
-		$buildConfig = Builder::getInstance()->buildConfigBundle('Categories', md5('abc'));
+		$buildConfig = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class, false);
 		$this->Cache->save('abc', $buildConfig);
 		$this->assertFalse($this->Cache->exists('def'));
 		$this->assertTrue($this->Cache->exists('abc'));

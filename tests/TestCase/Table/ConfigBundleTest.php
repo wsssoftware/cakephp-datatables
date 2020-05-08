@@ -43,7 +43,7 @@ class ConfigBundleTest extends TestCase {
 	 * @return void
 	 */
 	public function test() {
-		$this->assertEquals('TestApp\DataTables\ArticlesDataTables', $this->ConfigBundle->getTableCass());
+		$this->assertEquals('TestApp\DataTables\ArticlesDataTables', $this->ConfigBundle->getDataTableFQN());
 	}
 
 }

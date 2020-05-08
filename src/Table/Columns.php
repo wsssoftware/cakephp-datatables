@@ -22,18 +22,16 @@ use InvalidArgumentException;
 final class Columns {
 
 	/**
+	 * @var \DataTables\Table\ConfigBundle
+	 */
+	private $_configBundle;
+
+	/**
 	 * Created columns.
 	 *
 	 * @var \DataTables\Table\Column[]
 	 */
 	private $_columns = [];
-
-	/**
-	 * A selected Tables class.
-	 *
-	 * @var \DataTables\Table\DataTables
-	 */
-	private $_dataTables;
 
 	/**
 	 * Default application column configuration.
@@ -45,18 +43,18 @@ final class Columns {
 	/**
 	 * Columns constructor.
 	 *
-	 * @param \DataTables\Table\DataTables $dataTables
+	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 */
-	public function __construct(DataTables $dataTables) {
-		$this->_dataTables = $dataTables;
+	public function __construct(ConfigBundle $configBundle) {
+		$this->_configBundle = $configBundle;
 		$this->Default = new Column('default', false);
 	}
 
 	/**
-	 * @return \DataTables\Table\DataTables
+	 * @return \DataTables\Table\ConfigBundle
 	 */
-	public function getDataTables(): DataTables {
-		return $this->_dataTables;
+	public function getConfigBundle(): ConfigBundle {
+		return $this->_configBundle;
 	}
 
 	/**
@@ -137,7 +135,7 @@ final class Columns {
 	 */
 	public function getColumns(): array {
 		if (empty($this->_columns)) {
-			$table = $this->getDataTables()->getOrmTable();
+			$table = $this->getConfigBundle()->getDataTables()->getOrmTable();
 			$columns = [];
 			foreach ($table->getSchema()->columns() as $column) {
 				$columnInfo = $this->normalizeDataTableField("{$table->getAlias()}.$column");
@@ -222,7 +220,7 @@ final class Columns {
 	 * @return array
 	 */
 	public function normalizeDataTableField(string $dataBaseField): array {
-		$ormTable = $this->_dataTables->getOrmTable();
+		$ormTable = $this->getConfigBundle()->getDataTables()->getOrmTable();
 		$explodedDataBaseField = explode('.', $dataBaseField);
 		if (count($explodedDataBaseField) === 2) {
 			$table = Inflector::camelize($explodedDataBaseField[0]);

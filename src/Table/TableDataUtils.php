@@ -64,7 +64,7 @@ final class TableDataUtils {
 		$select = [];
 		$contains = [];
 		$columns = $this->_configBundle->Columns;
-		$table = $columns->getDataTables()->getOrmTable();
+		$table = $this->_configBundle->getDataTables()->getOrmTable();
 		$query = $this->_configBundle->Query->mergeWithQuery($table->find());
 		foreach ($columns->getColumns() as $columnName => $column) {
 			if ($column->isDatabase() && !Functions::getInstance()->getAssociationUsingPath($table, $column->getAssociationPath()) instanceof HasMany) {

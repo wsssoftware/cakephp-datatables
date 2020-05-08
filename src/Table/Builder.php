@@ -16,7 +16,6 @@ use Cake\Error\FatalErrorException;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DataTables\StorageEngine\StorageEngineInterface;
-use DataTables\Table\Option\MainOption;
 use DataTables\Tools\Functions;
 
 /**
@@ -63,11 +62,11 @@ final class Builder {
 	 * @throws \ReflectionException
 	 */
 	public function getConfigBundle(string $dataTables, bool $cache = true): ConfigBundle {
-		$dataTables = $this->parseClassNameToFQN($dataTables);
+		$dataTablesFQN = $this->parseClassNameToFQN($dataTables);
 		$dataTablesName = explode('\\', $dataTables);
 		$dataTablesName = array_pop($dataTablesName);
 		$storageEngine = $this->getStorageEngine();
-		$md5 = Functions::getInstance()->getClassAndVersionMd5($dataTables);
+		$md5 = Functions::getInstance()->getClassAndVersionMd5($dataTablesFQN);
 		$cacheKey = Inflector::underscore($dataTablesName);
 		$configBundle = null;
 		if ($cache === true && $storageEngine->exists($cacheKey)) {
@@ -75,44 +74,12 @@ final class Builder {
 			$configBundle = $storageEngine->read($cacheKey);
 		}
 		if (empty($configBundle) || $configBundle->getCheckMd5() !== $md5) {
-			$configBundle = $this->buildConfigBundle($dataTables, $md5);
+			$configBundle = new ConfigBundle($md5, $dataTablesFQN);
 			if ($cache && !$storageEngine->save($cacheKey, $configBundle)) {
 				throw new FatalErrorException('Unable to save the ConfigBundle cache.');
 			}
 		}
 		$configBundle = $this->checkIfHaveCustomItemsInSession($configBundle);
-		return $configBundle;
-	}
-
-	/**
-	 * Build a ConfigBundle class with its dependencies.
-	 *
-	 * @param string $dataTablesFQN Tables FQN class.
-	 * @param string $md5 Md5 verifier used in the cache.
-	 * @return \DataTables\Table\ConfigBundle
-	 */
-	public function buildConfigBundle(
-		string $dataTablesFQN,
-		string $md5
-	): ConfigBundle {
-		$dataTablesFQN = $this->parseClassNameToFQN($dataTablesFQN);
-		/** @var \DataTables\Table\DataTables $dataTables */
-		$dataTables = new $dataTablesFQN();
-		if (!$dataTables instanceof DataTables) {
-			throw new FatalErrorException("Class '$dataTablesFQN' must be an inheritance of 'DataTables'.");
-		}
-		$columns = new Columns($dataTables);
-		$url = Router::url([
-			'controller' => 'Provider',
-			'action' => 'getTablesData',
-			Inflector::dasherize($dataTables->getAlias()),
-			'plugin' => 'DataTables',
-			'prefix' => false,
-		]);
-		$options = new MainOption($dataTables->getAlias(), $url);
-		$configBundle = new ConfigBundle($md5, $columns, $options, new QueryBaseState(), $dataTablesFQN);
-		$dataTables->config($configBundle);
-		$configBundle->Options->setColumns($columns);
 		return $configBundle;
 	}
 

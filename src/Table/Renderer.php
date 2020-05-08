@@ -32,17 +32,17 @@ final class Renderer {
 	private $_cache = [];
 
 	/**
-	 * @var \DataTables\Table\Columns
+	 * @var \DataTables\Table\ConfigBundle
 	 */
-	private $_columns;
+	private $_configBundle;
 
 	/**
 	 * Renderer constructor.
 	 *
-	 * @param \DataTables\Table\Columns $columns
+	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 */
-	public function __construct(Columns $columns) {
-		$this->_columns = $columns;
+	public function __construct(ConfigBundle $configBundle) {
+		$this->_configBundle = $configBundle;
 	}
 
 	/**
@@ -53,10 +53,10 @@ final class Renderer {
 	 * @return $this
 	 */
 	public function add(string $columnName, $value): self {
-		if (!empty($this->_columns->getColumns()[$columnName])) {
+		if (!empty($this->_configBundle->Columns->getColumns()[$columnName])) {
 			$this->_cache[$columnName] = (string)$value;
 		} else {
-			$column = $this->_columns->normalizeDataTableField($columnName);
+			$column = $this->_configBundle->Columns->normalizeDataTableField($columnName);
 			$this->_cache["{$column['table']}.{$column['column']}"] = (string)$value;
 		}
 		return $this;
@@ -70,7 +70,7 @@ final class Renderer {
 	 */
 	public function renderRow(EntityInterface $entity): array {
 		$result = [];
-		foreach ($this->_columns->getColumns() as $columnName => $column) {
+		foreach ($this->_configBundle->Columns->getColumns() as $columnName => $column) {
 			if (!empty($this->_cache[$columnName])) {
 				$value = $this->_cache[$columnName];
 			} else {
@@ -123,7 +123,7 @@ final class Renderer {
 	 * @return mixed
 	 */
 	public function getPropertyUsingPath(string $path, EntityInterface $entity, string $property) {
-		$table = $this->_columns->getDataTables()->getOrmTable();
+		$table = $this->_configBundle->getDataTables()->getOrmTable();
 		if ($path === $table->getAlias()) {
 			return $entity->{$property};
 		}

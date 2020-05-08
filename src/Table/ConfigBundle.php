@@ -11,6 +11,9 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Error\FatalErrorException;
+use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use Cake\View\View;
 use DataTables\Table\Option\MainOption;
 
@@ -23,7 +26,14 @@ final class ConfigBundle {
 	/**
 	 * @var string
 	 */
-	private $_tableCass;
+	private $_dataTableFQN;
+
+	/**
+	 * A selected Tables class.
+	 *
+	 * @var \DataTables\Table\DataTables
+	 */
+	private $_dataTables;
 
 	/**
 	 * @var \DataTables\Table\Columns The DataTables table columns.
@@ -49,30 +59,52 @@ final class ConfigBundle {
 	 * ConfigBundle constructor.
 	 *
 	 * @param string $checkMd5 The md5 used to check changes.
-	 * @param \DataTables\Table\Columns $columns The DataTables table columns.
-	 * @param \DataTables\Table\Option\MainOption $options The DataTables JS Options.
-	 * @param \DataTables\Table\QueryBaseState $query The DataTables base query.
-	 * @param string $tableCass Tables class name.
+	 * @param string $dataTablesFQN Tables class name.
 	 */
 	public function __construct(
 		string $checkMd5,
-		Columns $columns,
-		MainOption $options,
-		QueryBaseState $query,
-		string $tableCass
+		string $dataTablesFQN
 	) {
 		$this->_checkMd5 = $checkMd5;
-		$this->Columns = $columns;
-		$this->Options = $options;
-		$this->Query = $query;
-		$this->_tableCass = $tableCass;
+		$this->_dataTableFQN = $dataTablesFQN;
+		$this->_dataTables = new $dataTablesFQN();
+		if (!$this->_dataTables instanceof DataTables) {
+			throw new FatalErrorException("Class '$dataTablesFQN' must be an inheritance of 'DataTables'.");
+		}
+		$this->Columns = new Columns($this);
+		$this->Options = new MainOption($this->_dataTables->getAlias(), $this->getUrl());
+		$this->Query = new QueryBaseState();
+		$this->_dataTables->config($this);
+		$this->Options->setColumns($this->Columns);
+	}
+
+	/**
+	 * @return \DataTables\Table\DataTables
+	 */
+	public function getDataTables(): \DataTables\Table\DataTables {
+		return $this->_dataTables;
+	}
+
+	/**
+	 * Return the url to get table data.
+	 *
+	 * @return string
+	 */
+	private function getUrl(): string {
+		return Router::url([
+			'controller' => 'Provider',
+			'action' => 'getTablesData',
+			Inflector::dasherize($this->_dataTables->getAlias()),
+			'plugin' => 'DataTables',
+			'prefix' => false,
+		]);
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getTableCass() {
-		return $this->_tableCass;
+	public function getDataTableFQN() {
+		return $this->_dataTableFQN;
 	}
 
 	/**
