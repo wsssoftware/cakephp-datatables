@@ -5,7 +5,5 @@ parameters:
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
-		- '#Call to an undefined method Cake\\ORM\\Association\\HasMany::getAlias()#'
-		- '#Call to an undefined method Cake\\ORM\\Association\\BelongsTo::getAlias()#'
 		- '#Property DataTables\\Table\\ConfigBundle::\$Options#'
 		- '#Property DataTables\\Table\\ConfigBundle::\$Query#'
