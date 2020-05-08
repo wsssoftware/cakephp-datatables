@@ -17,7 +17,6 @@ use DataTables\Plugin;
 use DataTables\Table\Builder;
 use DataTables\Table\Column;
 use DataTables\Table\Columns;
-use DataTables\Table\ConfigBundle;
 use DataTables\Table\DataTables;
 use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;

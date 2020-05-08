@@ -15,6 +15,7 @@ use Cake\Error\FatalErrorException;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\View\View;
+use DataTables\Table\DataTables;
 use DataTables\Table\Option\MainOption;
 
 /**
@@ -81,7 +82,7 @@ final class ConfigBundle {
 	/**
 	 * @return \DataTables\Table\DataTables
 	 */
-	public function getDataTables(): \DataTables\Table\DataTables {
+	public function getDataTables(): DataTables {
 		return $this->_dataTables;
 	}
 
