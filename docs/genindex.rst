@@ -14,7 +14,7 @@ Contents
 
    Installation <installation>
    Configuration <configuration>
-   DataTables class <datatables>
+   Tables <tables>
    Local Resources <resources>
 
 

@@ -2,7 +2,7 @@ DataTables
 ##########
 
 Classes inherited from **\\DataTables\\Table\\DataTables** is the classes that has two methods very important that is
-called to apply the application business rules to a :doc:`ConfigBundle </datatables/config-bundle>` from a table. They
+called to apply the application business rules to a :doc:`ConfigBundle </tables/config-bundle>` from a table. They
 are saved on ``src/DataTables/`` folder and are postfixed with `DataTables`, so, Categories DataTables class will be
 named `CategoriesDataTables`. When debug is disabled, they will be called only on first request, after this, the plugin
 will pack all configurations inside a `ConfigBundle` object and save it on cache. In the next time, if cache exists and
@@ -18,7 +18,7 @@ There are two methods, the `config` and `rowRenderer`, one to set configs and ot
 Config
 ^^^^^^
 
-**DataTables::config()** - This method has a :doc:`ConfigBundle </datatables/config-bundle>` passed as param. Inside it
+**DataTables::config()** - This method has a :doc:`ConfigBundle </tables/config-bundle>` passed as param. Inside it
 the developer will be able to set the columns, DataTables library options and special Query conditions for the table.
 Its structure is::
 
@@ -48,14 +48,3 @@ Each row render will call this method and the non set columns will be autogenera
      */
     public function rowRenderer(DataTablesView $appView, EntityInterface $entity, Renderer $renderer) {
     }
-
-Additional Reading
-==================
-
-.. toctree::
-    :maxdepth: 1
-
-    /datatables/bake
-    /datatables/config-bundle
-    /datatables/rendering
-    /datatables/customizing
