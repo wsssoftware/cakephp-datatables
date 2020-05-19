@@ -19,6 +19,7 @@ use DataTables\Tools\Validator;
  *
  * @method mixed|void _getConfig(?string $field = null, $default = null)
  * @method void _setConfig(string $field, $value, bool $mustPrint = true)
+ * @property \DataTables\Table\ConfigBundle $_configBundle
  */
 trait CallBacksTrait {
 
@@ -37,7 +38,7 @@ trait CallBacksTrait {
 	 */
 	private function callback($bodyOrParams, string $callbackName, string $functionName) {
 		Validator::getInstance()->validateBodyOrParams($bodyOrParams);
-		$result = CallBackFactory::getInstance($callbackName, $this->_dataTableName)->render($bodyOrParams);
+		$result = CallBackFactory::getInstance($callbackName, $this->_configBundle->getDataTables()->getAlias())->render($bodyOrParams);
 		$callBackTag = Functions::getInstance()->getCallBackReplaceTag($functionName);
 		$this->_callbackReplaces[$callBackTag] = $result;
 		$this->_setConfig($callbackName, $callBackTag);

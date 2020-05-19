@@ -78,6 +78,16 @@ class LocalResourceConfigTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testIsAutoload() {
+		$lrc = $this->getLRC();
+		static::assertEquals(true, $lrc->isAutoload());
+		$lrc->setAutoload(false);
+		static::assertEquals(false, $lrc->isAutoload());
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testRequestLoad() {
 		$lrc = $this->getLRC();
 		$view = new View();

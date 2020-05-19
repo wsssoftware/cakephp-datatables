@@ -14,9 +14,11 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
+use DataTables\Table\Builder;
 use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
 use TestApp\Application;
+use TestApp\DataTables\CategoriesDataTables;
 
 /**
  * Class LanguageOptionTraitTest
@@ -42,7 +44,8 @@ class LanguageOptionTraitTest extends TestCase {
 		$plugin->bootstrap(new Application(''));
 		$plugin->routes(Router::createRouteBuilder(''));
 		Router::setRequest(new ServerRequest());
-		$this->MainOption = new MainOption('Categories', 'abc');
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
+		$this->MainOption = $configBundle->Options;
 	}
 
 	/**

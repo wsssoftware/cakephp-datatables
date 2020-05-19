@@ -10,9 +10,15 @@
 
 namespace DataTables\Test\TestCase\Table\Option\Section;
 
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
+use DataTables\Plugin;
+use DataTables\Table\Builder;
 use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
+use TestApp\Application;
+use TestApp\DataTables\CategoriesDataTables;
 
 /**
  * Class AjaxOptionTraitTest
@@ -34,7 +40,12 @@ class AjaxOptionTraitTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$this->MainOption = new MainOption('Categories', 'abc');
+		$plugin = new Plugin();
+		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
+		$this->MainOption = $configBundle->Options;
 	}
 
 	/**
@@ -52,7 +63,7 @@ class AjaxOptionTraitTest extends TestCase {
 	 * @return void
 	 */
 	public function testAjaxUrl() {
-		$this->assertEquals('abc', $this->MainOption->getAjaxUrl());
+		$this->assertEquals('/data-tables/provider/get-tables-data/categories', $this->MainOption->getAjaxUrl());
 	}
 
 	/**

@@ -17,6 +17,7 @@ use Cake\Utility\Inflector;
 use Cake\View\View;
 use DataTables\Table\DataTables;
 use DataTables\Table\Option\MainOption;
+use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
 
 /**
  * Class ConfigBundle
@@ -52,6 +53,11 @@ final class ConfigBundle {
 	public $Query;
 
 	/**
+	 * @var \DataTables\Table\ResourcesConfig\LocalResourcesConfig The DataTables LocalResourcesConfig.
+	 */
+	public $LocalResourcesConfig;
+
+	/**
 	 * @var string The md5 used to check changes.
 	 */
 	private $_checkMd5;
@@ -73,10 +79,11 @@ final class ConfigBundle {
 			throw new FatalErrorException("Class '$dataTablesFQN' must be an inheritance of 'DataTables'.");
 		}
 		$this->Columns = new Columns($this);
-		$this->Options = new MainOption($this->_dataTables->getAlias(), $this->getUrl());
+		$this->Options = new MainOption($this, $this->getUrl());
 		$this->Query = new QueryBaseState();
 		$this->_dataTables->config($this);
 		$this->Options->setColumns($this->Columns);
+		$this->LocalResourcesConfig = LocalResourcesConfig::getInstance();
 	}
 
 	/**

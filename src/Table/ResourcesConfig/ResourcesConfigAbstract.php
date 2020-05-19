@@ -22,6 +22,11 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	private $_enabled = true;
 
 	/**
+	 * @var bool
+	 */
+	private $_autoload = true;
+
+	/**
 	 * @var string
 	 */
 	private $_cssBlock = 'css';
@@ -129,6 +134,7 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 			$configure = [];
 		}
 		$this->setEnabled(Hash::get($configure, 'enabled', true));
+		$this->setEnabled(Hash::get($configure, 'autoload', true));
 		$this->setCssBlock(Hash::get($configure, 'cssBlock', 'css'));
 		$this->setScriptBlock(Hash::get($configure, 'scriptBlock', 'script'));
 		$this->setTheme(Hash::get($configure, 'theme', static::THEME_BASE));
@@ -264,6 +270,21 @@ abstract class ResourcesConfigAbstract implements ResourcesConfigInterface {
 	 */
 	public function setEnabled(bool $enabled): void {
 		$this->_enabled = $enabled;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAutoload(): bool {
+		return $this->_autoload;
+	}
+
+	/**
+	 * @param bool $autoload
+	 * @return void
+	 */
+	public function setAutoload(bool $autoload): void {
+		$this->_autoload = $autoload;
 	}
 
 	/**

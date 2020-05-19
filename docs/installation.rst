@@ -107,20 +107,23 @@ Load the component by adding the following statement in your project's ``src/Con
 Setting the script renderer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. tip::
-    If you want to use the :doc:`Local Resources </resources>` class to load yours library dependencies files, you must to
-    have the `View::fetch('css')` and `View::fetch('script')` called inside your layout file.
-
-Set the `DataTables::renderJs()` function inside ``templates/layout/default.php`` bellow `View::fetch()`::
-
-    ...
-
-        <?= $this->fetch('css') ?>
-    </head>
+You must to call the `View::fetch()` with the script block name passed as parameter to plugin render tables scripts. The
+plugin use the same script block of :doc:`Local Resources </resources>`:: that by default is `script`. Is recommended
+that you call the fetch method above the **</body>** close tag like example below::
 
         ...
 
         <?= $this->fetch('script') ?>
-        <?= $this->DataTables->renderJs() ?>
     </body>
     </html>
+
+.. tip::
+    If you want to use the :doc:`Local Resources </resources>` class to load yours library dependencies files, you must
+    to have the `View::fetch()` with the css block name passed as parameter. You can change the block name, but by default
+    is `css`. Is recommend that you call the fetch method above the **</head>** close tag like example below::
+
+        ...
+
+            <?= $this->fetch('css') ?>
+        </head>
+

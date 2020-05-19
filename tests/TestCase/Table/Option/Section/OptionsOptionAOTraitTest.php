@@ -11,9 +11,15 @@
 namespace DataTables\Test\TestCase\Table\Option\Section;
 
 use Cake\Error\FatalErrorException;
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
+use DataTables\Plugin;
+use DataTables\Table\Builder;
 use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
+use TestApp\Application;
+use TestApp\DataTables\CategoriesDataTables;
 
 /**
  * Class OptionsOptionTraitAOTest
@@ -38,7 +44,12 @@ class OptionsOptionAOTraitTest extends TestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$this->MainOption = new MainOption('Categories', 'abc');
+		$plugin = new Plugin();
+		$plugin->bootstrap(new Application(''));
+		$plugin->routes(Router::createRouteBuilder(''));
+		Router::setRequest(new ServerRequest());
+		$configBundle = Builder::getInstance()->getConfigBundle(CategoriesDataTables::class);
+		$this->MainOption = $configBundle->Options;
 	}
 
 	/**

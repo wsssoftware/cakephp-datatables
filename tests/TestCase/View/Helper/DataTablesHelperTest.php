@@ -71,7 +71,6 @@ class DataTablesHelperTest extends TestCase {
 	 */
 	public function testRenderTable(): void {
 		$this->assertNotEmpty($this->DataTables->renderTable('Categories'));
-		$this->assertNotEmpty($this->DataTables->renderJs());
 		LocalResourcesConfig::getInstance(true);
 		EventManager::instance()->dispatch('View.beforeLayout');
 	}

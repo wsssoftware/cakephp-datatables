@@ -57,7 +57,9 @@ class DataTablesHelper extends Helper {
 		EventManager::instance()->on('View.beforeLayout', function ()
 		{
 			if (!empty($this->_configBundles)) {
+			    $tablesScript = $this->renderJs();
 				$this->getLocalResourceConfig()->requestLoad($this->getView());
+				$this->getView()->Html->scriptBlock($tablesScript, ['type' => 'text/javascript', 'block' => $this->getLocalResourceConfig()->getScriptBlock()]);
 			}
 		});
 
@@ -90,7 +92,7 @@ class DataTablesHelper extends Helper {
 	 *
 	 * @return string
 	 */
-	public function renderJs(): string {
+	private function renderJs(): string {
 		$result = '';
 		if (!empty($this->_configBundles)) {
 			$result .= $this->getView()->element('DataTables.script', ['configBundles' => $this->_configBundles]);

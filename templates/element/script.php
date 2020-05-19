@@ -23,11 +23,9 @@ foreach ($configBundles as $configBundle) {
 ?>
 
 <?php if ($minify === false): ?>
-    <script type="text/javascript">
         $(document).ready(function () {
 <?= $body ?>
         });
-    </script>
 <?php else: ?>
-    <script type="text/javascript">$(document).ready(function () {<?= Minifier::js($body) ?>});</script>
+    $(document).ready(function () {<?= Minifier::js($body) ?>});
 <?php endif;

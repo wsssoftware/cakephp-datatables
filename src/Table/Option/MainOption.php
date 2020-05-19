@@ -17,6 +17,7 @@ use Cake\ORM\Association\HasMany;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use DataTables\Table\Columns;
+use DataTables\Table\ConfigBundle;
 use DataTables\Table\Option\CallBack\CallBackFactory;
 use DataTables\Table\Option\CallBack\CallBacksTrait;
 use DataTables\Table\Option\Section\AjaxOptionTrait;
@@ -54,9 +55,9 @@ final class MainOption extends OptionAbstract {
 	const I18N_TRANSLATION = -1;
 
 	/**
-	 * @var string
+	 * @var \DataTables\Table\ConfigBundle
 	 */
-	protected $_dataTableName = '';
+	protected $_configBundle;
 
 	/**
 	 * @var array
@@ -135,12 +136,12 @@ final class MainOption extends OptionAbstract {
 	/**
 	 * MainOption constructor.
 	 *
-	 * @param string $dataTablesName
+	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 * @param string $url
 	 */
-	public function __construct(string $dataTablesName, string $url) {
+	public function __construct(ConfigBundle $configBundle, string $url) {
 		parent::__construct();
-		$this->_dataTableName = $dataTablesName;
+		$this->_configBundle = $configBundle;
 		$this->setConfig('ajax.url', $url);
 		$this->setLanguageThousands(Number::formatter()->getSymbol(NumberFormatter::DECIMAL));
 		$this->setLanguageDecimal(Number::formatter()->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL));
@@ -170,7 +171,7 @@ final class MainOption extends OptionAbstract {
 			}
 			$columnConfig = $column->getConfig();
 			if (!empty($columnConfig['createdCell'])) {
-				$result = CallBackFactory::getInstance('createdCell', $this->_dataTableName)->render($columnConfig['createdCell'], 3);
+				$result = CallBackFactory::getInstance('createdCell', $this->_configBundle->getDataTables()->getAlias())->render($columnConfig['createdCell'], 3);
 				$callBackTag = Functions::getInstance()->getCallBackReplaceTag(__FUNCTION__);
 				$this->_callbackReplaces[$callBackTag] = $result;
 				$columnConfig['createdCell'] = $callBackTag;
@@ -283,6 +284,13 @@ final class MainOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getConfigAsArray(?bool $printAllOptions = null): array {
+		$localResourcesConfig = $this->_configBundle->LocalResourcesConfig;
+	    if ($localResourcesConfig->isAutoload()) {
+			if (!empty($this->getConfig('select')) && !$localResourcesConfig->isLoadPluginSelect()) {
+				$localResourcesConfig->setLoadPluginSelect(true);
+			}
+		}
+
 		$url = Hash::get($this->_config, 'ajax.url');
 		$url = "$url/" . md5(Router::url());
 		$this->_config = Hash::insert($this->_config, 'ajax.url', $url);

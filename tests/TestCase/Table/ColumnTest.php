@@ -18,7 +18,6 @@ use DataTables\Table\Builder;
 use DataTables\Table\Column;
 use DataTables\Table\Columns;
 use DataTables\Table\DataTables;
-use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
 use TestApp\Application;
 use TestApp\DataTables\UsersDataTables;
@@ -88,7 +87,8 @@ class ColumnTest extends TestCase {
 	 * @return void
 	 */
 	public function testColumns() {
-		$mainOption = new MainOption('Users', 'abc');
+	    $configBundle = Builder::getInstance()->getConfigBundle(UsersDataTables::class);
+		$mainOption = $configBundle->Options;
 		$this->Columns->addNonDatabaseColumn('action');
 		$mainOption->setColumns($this->Columns);
 		$expected = count($this->Columns->getColumns());

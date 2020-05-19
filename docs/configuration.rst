@@ -12,11 +12,15 @@ DataTables.libraries
 DataTables.libraries.enabled
     `Default:` **true** - If true, will enable the ``css`` and ``scripts`` load, if false, will disable it.
 
+DataTables.libraries.autoload
+    `Default:` **true** - If true, it will load the library plugins automatically when one is used.
+
 DataTables.libraries.cssBlock
     `Default:` **css** - This config is used by plugin to know in what fetch block the css files tag will be rendered.
 
 DataTables.libraries.scriptBlock
     `Default:` **script** - This config is used by plugin to know in what fetch block the script files tag will be rendered.
+    The plugin script code for each table will be rendered inside this block too.
 
 DataTables.libraries.theme
     `Default:` **LocalResourcesConfig::THEME_BASE** - This configuration will decide what theme files must be loaded.
