@@ -1,5 +1,9 @@
+.. php:namespace:: DataTables\Table
+
 ConfigBundle
 ############
+
+.. php:class:: ConfigBundle(string $checkMd5, string $dataTablesFQN)
 
 `ConfigBundle` is a class that store a table configuration. It will be used to draw the table html, to create the
 JavaScript, and to get the table data.
@@ -32,5 +36,6 @@ Learning more
     :maxdepth: 1
 
     /tables/config-bundle/columns
+    /tables/config-bundle/column
     /tables/config-bundle/options
     /tables/config-bundle/query

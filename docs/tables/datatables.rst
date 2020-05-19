@@ -1,7 +1,11 @@
+.. php:namespace:: DataTables\Table
+
 DataTables
 ##########
 
-Classes inherited from **\\DataTables\\Table\\DataTables** is the classes that has two methods very important that is
+.. php:class:: DataTables()
+
+Classes inherited from **DataTables** is the classes that has two methods very important that is
 called to apply the application business rules to a :doc:`ConfigBundle </tables/config-bundle>` from a table. They
 are saved on ``src/DataTables/`` folder and are postfixed with `DataTables`, so, Categories DataTables class will be
 named `CategoriesDataTables`. You can easily :doc:`bake </tables/bake>` this class using the CakePHP bake shell.
@@ -14,7 +18,9 @@ There are two methods, the `config` and `rowRenderer`, one to set configs and ot
 Config
 ^^^^^^
 
-**DataTables::config()** - This method has a :doc:`ConfigBundle </tables/config-bundle>` passed as param. Inside it
+.. php:method:: config(ConfigBundle $configBundle)
+
+This method has a :doc:`ConfigBundle </tables/config-bundle>` passed as param. Inside it
 you will be able to set the columns, DataTables library options and special Query conditions for the table. Its
 structure is::
 
@@ -30,7 +36,9 @@ structure is::
 Row Renderer
 ^^^^^^^^^^^^
 
-**DataTables::rowRenderer()** - This method has a `DataTablesView`, `Entity` and `Renderer` objects passed as param. Inside it
+.. php:method:: rowRenderer(DataTablesView $appView, EntityInterface $entity, Renderer $renderer)
+
+This method has a `DataTablesView`, `Entity` and `Renderer` objects passed as param. Inside it
 the developer will be able to define how each row column will be rendered. DataTablesView is inheritance from `AppView` and
 has access to all helpers and `View` methods. The entity has all needle dada, the developer can even do `if` and
 others conditionals as required by business rule. Renderer is a object that will storage each column value set by the developer.
