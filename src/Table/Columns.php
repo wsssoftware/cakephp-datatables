@@ -165,7 +165,7 @@ final class Columns {
 	}
 
 	/**
-	 * Return all configured columns.
+	 * Return column by passed index.
 	 *
 	 * @param int $index
 	 * @return \DataTables\Table\Column
@@ -175,6 +175,31 @@ final class Columns {
 		$columns = array_values($columns);
 
 		return $columns[$index];
+	}
+
+	/**
+	 * Get the column index by name.
+	 *
+	 * @param string $columnName
+	 * @return int
+	 */
+	public function getColumnIndexByName(string $columnName): int {
+		if (!empty($this->_columns[$columnName])) {
+			$columnIndex = $columnName;
+		}
+		if (empty($columnIndex)) {
+			$columnInfo = $this->normalizeDataTableField($columnName);
+			$columnIndex = "{$columnInfo['table']}.{$columnInfo['column']}";
+		}
+		$columns = $this->getColumns();
+		$currentIndex = 0;
+		foreach ($columns as $key => $column) {
+			if ($key === $columnIndex) {
+				return $currentIndex;
+			}
+			$currentIndex++;
+		}
+		return -1;
 	}
 
 	/**

@@ -199,4 +199,17 @@ class ColumnsTest extends TestCase {
 		$this->Columns->changeColumnIndex('abc', 2);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testGetIndexByName() {
+		$index = $this->Columns->getColumnIndexByName('title');
+		$this->assertEquals(1, $index);
+		$index = $this->Columns->getColumnIndexByName('action');
+		$this->assertEquals(6, $index);
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->Columns->getColumnIndexByName('abc');
+	}
+
 }

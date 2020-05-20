@@ -15,6 +15,7 @@ use Cake\Event\EventManager;
 use Cake\View\Helper;
 use DataTables\Table\Builder;
 use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
+use DataTables\Table\UrlQueryBuilder;
 
 /**
  * Class DataTablesHelper
@@ -62,7 +63,20 @@ class DataTablesHelper extends Helper {
 				$this->getView()->Html->scriptBlock($tablesScript, ['type' => 'text/javascript', 'block' => $this->getLocalResourceConfig()->getScriptBlock()]);
 			}
 		});
+	}
 
+	/**
+	 * Create a link to put some filters and orders to the table.
+	 *
+	 * @param string $dataTables
+	 * @param string $name
+	 * @param array $url
+	 * @param array $options
+	 * @return \DataTables\Table\UrlQueryBuilder
+	 * @throws \ReflectionException
+	 */
+	public function link(string $dataTables, string $name, array $url, array $options = []): UrlQueryBuilder {
+	    return new UrlQueryBuilder($this->getView(), $dataTables, $name, $url, $options);
 	}
 
 	/**

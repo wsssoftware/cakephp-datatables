@@ -3,7 +3,6 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  * php version 7.2
- *
  * link     https://github.com/allanmcarvalho/cakephp-data-renderer
  * author   Allan Carvalho <allan.m.carvalho@outlook.com>
  */
@@ -11,6 +10,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\View\Helper;
 
+use Cake\Error\FatalErrorException;
 use Cake\Event\EventManager;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
@@ -20,6 +20,7 @@ use DataTables\Plugin;
 use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
 use DataTables\View\Helper\DataTablesHelper;
 use TestApp\Application;
+use TestApp\DataTables\CategoriesDataTables;
 
 /**
  * Class DataTablesHelperTest
@@ -73,6 +74,43 @@ class DataTablesHelperTest extends TestCase {
 		$this->assertNotEmpty($this->DataTables->renderTable('Categories'));
 		LocalResourcesConfig::getInstance(true);
 		EventManager::instance()->dispatch('View.beforeLayout');
+	}
+
+	/**
+	 * Test renderTable method
+	 *
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testLink(): void {
+
+		$urlQuery = $this->DataTables->link(
+			CategoriesDataTables::class,
+			'abc',
+			[
+				'controller' => 'Provider',
+				'action' => 'getTablesData',
+				'plugin' => 'DataTables',
+				'prefix' => false,
+				'?' => ['abc' => '123'],
+			]);
+
+		$urlQuery
+			->setPage(2)
+			->setColumnOrderDesc('id')
+			->setColumnOrderAsc('created')
+			->setSearch('abc')
+			->setColumnSearch('id', 'abc');
+
+		$expected = '<a href="/data-tables/provider/get-tables-data?abc=123&amp;data-tables%5BCategories%5D%5Bpage%5D=2&amp;data-tables%5BCategories%5D%5Bcolumns%5D%5BCategories.id%5D%5Border%5D=desc&amp;data-tables%5BCategories%5D%5Bcolumns%5D%5BCategories.id%5D%5Bsearch%5D=abc&amp;data-tables%5BCategories%5D%5Bcolumns%5D%5BCategories.created%5D%5Border%5D=asc&amp;data-tables%5BCategories%5D%5Bsearch%5D=abc">abc</a>';
+		$this->assertEquals($expected, $urlQuery->__toString());
+
+		$urlQuery->setPage('last');
+		$expected = '<a href="/data-tables/provider/get-tables-data?abc=123&amp;data-tables%5BCategories%5D%5Bpage%5D=last&amp;data-tables%5BCategories%5D%5Bcolumns%5D%5BCategories.id%5D%5Border%5D=desc&amp;data-tables%5BCategories%5D%5Bcolumns%5D%5BCategories.id%5D%5Bsearch%5D=abc&amp;data-tables%5BCategories%5D%5Bcolumns%5D%5BCategories.created%5D%5Border%5D=asc&amp;data-tables%5BCategories%5D%5Bsearch%5D=abc">abc</a>';
+		$this->assertEquals($expected, $urlQuery->__toString());
+
+		$this->expectException(FatalErrorException::class);
+		$urlQuery->setPage(true);
 	}
 
 }

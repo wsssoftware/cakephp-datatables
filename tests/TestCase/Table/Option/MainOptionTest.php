@@ -10,14 +10,14 @@
 
 namespace DataTables\Test\TestCase\Table\Option;
 
+use Cake\Error\FatalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
+use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use const JSON_ERROR_NONE;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
-use DataTables\Table\Columns;
-use DataTables\Table\Option\MainOption;
 use DataTables\Tools\Minifier;
 use Exception;
 use TestApp\Application;
@@ -31,6 +31,8 @@ use TestApp\DataTables\CategoriesDataTables;
  * @link     https://github.com/allanmcarvalho/cakephp-datatables
  */
 class MainOptionTest extends TestCase {
+
+	use IntegrationTestTrait;
 
 	/**
 	 * Test subject
@@ -147,6 +149,41 @@ class MainOptionTest extends TestCase {
 		$json = Minifier::js($this->MainOption->getConfigAsJson());
 		$expected = '{"ajax":{"type":"GET","url":"\/data-tables\/provider\/get-tables-data\/categories\/6666cd76f96956469e7be39d750cc7d9"},"serverSide":!0,"language":{"thousands":",","decimal":"."},"columnDefs":[{"targets":"_all"}],"columns":[{"createdCell":function(cell,cellData,rowData,rowIndex,colIndex){alert("ok")},"name":"Categories.id","title":"Id","type":"num"},{"name":"Categories.name","title":"Name","type":"string"},{"name":"Categories.created","title":"Created","type":"date"},{"name":"action","orderable":!1,"searchable":!1,"title":"Action"}]}';
 		$this->assertTextContains($expected, $json);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSetPage() {
+		$this->assertEquals(null, $this->MainOption->getCurrentPage());
+		$this->MainOption->setCurrentPage(2);
+		$this->assertEquals(2, $this->MainOption->getCurrentPage());
+		$this->MainOption->setCurrentPage('last');
+		$this->assertEquals('"last"', $this->MainOption->getCurrentPage());
+		$this->expectException(FatalErrorException::class);
+		$this->MainOption->setCurrentPage(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testWithLink() {
+		$dataTablesQuery['data-tables']['Categories'] = [
+			'page' => 2,
+			'search' => 'abc',
+			'columns' => [
+				'Categories.id' => [
+					'order' => 'asc',
+					'search' => 'abc',
+				],
+			],
+		];
+		Router::setRequest(new ServerRequest(['query' => $dataTablesQuery]));
+		$this->MainOption->getConfigAsArray();
+		$this->assertEquals(2, $this->MainOption->getCurrentPage());
+		$this->assertEquals('abc', $this->MainOption->getSearchSearch());
+		$this->assertNotEmpty($this->MainOption->getOrder());
+		$this->assertNotEmpty($this->MainOption->getSearchCols());
 	}
 
 }

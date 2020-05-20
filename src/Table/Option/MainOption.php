@@ -12,6 +12,7 @@ declare(strict_types = 1);
 namespace DataTables\Table\Option;
 
 use Cake\Core\Configure;
+use Cake\Error\FatalErrorException;
 use Cake\I18n\Number;
 use Cake\ORM\Association\HasMany;
 use Cake\Routing\Router;
@@ -27,6 +28,7 @@ use DataTables\Table\Option\Section\OptionsOptionAOTrait;
 use DataTables\Table\Option\Section\OptionsOptionPZTrait;
 use DataTables\Table\Option\Section\PluginSelectTrait;
 use DataTables\Tools\Functions;
+use DataTables\Tools\Validator;
 use NumberFormatter;
 
 /**
@@ -58,6 +60,11 @@ final class MainOption extends OptionAbstract {
 	 * @var \DataTables\Table\ConfigBundle
 	 */
 	protected $_configBundle;
+
+	/**
+	 * @var int|string|null
+	 */
+	protected $_currentPage = null;
 
 	/**
 	 * @var array
@@ -148,12 +155,44 @@ final class MainOption extends OptionAbstract {
 	}
 
 	/**
+	 * Get table current page.
+	 *
+	 * @return int|string|null
+	 */
+	public function getCurrentPage() {
+		return $this->_currentPage;
+	}
+
+	/**
+	 * Set the table current page.
+	 *
+	 * @param int|string|null $page
+	 * @return $this
+	 */
+	public function setCurrentPage($page): self {
+	    if (is_numeric($page)) {
+	        $page = (int)$page;
+		}
+	    if (is_string($page)) {
+			Validator::getInstance()->inArrayOrFail($page, ['first', 'next', 'previous', 'last']);
+			$page = "\"$page\"";
+		} elseif (!is_int($page)) {
+			throw new FatalErrorException('Invalid type of page. Must be int or string');
+		}
+		$this->_currentPage = $page;
+	    return $this;
+	}
+
+	/**
 	 * Setter method.
 	 * Set all columns and defColumns options using a Columns class.
 	 *
-	 * @internal
 	 * @param \DataTables\Table\Columns $columns
 	 * @return $this
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
+	 * @internal
 	 * @link https://datatables.net/reference/option/
 	 */
 	public function setColumns(Columns $columns): self {
@@ -291,6 +330,7 @@ final class MainOption extends OptionAbstract {
 			}
 		}
 
+	    $this->processUrlQuery();
 		$url = Hash::get($this->_config, 'ajax.url');
 		$url = "$url/" . md5(Router::url());
 		$this->_config = Hash::insert($this->_config, 'ajax.url', $url);
@@ -303,6 +343,48 @@ final class MainOption extends OptionAbstract {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @return void
+	 */
+	private function processUrlQuery() {
+		$urlQuery = Router::getRequest()->getQuery("data-tables.{$this->_configBundle->getDataTables()->getAlias()}");
+		if (!empty($urlQuery['page'])) {
+			$this->setCurrentPage($urlQuery['page']);
+		}
+		if (!empty($urlQuery['search'])) {
+			$this->setSearchSearch($urlQuery['search']);
+		}
+		if (!empty($urlQuery['columns'])) {
+			$order = [];
+			$searchCols = [];
+			foreach ($urlQuery['columns'] as $columnName => $options) {
+				$columnIndex = $this->_configBundle->Columns->getColumnIndexByName($columnName);
+				if (!empty($options['order'])) {
+					$columnOrder = [];
+					$columnOrder[] = $columnIndex;
+					$columnOrder[] = $options['order'];
+					$order[] = $columnOrder;
+				}
+				if (!empty($options['search'])) {
+				    $columnsCount = count($this->_configBundle->Columns->getColumns());
+					for ($i = 0; $i <= $columnsCount; $i++) {
+						if ($i !== $columnIndex) {
+							$searchCols[] = null;
+						} else {
+							$searchCols[] = ['search' => $options['search']];
+						}
+					}
+				}
+			}
+			if (!empty($order)) {
+				$this->_configBundle->Options->setOrder($order);
+			}
+			if (!empty($searchCols)) {
+				$this->_configBundle->Options->setSearchCols($searchCols);
+			}
+		}
 	}
 
 }
