@@ -162,6 +162,24 @@ requested column index. Example of usage::
         $columnTitle = $columns->getColumnByIndex(0)->getTitle();
     }
 
+Getting a column index by name
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. php:method:: getColumnIndexByName(string $columnName)
+
+If you need know the index of a specific column, you can provide the column name to this method and it will return the
+index. Example of usage::
+
+    /**
+     * A example of controller action.
+     */
+    public function controllerAction()
+    {
+        $columns = $this->DataTables->getColumns('Products')
+
+        $columnIndex = $columns->getColumnIndexByName('Products.created');
+    }
+
 Getting a column name by index
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

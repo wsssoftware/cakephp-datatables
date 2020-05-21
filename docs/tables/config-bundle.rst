@@ -39,3 +39,4 @@ Learning more
     /tables/config-bundle/column
     /tables/config-bundle/options
     /tables/config-bundle/query
+    /tables/config-bundle/resources

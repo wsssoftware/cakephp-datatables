@@ -15,6 +15,3 @@ Contents
    Installation <installation>
    Configuration <configuration>
    Tables <tables>
-   Local Resources <resources>
-
-
