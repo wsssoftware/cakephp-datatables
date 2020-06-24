@@ -67,8 +67,10 @@ final class TableDataUtils {
 		$table = $this->_configBundle->getDataTables()->getOrmTable();
 		$query = $this->_configBundle->Query->mergeWithQuery($table->find());
 		foreach ($columns->getColumns() as $columnName => $column) {
-			if ($column->isDatabase() && !Functions::getInstance()->getAssociationUsingPath($table, $column->getAssociationPath()) instanceof HasMany) {
+			if ($column->isDatabase() && empty($column->getFunctionExpression()) && !Functions::getInstance()->getAssociationUsingPath($table, $column->getAssociationPath()) instanceof HasMany) {
 				$select[] = $columnName;
+			} elseif (!empty($column->getFunctionExpression())) {
+				$select[$columnName] = $column->getFunctionExpression();
 			}
 			$associationPaths = substr_replace($column->getAssociationPath(), '', 0, strlen($table->getAlias()) + 1);
 			if (!empty($associationPaths)) {

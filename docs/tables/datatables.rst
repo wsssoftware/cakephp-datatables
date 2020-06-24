@@ -5,7 +5,7 @@ DataTables
 
 .. php:class:: DataTables()
 
-Classes inherited from **DataTables** is the classes that has two methods very important that is
+Classes inherited from **DataTables** are the classes that has two methods very important that is
 called to apply the application business rules to a :doc:`ConfigBundle </tables/config-bundle>` from a table. They
 are saved on ``src/DataTables/`` folder and are postfixed with `DataTables`, so, Categories DataTables class will be
 named `CategoriesDataTables`. You can easily :doc:`bake </tables/bake>` this class using the CakePHP bake shell.

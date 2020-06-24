@@ -11,6 +11,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Database\Expression\FunctionExpression;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
@@ -110,23 +111,33 @@ final class Column {
 	private $_associationPath = '';
 
 	/**
+	 * @var \Cake\Database\Expression\FunctionExpression|null
+	 */
+	private $_functionExpression = null;
+
+	/**
 	 * Column constructor.
 	 *
 	 * @param string $name
 	 * @param bool $database
 	 * @param array $columnSchema
 	 * @param string $associationPath
+	 * @param \Cake\Database\Expression\FunctionExpression|null $functionExpression
 	 */
-	public function __construct(string $name, bool $database = true, array $columnSchema = [], string $associationPath = '') {
-		$title = Inflector::humanize($name);
-		if ($database === true) {
-			$title = Inflector::humanize(explode('.', $name)[1]);
+	public function __construct(string $name, bool $database = true, array $columnSchema = [], string $associationPath = '', FunctionExpression $functionExpression = null) {
+		$title = explode('.', $name);
+		if (count($title) === 2) {
+			$title = $title[1];
+		} else {
+			$title = $title[0];
 		}
+	    $title = Inflector::humanize($title);
 		$this->_config = Hash::insert($this->_config, 'name', $name);
 		$this->_config = Hash::insert($this->_config, 'title', $title);
 		$this->_database = $database;
 		$this->_columnSchema = $columnSchema;
 		$this->_associationPath = $associationPath;
+		$this->_functionExpression = $functionExpression;
 		if ($database === true && !empty($columnSchema['type']) && !empty(static::DATA_TABLES_TYPE_MAP[$columnSchema['type']])) {
 			$this->setType(static::DATA_TABLES_TYPE_MAP[$columnSchema['type']]);
 		}
@@ -137,6 +148,13 @@ final class Column {
 	 */
 	public function getAssociationPath(): string {
 		return $this->_associationPath;
+	}
+
+	/**
+	 * @return \Cake\Database\Expression\FunctionExpression
+	 */
+	public function getFunctionExpression(): ?FunctionExpression {
+		return $this->_functionExpression;
 	}
 
 	/**

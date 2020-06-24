@@ -10,6 +10,8 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Database\Expression\FunctionExpression;
+use Cake\Database\FunctionsBuilder;
 use Cake\Error\FatalErrorException;
 use Cake\Utility\Inflector;
 use DataTables\Tools\Functions;
@@ -39,6 +41,11 @@ final class Columns {
 	 * @var \DataTables\Table\Column
 	 */
 	public $Default;
+
+	/**
+	 * @var \Cake\Database\FunctionsBuilder|null
+	 */
+	private $_functionsBuilder = null;
 
 	/**
 	 * Columns constructor.
@@ -71,6 +78,20 @@ final class Columns {
 	}
 
 	/**
+	 * Add a custom database column to DataTables table.
+	 * This method don't will autoload others tables, so, if you want use with a joined table, you must add it before.
+	 *
+	 * @param \Cake\Database\Expression\FunctionExpression $functionExpression
+	 * @param string $asName
+	 * @param int|null $index Position to insert new column.
+	 * @return \DataTables\Table\Column
+	 */
+	public function addCustomDatabaseColumn(FunctionExpression $functionExpression, string $asName, ?int $index = null): Column {
+		$column = new Column($asName, true, [], '', $functionExpression);
+		return $this->saveColumn($column, $index);
+	}
+
+	/**
 	 * Add a non database column to DataTables table.
 	 *
 	 * @param string $label
@@ -84,6 +105,19 @@ final class Columns {
 		$column = new Column($label, false);
 
 		return $this->saveColumn($column, $index);
+	}
+
+	/**
+	 * Get the query FunctionBuilder instance.
+	 *
+	 * @return \Cake\Database\FunctionsBuilder
+	 */
+	public function func(): FunctionsBuilder {
+		if ($this->_functionsBuilder === null) {
+			$this->_functionsBuilder = new FunctionsBuilder();
+		}
+
+		return $this->_functionsBuilder;
 	}
 
 	/**

@@ -49,6 +49,30 @@ the index to put the column in a specific position. Example of usage::
     needed, so, the query will be build automatically according to your configuration. **BelongsTo** and **HasMany**
     associations will follow the same logical from CakePHP ou result entity.
 
+Adding a custom database column
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. php:method:: addCustomDatabaseColumn(FunctionExpression $functionExpression, string $asName, ?int $index = null)
+
+With this method, you will able of do some custom sql finds like `CONCAT`, `SUM` and others. You must provide a
+`FunctionExpression` instance that is the result of one of many methods that you can find in `FunctionsBuilder` that you
+can get in `$configBundle->Columns->func()` method. Example of usage::
+
+    /**
+     * @param \DataTables\Table\ConfigBundle $configBundle
+     */
+    public function config(ConfigBundle $configBundle): void
+    {
+        $func = $configBundle->Columns->func()->concat(['id' => 'identifier', ' created in: ', 'created' => 'identifier']);
+        $configBundle->Columns->addCustomDatabaseColumn($func, 'custom_field');
+
+    }
+
+.. note::
+    When you use this method with joined tables you will need to join it manually with the `$configBundle->Query` object.
+    With this `\DataTables\Table\QueryBaseState` object, you will can join the new table with a contain method or others
+    joins methods.
+
 Adding non database column
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

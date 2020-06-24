@@ -201,7 +201,7 @@ final class MainOption extends OptionAbstract {
 			if ($column->isDatabase() === false) {
 				$column->setSearchable(false);
 				$column->setOrderable(false);
-			} else {
+			} elseif (empty($column->getFunctionExpression())) {
 				$association = Functions::getInstance()->getAssociationUsingPath($columns->getConfigBundle()->getDataTables()->getOrmTable(), $column->getAssociationPath());
 				if ($association instanceof HasMany) {
 					$column->setSearchable(false);
@@ -329,7 +329,6 @@ final class MainOption extends OptionAbstract {
 				$localResourcesConfig->setLoadPluginSelect(true);
 			}
 		}
-
 	    $this->processUrlQuery();
 		$url = Hash::get($this->_config, 'ajax.url');
 		$url = "$url/" . md5(Router::url());
