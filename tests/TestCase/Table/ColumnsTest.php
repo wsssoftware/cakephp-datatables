@@ -17,6 +17,7 @@ use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
+use DataTables\Table\Column;
 use DataTables\Table\Columns;
 use InvalidArgumentException;
 use TestApp\Application;
@@ -96,6 +97,15 @@ class ColumnsTest extends TestCase {
 	public function testDatabaseColumn() {
 		$this->expectException(InvalidArgumentException::class);
 		$this->Columns->addDatabaseColumn('Articles.abc');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCustomDatabaseColumn() {
+		$concat = $this->Columns->func()->concat(['id' => 'identifier', '_', 'created' => 'identifier']);
+		$column = $this->Columns->addCustomDatabaseColumn($concat, 'custom_column');
+		$this->assertInstanceOf(Column::class, $column);
 	}
 
 	/**
