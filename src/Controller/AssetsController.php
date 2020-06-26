@@ -1,106 +1,50 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DataTables\Controller;
 
 use DataTables\Controller\AppController;
 
 /**
- * Assets Controller
+ * Class AssetsController
+ * Created by allancarvalho in june 26, 2020
  *
- * @method \DataTables\Model\Entity\Asset[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \DataTables\Controller\Component\CssComponent $Css
+ * @property \DataTables\Controller\Component\JsComponent $Js
  */
-class AssetsController extends AppController
-{
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $assets = $this->paginate($this->Assets);
+class AssetsController extends AppController {
 
-        $this->set(compact('assets'));
-    }
+	/**
+	 * @return void
+	 */
+	public function initialize(): void {
+		parent::initialize();
+		$this->loadComponent('DataTables.Css');
+		$this->loadComponent('DataTables.Js');
+	}
 
-    /**
-     * View method
-     *
-     * @param string|null $id Asset id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $asset = $this->Assets->get($id, [
-            'contain' => [],
-        ]);
+	/**
+	 * Get the css file.
+	 *
+	 * @return \Cake\Http\Response
+	 */
+	public function css() {
+		$query = $this->getRequest()->getQuery();
+		$body = $this->Css->getFilesBody($query, 'css');
 
-        $this->set(compact('asset'));
-    }
+		return $this->getResponse()->withType('text/css;charset=UTF-8')->withStringBody($body);
+	}
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $asset = $this->Assets->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $asset = $this->Assets->patchEntity($asset, $this->request->getData());
-            if ($this->Assets->save($asset)) {
-                $this->Flash->success(__('The asset has been saved.'));
+	/**
+	 * Get the script file.
+	 *
+	 * @return \Cake\Http\Response
+	 */
+	public function script() {
+		$query = $this->getRequest()->getQuery();
+		$body = $this->Js->getFilesBody($query, 'js');
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The asset could not be saved. Please, try again.'));
-        }
-        $this->set(compact('asset'));
-    }
+		return $this->getResponse()->withType('application/javascript')->withStringBody($body);
+	}
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Asset id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $asset = $this->Assets->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $asset = $this->Assets->patchEntity($asset, $this->request->getData());
-            if ($this->Assets->save($asset)) {
-                $this->Flash->success(__('The asset has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The asset could not be saved. Please, try again.'));
-        }
-        $this->set(compact('asset'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Asset id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $asset = $this->Assets->get($id);
-        if ($this->Assets->delete($asset)) {
-            $this->Flash->success(__('The asset has been deleted.'));
-        } else {
-            $this->Flash->error(__('The asset could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
 }

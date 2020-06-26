@@ -323,10 +323,10 @@ final class MainOption extends OptionAbstract {
 	 * @return array
 	 */
 	public function getConfigAsArray(?bool $printAllOptions = null): array {
-		$localResourcesConfig = $this->_configBundle->LocalResourcesConfig;
-	    if ($localResourcesConfig->isAutoload()) {
-			if (!empty($this->getConfig('select')) && !$localResourcesConfig->isLoadPluginSelect()) {
-				$localResourcesConfig->setLoadPluginSelect(true);
+		$assets = $this->_configBundle->Assets;
+	    if ($assets->isAutoload()) {
+			if (!empty($this->getConfig('select')) && !$assets->isLoadPluginSelect()) {
+				$assets->setLoadPluginSelect(true);
 			}
 		}
 	    $this->processUrlQuery();

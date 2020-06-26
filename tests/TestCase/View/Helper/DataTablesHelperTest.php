@@ -17,7 +17,7 @@ use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 use DataTables\Plugin;
-use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
+use DataTables\Table\Assets;
 use DataTables\View\Helper\DataTablesHelper;
 use TestApp\Application;
 use TestApp\DataTables\CategoriesDataTables;
@@ -72,7 +72,7 @@ class DataTablesHelperTest extends TestCase {
 	 */
 	public function testRenderTable(): void {
 		$this->assertNotEmpty($this->DataTables->renderTable('Categories'));
-		LocalResourcesConfig::getInstance(true);
+		Assets::getInstance(true);
 		EventManager::instance()->dispatch('View.beforeLayout');
 	}
 

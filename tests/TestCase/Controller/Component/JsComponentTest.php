@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DataTables\Test\TestCase\Controller\Component;
 
@@ -10,36 +10,42 @@ use DataTables\Controller\Component\JsComponent;
 /**
  * DataTables\Controller\Component\JsComponent Test Case
  */
-class JsComponentTest extends TestCase
-{
-    /**
-     * Test subject
-     *
-     * @var \DataTables\Controller\Component\JsComponent
-     */
-    protected $Js;
+class JsComponentTest extends TestCase {
 
-    /**
-     * setUp method
-     *
-     * @return void
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $registry = new ComponentRegistry();
-        $this->Js = new JsComponent($registry);
-    }
+	/**
+	 * Test subject
+	 *
+	 * @var \DataTables\Controller\Component\JsComponent
+	 */
+	protected $Js;
 
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    public function tearDown(): void
-    {
-        unset($this->Js);
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
+	public function setUp(): void {
+		parent::setUp();
+		$registry = new ComponentRegistry();
+		$this->Js = new JsComponent($registry);
+	}
 
-        parent::tearDown();
-    }
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
+	public function tearDown(): void {
+		unset($this->Js);
+
+		parent::tearDown();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test() {
+		static::markTestIncomplete();
+	}
+
 }

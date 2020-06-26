@@ -12,9 +12,10 @@ namespace DataTables\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
+use Cake\Routing\Router;
 use Cake\View\Helper;
+use DataTables\Table\Assets;
 use DataTables\Table\Builder;
-use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
 use DataTables\Table\UrlQueryBuilder;
 
 /**
@@ -59,8 +60,12 @@ class DataTablesHelper extends Helper {
 		{
 			if (!empty($this->_configBundles)) {
 			    $tablesScript = $this->renderJs();
-				$this->getLocalResourceConfig()->requestLoad($this->getView());
-				$this->getView()->Html->scriptBlock($tablesScript, ['type' => 'text/javascript', 'block' => $this->getLocalResourceConfig()->getScriptBlock()]);
+				$assets = Assets::getInstance();
+				if ($assets->isEnabled()) {
+					$this->getView()->Html->css(Router::url($assets->getCssUrlArray(), true), ['block' => $assets->getCssBlock()]);
+					$this->getView()->Html->script(Router::url($assets->getScriptUrlArray(), true), ['block' => $assets->getScriptBlock()]);
+				}
+				$this->getView()->Html->scriptBlock($tablesScript, ['type' => 'text/javascript', 'block' => $assets->getScriptBlock()]);
 			}
 		});
 	}
@@ -92,13 +97,6 @@ class DataTablesHelper extends Helper {
 		$this->_configBundles[$configBundle->getUniqueId()] = $configBundle;
 
 		return $configBundle->generateTableHtml($this->getView(), $options);
-	}
-
-	/**
-	 * @return \DataTables\Table\ResourcesConfig\LocalResourcesConfig
-	 */
-	public function getLocalResourceConfig() {
-		return LocalResourcesConfig::getInstance();
 	}
 
 	/**

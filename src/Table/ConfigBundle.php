@@ -17,7 +17,6 @@ use Cake\Utility\Inflector;
 use Cake\View\View;
 use DataTables\Table\DataTables;
 use DataTables\Table\Option\MainOption;
-use DataTables\Table\ResourcesConfig\LocalResourcesConfig;
 
 /**
  * Class ConfigBundle
@@ -53,11 +52,6 @@ final class ConfigBundle {
 	public $Query;
 
 	/**
-	 * @var \DataTables\Table\ResourcesConfig\LocalResourcesConfig The DataTables LocalResourcesConfig.
-	 */
-	public $LocalResourcesConfig;
-
-	/**
 	 * @var \DataTables\Table\Assets The DataTables Assets manager.
 	 */
 	public $Assets;
@@ -86,10 +80,9 @@ final class ConfigBundle {
 		$this->Columns = new Columns($this);
 		$this->Options = new MainOption($this, $this->getUrl());
 		$this->Query = new QueryBaseState();
+		$this->Assets = Assets::getInstance();
 		$this->_dataTables->config($this);
 		$this->Options->setColumns($this->Columns);
-		$this->Assets = new Assets();
-		$this->LocalResourcesConfig = LocalResourcesConfig::getInstance();
 	}
 
 	/**
