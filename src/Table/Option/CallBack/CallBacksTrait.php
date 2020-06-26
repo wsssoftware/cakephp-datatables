@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -66,8 +66,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackCreatedRow($bodyOrParams = []): self {
+	public function callbackCreatedRow($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'createdRow', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -89,8 +90,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackDrawCallback($bodyOrParams = []): self {
+	public function callbackDrawCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'drawCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -117,8 +119,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackFooterCallback($bodyOrParams = []): self {
+	public function callbackFooterCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'footerCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -143,8 +146,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackFormatNumber($bodyOrParams = []): self {
+	public function callbackFormatNumber($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'formatNumber', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -170,8 +174,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackHeaderCallback($bodyOrParams = []): self {
+	public function callbackHeaderCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'headerCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -199,8 +204,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackInfoCallback($bodyOrParams = []): self {
+	public function callbackInfoCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'infoCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -226,8 +232,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackInitComplete($bodyOrParams = []): self {
+	public function callbackInitComplete($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'initComplete', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -249,8 +256,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackPreDrawCallback($bodyOrParams = []): self {
+	public function callbackPreDrawCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'preDrawCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -279,8 +287,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackRowCallback($bodyOrParams = []): self {
+	public function callbackRowCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'rowCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -314,8 +323,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackStateLoadCallback($bodyOrParams = []): self {
+	public function callbackStateLoadCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'stateLoadCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -343,8 +353,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackStateLoadParams($bodyOrParams = []): self {
+	public function callbackStateLoadParams($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'stateLoadParams', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -369,8 +380,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackStateLoaded($bodyOrParams = []): self {
+	public function callbackStateLoaded($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'stateLoaded', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -392,8 +404,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackStateSaveCallback($bodyOrParams = []): self {
+	public function callbackStateSaveCallback($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'stateSaveCallback', __FUNCTION__);
+
 		return $this;
 	}
 
@@ -421,8 +434,9 @@ trait CallBacksTrait {
 	 * @throws \Twig\Error\SyntaxError
 	 * @return $this
 	 */
-	public function callbackStateSaveParams($bodyOrParams = []): self {
+	public function callbackStateSaveParams($bodyOrParams = []) {
 		$this->callback($bodyOrParams, 'stateSaveParams', __FUNCTION__);
+
 		return $this;
 	}
 

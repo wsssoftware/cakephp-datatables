@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  *
  * @noinspection SqlNoDataSourceInspection
  * @noinspection SqlDialectInspection
@@ -49,8 +49,8 @@ class QueryBaseStateTest extends TestCase {
 	/**
 	 * setUp method
 	 *
-	 * @return void
 	 * @throws \ReflectionException
+	 * @return void
 	 */
 	public function setUp(): void {
 		parent::setUp();

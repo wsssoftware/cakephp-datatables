@@ -2,9 +2,9 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -18,28 +18,28 @@ use DataTables\Tools\Validator;
  */
 class Assets {
 
-	const BASE_CSS_URL = [
+	public const BASE_CSS_URL = [
 		'prefix' => false,
 		'plugin' => 'DataTables',
 		'controller' => 'Assets',
 		'action' => 'css',
 	];
-	const BASE_SCRIPT_URL = [
+	public const BASE_SCRIPT_URL = [
 		'prefix' => false,
 		'plugin' => 'DataTables',
 		'controller' => 'Assets',
 		'action' => 'script',
 	];
 
-	const DEFAULT_THEME = self::THEME_BASE;
-	const THEME_BASE = 'base';
-	const THEME_BOOTSTRAP3 = 'bootstrap3';
-	const THEME_BOOTSTRAP4 = 'bootstrap4';
-	const THEME_FOUNDATION = 'foundation';
-	const THEME_JQUERYUI = 'jqueryui';
-	const THEME_SEMANTICUI = 'semanticui';
+	public const DEFAULT_THEME = self::THEME_BASE;
+	public const THEME_BASE = 'base';
+	public const THEME_BOOTSTRAP3 = 'bootstrap3';
+	public const THEME_BOOTSTRAP4 = 'bootstrap4';
+	public const THEME_FOUNDATION = 'foundation';
+	public const THEME_JQUERYUI = 'jqueryui';
+	public const THEME_SEMANTICUI = 'semanticui';
 
-	const THEMES_ALLOWED = [
+	public const THEMES_ALLOWED = [
 		self::THEME_BASE,
 		self::THEME_BOOTSTRAP3,
 		self::THEME_BOOTSTRAP4,
@@ -48,36 +48,36 @@ class Assets {
 		self::THEME_SEMANTICUI,
 	];
 
-	const LIBRARY_JQUERY1 = 'jquery1';
-	const LIBRARY_JQUERY3 = 'jquery3';
+	public const LIBRARY_JQUERY1 = 'jquery1';
+	public const LIBRARY_JQUERY3 = 'jquery3';
 
-	const JQUERY_ALLOWED = [
+	public const JQUERY_ALLOWED = [
 		false,
 		self::LIBRARY_JQUERY1,
 		self::LIBRARY_JQUERY3,
 	];
 
-	const PLUGIN_AUTO_FILL = 'autoFill';
-	const PLUGIN_BUTTONS = 'buttons';
-	const PLUGIN_COL_REORDER = 'colReorder';
-	const PLUGIN_FIXED_COLUMNS = 'fixedColumns';
-	const PLUGIN_FIXED_HEADER = 'fixedHeader';
-	const PLUGIN_KEY_TABLE = 'keyTable';
-	const PLUGIN_RESPONSIVE = 'responsive';
-	const PLUGIN_ROW_GROUP = 'rowGroup';
-	const PLUGIN_ROW_REORDER = 'rowReorder';
-	const PLUGIN_SCROLLER = 'scroller';
-	const PLUGIN_SEARCH_PANES = 'searchPanes';
-	const PLUGIN_SELECT = 'select';
+	public const PLUGIN_AUTO_FILL = 'autoFill';
+	public const PLUGIN_BUTTONS = 'buttons';
+	public const PLUGIN_COL_REORDER = 'colReorder';
+	public const PLUGIN_FIXED_COLUMNS = 'fixedColumns';
+	public const PLUGIN_FIXED_HEADER = 'fixedHeader';
+	public const PLUGIN_KEY_TABLE = 'keyTable';
+	public const PLUGIN_RESPONSIVE = 'responsive';
+	public const PLUGIN_ROW_GROUP = 'rowGroup';
+	public const PLUGIN_ROW_REORDER = 'rowReorder';
+	public const PLUGIN_SCROLLER = 'scroller';
+	public const PLUGIN_SEARCH_PANES = 'searchPanes';
+	public const PLUGIN_SELECT = 'select';
 
-	const VERSION_10_10_20 = '10.10.20';
-	const DEFAULT_VERSION = self::VERSION_10_10_20;
-	const ALLOWED_VERSIONS = [
+	public const VERSION_10_10_20 = '10.10.20';
+	public const DEFAULT_VERSION = self::VERSION_10_10_20;
+	public const ALLOWED_VERSIONS = [
 		self::VERSION_10_10_20,
 	];
 
 	/**
-	 * @var \DataTables\Table\Assets
+	 * @var self
 	 */
 	private static $_instance;
 
@@ -181,9 +181,6 @@ class Assets {
 	 */
 	private $_loadPluginSelect;
 
-	/**
-	 * Assets constructor.
-	 */
 	public function __construct() {
 		$this->reset();
 	}
@@ -194,19 +191,20 @@ class Assets {
 	 * @param bool $reset
 	 * @return \DataTables\Table\Assets
 	 */
-	public static function getInstance(bool $reset = false): self {
+	public static function getInstance(bool $reset = false) {
 		if (static::$_instance === null || $reset === true) {
 			static::$_instance = new self();
 		}
+
 		return static::$_instance;
 	}
 
 	/**
 	 * Return the assets to default state.
 	 *
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function reset(): self {
+	public function reset() {
 		$this->setEnabled(true);
 		$this->setAutoload(true);
 		$this->setCssBlock('css');
@@ -295,9 +293,9 @@ class Assets {
 	 * Set assets load to on or off.
 	 *
 	 * @param bool $enabled
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setEnabled(bool $enabled): self {
+	public function setEnabled(bool $enabled) {
 		$this->_enabled = $enabled;
 
 		return $this;
@@ -316,9 +314,9 @@ class Assets {
 	 * Set to on or off if the plugin will load a plugin when it needed.
 	 *
 	 * @param bool $autoload
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setAutoload(bool $autoload): self {
+	public function setAutoload(bool $autoload) {
 		$this->_autoload = $autoload;
 
 		return $this;
@@ -337,9 +335,9 @@ class Assets {
 	 * Set the block name that the plugin will render the css.
 	 *
 	 * @param string $cssBlock
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setCssBlock(string $cssBlock): self {
+	public function setCssBlock(string $cssBlock) {
 		$this->_cssBlock = $cssBlock;
 
 		return $this;
@@ -358,9 +356,9 @@ class Assets {
 	 * Set the block name that the plugin will render the script.
 	 *
 	 * @param string $scriptBlock
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setScriptBlock(string $scriptBlock): self {
+	public function setScriptBlock(string $scriptBlock) {
 		$this->_scriptBlock = $scriptBlock;
 
 		return $this;
@@ -379,9 +377,9 @@ class Assets {
 	 * Set the current library version that will be used to load the assets.
 	 *
 	 * @param string $dataTablesVersion
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setDataTablesVersion(string $dataTablesVersion): self {
+	public function setDataTablesVersion(string $dataTablesVersion) {
 		Validator::getInstance()->inArrayOrFail($dataTablesVersion, static::ALLOWED_VERSIONS, false);
 		$this->_dataTablesVersion = $dataTablesVersion;
 
@@ -401,9 +399,9 @@ class Assets {
 	 * Set a theme that the DataTable library will use.
 	 *
 	 * @param string $theme
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setTheme(string $theme): self {
+	public function setTheme(string $theme) {
 		Validator::getInstance()->inArrayOrFail($theme, static::THEMES_ALLOWED, false);
 		$this->_theme = $theme;
 
@@ -423,9 +421,9 @@ class Assets {
 	 * Set if the plugin must to load the theme library if needed.
 	 *
 	 * @param bool $loadThemeLibrary
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadThemeLibrary(bool $loadThemeLibrary): self {
+	public function setLoadThemeLibrary(bool $loadThemeLibrary) {
 		$this->_loadThemeLibrary = $loadThemeLibrary;
 
 		return $this;
@@ -444,9 +442,9 @@ class Assets {
 	 * Set the version that the library will use of jQuery. Set false to disabled.
 	 *
 	 * @param string|false $jquery
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setJquery($jquery): self {
+	public function setJquery($jquery) {
 		Validator::getInstance()->inArrayOrFail($jquery, static::JQUERY_ALLOWED, false);
 		$this->_jquery = $jquery;
 
@@ -466,9 +464,9 @@ class Assets {
 	 * Set if the plugin Auto Fill will be loaded.
 	 *
 	 * @param bool $loadPluginAutoFill
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginAutoFill(bool $loadPluginAutoFill): self {
+	public function setLoadPluginAutoFill(bool $loadPluginAutoFill) {
 		$this->_loadPluginAutoFill = $loadPluginAutoFill;
 
 		return $this;
@@ -487,9 +485,9 @@ class Assets {
 	 * Set if the plugin Butttons will be loaded.
 	 *
 	 * @param bool $loadPluginButtons
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginButtons(bool $loadPluginButtons): self {
+	public function setLoadPluginButtons(bool $loadPluginButtons) {
 		$this->_loadPluginButtons = $loadPluginButtons;
 
 		return $this;
@@ -508,9 +506,9 @@ class Assets {
 	 * Set if the plugin Col Reorder will be loaded.
 	 *
 	 * @param bool $loadPluginColReorder
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginColReorder(bool $loadPluginColReorder): self {
+	public function setLoadPluginColReorder(bool $loadPluginColReorder) {
 		$this->_loadPluginColReorder = $loadPluginColReorder;
 
 		return $this;
@@ -529,9 +527,9 @@ class Assets {
 	 * Set if the plugin Fixed Columns will be loaded.
 	 *
 	 * @param bool $loadPluginFixedColumns
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginFixedColumns(bool $loadPluginFixedColumns): self {
+	public function setLoadPluginFixedColumns(bool $loadPluginFixedColumns) {
 		$this->_loadPluginFixedColumns = $loadPluginFixedColumns;
 
 		return $this;
@@ -550,9 +548,9 @@ class Assets {
 	 * Set if the plugin Fixed Header will be loaded.
 	 *
 	 * @param bool $loadPluginFixedHeader
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginFixedHeader(bool $loadPluginFixedHeader): self {
+	public function setLoadPluginFixedHeader(bool $loadPluginFixedHeader) {
 		$this->_loadPluginFixedHeader = $loadPluginFixedHeader;
 
 		return $this;
@@ -571,9 +569,9 @@ class Assets {
 	 * Set if the plugin Key Table will be loaded.
 	 *
 	 * @param bool $loadPluginKeyTable
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginKeyTable(bool $loadPluginKeyTable): self {
+	public function setLoadPluginKeyTable(bool $loadPluginKeyTable) {
 		$this->_loadPluginKeyTable = $loadPluginKeyTable;
 
 		return $this;
@@ -592,9 +590,9 @@ class Assets {
 	 * Set if the plugin Responsive will be loaded.
 	 *
 	 * @param bool $loadPluginResponsive
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginResponsive(bool $loadPluginResponsive): self {
+	public function setLoadPluginResponsive(bool $loadPluginResponsive) {
 		$this->_loadPluginResponsive = $loadPluginResponsive;
 
 		return $this;
@@ -613,9 +611,9 @@ class Assets {
 	 * Set if the plugin Row Group will be loaded.
 	 *
 	 * @param bool $loadPluginRowGroup
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginRowGroup(bool $loadPluginRowGroup): self {
+	public function setLoadPluginRowGroup(bool $loadPluginRowGroup) {
 		$this->_loadPluginRowGroup = $loadPluginRowGroup;
 
 		return $this;
@@ -634,9 +632,9 @@ class Assets {
 	 * Set if the plugin Row Reorder will be loaded.
 	 *
 	 * @param bool $loadPluginRowReorder
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginRowReorder(bool $loadPluginRowReorder): self {
+	public function setLoadPluginRowReorder(bool $loadPluginRowReorder) {
 		$this->_loadPluginRowReorder = $loadPluginRowReorder;
 
 		return $this;
@@ -655,9 +653,9 @@ class Assets {
 	 * Set if the plugin Scroller will be loaded.
 	 *
 	 * @param bool $loadPluginScroller
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginScroller(bool $loadPluginScroller): self {
+	public function setLoadPluginScroller(bool $loadPluginScroller) {
 		$this->_loadPluginScroller = $loadPluginScroller;
 
 		return $this;
@@ -676,9 +674,9 @@ class Assets {
 	 * Set if the plugin Search Panes will be loaded.
 	 *
 	 * @param bool $loadPluginSearchPanes
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginSearchPanes(bool $loadPluginSearchPanes): self {
+	public function setLoadPluginSearchPanes(bool $loadPluginSearchPanes) {
 		$this->_loadPluginSearchPanes = $loadPluginSearchPanes;
 
 		return $this;
@@ -697,9 +695,9 @@ class Assets {
 	 * Set if the plugin Select will be loaded.
 	 *
 	 * @param bool $loadPluginSelect
-	 * @return \DataTables\Table\Assets
+	 * @return $this
 	 */
-	public function setLoadPluginSelect(bool $loadPluginSelect): self {
+	public function setLoadPluginSelect(bool $loadPluginSelect) {
 		$this->_loadPluginSelect = $loadPluginSelect;
 
 		return $this;

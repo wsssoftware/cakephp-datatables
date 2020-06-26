@@ -2,9 +2,9 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -45,11 +45,9 @@ final class Columns {
 	/**
 	 * @var \Cake\Database\FunctionsBuilder|null
 	 */
-	private $_functionsBuilder = null;
+	private $_functionsBuilder;
 
 	/**
-	 * Columns constructor.
-	 *
 	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 */
 	public function __construct(ConfigBundle $configBundle) {
@@ -74,6 +72,7 @@ final class Columns {
 	public function addDatabaseColumn(string $dataBaseField, ?int $index = null): Column {
 		$columnInfo = $this->normalizeDataTableField($dataBaseField);
 		$column = new Column("{$columnInfo['table']}.{$columnInfo['column']}", true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
+
 		return $this->saveColumn($column, $index);
 	}
 
@@ -88,6 +87,7 @@ final class Columns {
 	 */
 	public function addCustomDatabaseColumn(FunctionExpression $functionExpression, string $asName, ?int $index = null): Column {
 		$column = new Column($asName, true, [], '', $functionExpression);
+
 		return $this->saveColumn($column, $index);
 	}
 
@@ -176,8 +176,10 @@ final class Columns {
 				$newColumn = new Column("{$columnInfo['table']}.{$columnInfo['column']}", true, $columnInfo['columnSchema'], $columnInfo['associationPath']);
 				$columns[$newColumn->getName()] = $newColumn;
 			}
+
 			return $columns;
 		}
+
 		return $this->_columns;
 	}
 
@@ -195,6 +197,7 @@ final class Columns {
 			$columnInfo = $this->normalizeDataTableField($columnName);
 			$columnIndex = "{$columnInfo['table']}.{$columnInfo['column']}";
 		}
+
 		return $this->_columns[$columnIndex];
 	}
 
@@ -233,6 +236,7 @@ final class Columns {
 			}
 			$currentIndex++;
 		}
+
 		return -1;
 	}
 

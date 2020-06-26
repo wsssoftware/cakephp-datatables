@@ -2,9 +2,9 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -34,11 +34,6 @@ class DataTablesHelper extends Helper {
 		'minify' => true,
 		'autoLoadLibraries' => true,
 	];
-
-	/**
-	 * @var bool
-	 */
-	private $_isLoaded = false;
 
 	/**
 	 * @var \DataTables\Table\ConfigBundle[]
@@ -77,8 +72,8 @@ class DataTablesHelper extends Helper {
 	 * @param string $name
 	 * @param array $url
 	 * @param array $options
-	 * @return \DataTables\Table\UrlQueryBuilder
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\UrlQueryBuilder
 	 */
 	public function link(string $dataTables, string $name, array $url, array $options = []): UrlQueryBuilder {
 	    return new UrlQueryBuilder($this->getView(), $dataTables, $name, $url, $options);
@@ -89,8 +84,8 @@ class DataTablesHelper extends Helper {
 	 *
 	 * @param string $dataTables DataTables class FQN or name.
 	 * @param array $options A table tag options.
-	 * @return string
 	 * @throws \ReflectionException
+	 * @return string
 	 */
 	public function renderTable(string $dataTables, array $options = []): string {
 		$configBundle = Builder::getInstance()->getConfigBundle($dataTables, $this->getConfig('cache'));
@@ -109,6 +104,7 @@ class DataTablesHelper extends Helper {
 		if (!empty($this->_configBundles)) {
 			$result .= $this->getView()->element('DataTables.script', ['configBundles' => $this->_configBundles]);
 		}
+
 		return $result;
 	}
 

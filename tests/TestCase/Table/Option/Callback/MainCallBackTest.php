@@ -4,8 +4,8 @@
  * Under Mit License
  * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase\Table\Option\Callback;
@@ -21,9 +21,9 @@ use TestApp\Application;
 /**
  * Class MainCallBackTest
  *
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ * @author Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link https://github.com/allanmcarvalho/cakephp-datatables
  */
 class MainCallBackTest extends TestCase {
 
@@ -49,10 +49,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testWithFile() {
 		CallBackFactory::destroyAllInstances();
@@ -61,10 +61,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testWithBody() {
 		CallBackFactory::destroyAllInstances();
@@ -73,10 +73,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testWithCache() {
 		CallBackFactory::destroyAllInstances();
@@ -86,10 +86,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testAppTemplateNotFound() {
 		CallBackFactory::destroyAllInstances();
@@ -98,10 +98,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testPluginTemplateNotFound() {
 		CallBackFactory::destroyAllInstances();
@@ -110,10 +110,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testInvalidBodyOrParams1() {
 		CallBackFactory::destroyAllInstances();
@@ -122,10 +122,10 @@ class MainCallBackTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testInvalidBodyOrParams2() {
 		CallBackFactory::destroyAllInstances();

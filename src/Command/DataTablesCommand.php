@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 
 namespace DataTables\Command;
@@ -98,10 +98,12 @@ class DataTablesCommand extends SimpleBakeCommand {
 				foreach ($scanner->listUnskipped() as $item) {
 					$io->out('- ' . Inflector::camelize($item));
 				}
+
 				return static::CODE_SUCCESS;
 			}
 			if (!empty($this->_callback)) {
 				$io->warning(sprintf("You don't must use callback argument on bake configs."));
+
 				return static::CODE_SUCCESS;
 			}
 			$this->bakeConfig($args, $io);
@@ -114,6 +116,7 @@ class DataTablesCommand extends SimpleBakeCommand {
 				foreach ($validConfigs as $item) {
 					$io->out('- ' . Inflector::camelize($item));
 				}
+
 				return static::CODE_SUCCESS;
 			}
 			if (empty($this->_callback) || !in_array($this->_callback, $this->getValidCallbacks())) {
@@ -121,10 +124,12 @@ class DataTablesCommand extends SimpleBakeCommand {
 				foreach ($this->getValidCallbacks() as $validCallback) {
 					$io->out(" - $validCallback");
 				}
+
 				return static::CODE_SUCCESS;
 			}
 			$this->bakeCallbackBody($args, $io);
 		}
+
 		return static::CODE_SUCCESS;
 	}
 
@@ -212,6 +217,7 @@ class DataTablesCommand extends SimpleBakeCommand {
 				$callbacks[$index] = str_replace(['callback_', '.twig'], '', $callback);
 			}
 		}
+
 		return $callbacks;
 	}
 
@@ -228,6 +234,7 @@ class DataTablesCommand extends SimpleBakeCommand {
 				$configs[$index] = str_replace(['DataTables.php'], '', $callback);
 			}
 		}
+
 		return $configs;
 	}
 
@@ -261,6 +268,7 @@ class DataTablesCommand extends SimpleBakeCommand {
 		]);
 		$parser->removeOption('plugin');
 		$parser->removeOption('theme');
+
 		return $parser;
 	}
 

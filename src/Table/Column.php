@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -25,14 +25,14 @@ use InvalidArgumentException;
  */
 final class Column {
 
-	const TYPE_DATE = 'date';
-	const TYPE_NUM = 'num';
-	const TYPE_NUM_FMT = 'num-fmt';
-	const TYPE_HTML_NUM = 'html-num';
-	const TYPE_HTML_NUM_FMT = 'html-num-fmt';
-	const TYPE_HTML = 'html';
-	const TYPE_STRING = 'string';
-	const VALID_TYPES = [
+	public const TYPE_DATE = 'date';
+	public const TYPE_NUM = 'num';
+	public const TYPE_NUM_FMT = 'num-fmt';
+	public const TYPE_HTML_NUM = 'html-num';
+	public const TYPE_HTML_NUM_FMT = 'html-num-fmt';
+	public const TYPE_HTML = 'html';
+	public const TYPE_STRING = 'string';
+	public const VALID_TYPES = [
 		self::TYPE_DATE,
 		self::TYPE_NUM,
 		self::TYPE_NUM_FMT,
@@ -41,15 +41,15 @@ final class Column {
 		self::TYPE_HTML,
 		self::TYPE_STRING,
 	];
-	const DOM_TEXT = 'dom-text';
-	const DOM_SELECT = 'dom-select';
-	const DOM_CHECKBOX = 'dom-checkbox';
-	const VALID_ORDER_DATA_TYPES = [
+	public const DOM_TEXT = 'dom-text';
+	public const DOM_SELECT = 'dom-select';
+	public const DOM_CHECKBOX = 'dom-checkbox';
+	public const VALID_ORDER_DATA_TYPES = [
 		self::DOM_TEXT,
 		self::DOM_SELECT,
 		self::DOM_CHECKBOX,
 	];
-	const DATA_TABLES_TYPE_MAP = [
+	public const DATA_TABLES_TYPE_MAP = [
 		'tinyinteger' => 'num',
 		'smallinteger' => 'num',
 		'integer' => 'num',
@@ -113,18 +113,16 @@ final class Column {
 	/**
 	 * @var \Cake\Database\Expression\FunctionExpression|null
 	 */
-	private $_functionExpression = null;
+	private $_functionExpression;
 
 	/**
-	 * Column constructor.
-	 *
 	 * @param string $name
 	 * @param bool $database
 	 * @param array $columnSchema
 	 * @param string $associationPath
 	 * @param \Cake\Database\Expression\FunctionExpression|null $functionExpression
 	 */
-	public function __construct(string $name, bool $database = true, array $columnSchema = [], string $associationPath = '', FunctionExpression $functionExpression = null) {
+	public function __construct(string $name, bool $database = true, array $columnSchema = [], string $associationPath = '', ?FunctionExpression $functionExpression = null) {
 		$title = explode('.', $name);
 		if (count($title) === 2) {
 			$title = $title[1];
@@ -179,6 +177,7 @@ final class Column {
 			unset($result['name']);
 			unset($result['title']);
 		}
+
 		return $result;
 	}
 
@@ -204,10 +203,11 @@ final class Column {
 	 * @param string|null $name
 	 * @return mixed
 	 */
-	public function getColumnSchema(string $name = null) {
+	public function getColumnSchema(?string $name = null) {
 		if (empty($name)) {
 			return $this->_columnSchema;
 		}
+
 		return Hash::get($this->_columnSchema, $name);
 	}
 
@@ -217,8 +217,8 @@ final class Column {
 	 * This can be useful as TH cells have semantic meaning in the table body, allowing them to act as a header for a
 	 * row (you may wish to add scope='row' to the TH elements using columns.createdCell option).
 	 *
+	 * @link https://datatables.net/reference/option/columns.cellType
 	 * @return string|null
-	 * @link   https://datatables.net/reference/option/columns.cellType
 	 */
 	public function getCellType(): ?string {
 		return Hash::get($this->_config, 'cellType');
@@ -230,16 +230,17 @@ final class Column {
 	 * This can be useful as TH cells have semantic meaning in the table body, allowing them to act as a header for a
 	 * row (you may wish to add scope='row' to the TH elements using columns.createdCell option).
 	 *
+	 * @link https://datatables.net/reference/option/columns.cellType
 	 * @param string|null $cellType
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.cellType
+	 * @return $this
 	 */
-	public function setCellType(?string $cellType): self {
+	public function setCellType(?string $cellType) {
 		if (!in_array($cellType, ['td', 'th']) && !empty($cellType)) {
 			throw new InvalidArgumentException("\$cellType must be 'td' or 'th'. Found: $cellType.");
 		}
 		$this->_config = Hash::insert($this->_config, 'cellType', $cellType);
+
 		return $this;
 	}
 
@@ -248,8 +249,8 @@ final class Column {
 	 * Quite simply this option adds a class to each cell in a column, regardless of if the table source is from DOM,
 	 * Javascript or Ajax. This can be useful for styling columns.
 	 *
+	 * @link https://datatables.net/reference/option/columns.className
 	 * @return string|null
-	 * @link   https://datatables.net/reference/option/columns.className
 	 */
 	public function getClassName(): ?string {
 		return Hash::get($this->_config, 'className');
@@ -260,13 +261,14 @@ final class Column {
 	 * Quite simply this option adds a class to each cell in a column, regardless of if the table source is from DOM,
 	 * Javascript or Ajax. This can be useful for styling columns.
 	 *
+	 * @link https://datatables.net/reference/option/columns.className
 	 * @param string|null $className
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.className
+	 * @return $this
 	 */
-	public function setClassName(?string $className): self {
+	public function setClassName(?string $className) {
 		$this->_config = Hash::insert($this->_config, 'className', $className);
+
 		return $this;
 	}
 
@@ -275,8 +277,8 @@ final class Column {
 	 * Quite simply this option adds a class to each cell in a column, regardless of if the table source is from DOM,
 	 * Javascript or Ajax. This can be useful for styling columns.
 	 *
+	 * @link https://datatables.net/reference/option/columns.contentPadding
 	 * @return string|null
-	 * @link   https://datatables.net/reference/option/columns.contentPadding
 	 */
 	public function getContentPadding(): ?string {
 		return Hash::get($this->_config, 'contentPadding');
@@ -293,13 +295,14 @@ final class Column {
 	 * that is horribly slow!). Thus as a "work around" we provide this option. It will append its value to the text
 	 * that is found to be the longest string for the column - i.e. padding.
 	 *
+	 * @link https://datatables.net/reference/option/columns.contentPadding
 	 * @param string $contentPadding
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.contentPadding
+	 * @return $this
 	 */
-	public function setContentPadding(?string $contentPadding): self {
+	public function setContentPadding(?string $contentPadding) {
 		$this->_config = Hash::insert($this->_config, 'contentPadding', $contentPadding);
+
 		return $this;
 	}
 
@@ -320,18 +323,19 @@ final class Column {
 	 *  - rowIndex (integer) - DataTables' internal index for the row.
 	 *  - colIndex (integer) - DataTables' internal index for the column.
 	 *
+	 * @link https://datatables.net/reference/option/columns.createdCell
+	 * @link https://datatables.net/reference/type/node
+	 * @link https://datatables.net/reference/type/integer
 	 * @param array|string $bodyOrParams To use application template file, leave blank or pass an array with params
 	 *                                   that will be used in file. To use the body mode, pass an js code that will
 	 *                                   putted inside the js function.
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.createdCell
-	 * @link   https://datatables.net/reference/type/node
-	 * @link   https://datatables.net/reference/type/integer
+	 * @return $this
 	 */
-	public function callbackCreatedCell($bodyOrParams = []): self {
+	public function callbackCreatedCell($bodyOrParams = []) {
 		Validator::getInstance()->validateBodyOrParams($bodyOrParams);
 		$this->_config = Hash::insert($this->_config, 'createdCell', $bodyOrParams);
+
 		return $this;
 	}
 
@@ -346,8 +350,8 @@ final class Column {
 	 * there is some meta data than can be sorted (e.g. file name) - note that orthogonal data is an alternative method
 	 * that can be used for this.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderData
 	 * @return int|array|null
-	 * @link   https://datatables.net/reference/option/columns.orderData
 	 */
 	public function getOrderData() {
 		return Hash::get($this->_config, 'orderData');
@@ -364,12 +368,12 @@ final class Column {
 	 * there is some meta data than can be sorted (e.g. file name) - note that orthogonal data is an alternative method
 	 * that can be used for this.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderData
 	 * @param int|array|null $orderData
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.orderData
+	 * @return $this
 	 */
-	public function setOrderData($orderData): self {
+	public function setOrderData($orderData) {
 		$orderDataType = gettype($orderData);
 		$validTypes = [
 			'integer',
@@ -385,6 +389,7 @@ final class Column {
 			throw new InvalidArgumentException("In \$orderData you can use only $validTypesString. Found: '$orderDataType'.");
 		}
 		$this->_config = Hash::insert($this->_config, 'orderData', $orderData);
+
 		return $this;
 	}
 
@@ -400,9 +405,9 @@ final class Column {
 	 * Please note that there are no columns.orderDataType plug-ins built into DataTables, they must be added
 	 * separately. See the DataTables sorting plug-ins page for further information.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderDataType
+	 * @link https://datatables.net/plug-ins/sorting/
 	 * @return string|null
-	 * @link   https://datatables.net/reference/option/columns.orderDataType
-	 * @link   https://datatables.net/plug-ins/sorting/
 	 */
 	public function getOrderDataType(): ?string {
 		return Hash::get($this->_config, 'orderDataType');
@@ -420,15 +425,16 @@ final class Column {
 	 * Please note that there are no columns.orderDataType plug-ins built into DataTables, they must be added
 	 * separately. See the DataTables sorting plug-ins page for further information.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderDataType
+	 * @link https://datatables.net/plug-ins/sorting/
 	 * @param string|null $orderDataType
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.orderDataType
-	 * @link   https://datatables.net/plug-ins/sorting/
+	 * @return $this
 	 */
-	public function setOrderDataType(?string $orderDataType): self {
+	public function setOrderDataType(?string $orderDataType) {
 		Validator::getInstance()->inArrayOrFail($orderDataType, static::VALID_ORDER_DATA_TYPES);
 		$this->_config = Hash::insert($this->_config, 'orderDataType', $orderDataType);
+
 		return $this;
 	}
 
@@ -437,8 +443,8 @@ final class Column {
 	 * You can control the default ordering direction, and even alter the behaviour of the order handler (i.e. only
 	 * allow ascending sorting etc) using this parameter.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderSequence
 	 * @return array
-	 * @link   https://datatables.net/reference/option/columns.orderSequence
 	 */
 	public function getOrderSequence(): ?array {
 		return Hash::get($this->_config, 'orderSequence');
@@ -449,12 +455,12 @@ final class Column {
 	 * You can control the default ordering direction, and even alter the behaviour of the order handler (i.e. only
 	 * allow ascending sorting etc) using this parameter.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderSequence
 	 * @param array $orderSequence
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.orderSequence
+	 * @return $this
 	 */
-	public function setOrderSequence(array $orderSequence = []): self {
+	public function setOrderSequence(array $orderSequence = []) {
 		Validator::getInstance()->checkKeysValueTypesOrFail($orderSequence, 'integer', 'string', '$orderSequence');
 		foreach ($orderSequence as $item) {
 			if (!in_array($item, ['asc', 'desc'])) {
@@ -462,6 +468,7 @@ final class Column {
 			}
 		}
 		$this->_config = Hash::insert($this->_config, 'orderSequence', $orderSequence);
+
 		return $this;
 	}
 
@@ -473,8 +480,8 @@ final class Column {
 	 * Note that this option only affects the end user's ability to order a column. Developers are still able to order
 	 * a column using the order option or the order() method if required.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderable
 	 * @return bool|null
-	 * @link   https://datatables.net/reference/option/columns.orderable
 	 */
 	public function isOrderable(): ?bool {
 		return Hash::get($this->_config, 'orderable');
@@ -488,13 +495,14 @@ final class Column {
 	 * Note that this option only affects the end user's ability to order a column. Developers are still able to order
 	 * a column using the order option or the order() method if required.
 	 *
+	 * @link https://datatables.net/reference/option/columns.orderable
 	 * @param bool|null $orderable
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.orderable
+	 * @return $this
 	 */
-	public function setOrderable(?bool $orderable): self {
+	public function setOrderable(?bool $orderable) {
 		$this->_config = Hash::insert($this->_config, 'orderable', $orderable);
+
 		return $this;
 	}
 
@@ -504,8 +512,8 @@ final class Column {
 	 * table. You may want to use this option to disable search on generated columns such as 'Edit' and 'Delete'
 	 * buttons for example.
 	 *
+	 * @link https://datatables.net/reference/option/columns.searchable
 	 * @return bool|null
-	 * @link   https://datatables.net/reference/option/columns.searchable
 	 */
 	public function isSearchable(): ?bool {
 		return Hash::get($this->_config, 'searchable');
@@ -517,13 +525,14 @@ final class Column {
 	 * table. You may want to use this option to disable search on generated columns such as 'Edit' and 'Delete'
 	 * buttons for example.
 	 *
+	 * @link https://datatables.net/reference/option/columns.searchable
 	 * @param bool|null $searchable
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.searchable
+	 * @return $this
 	 */
-	public function setSearchable(?bool $searchable): self {
+	public function setSearchable(?bool $searchable) {
 		$this->_config = Hash::insert($this->_config, 'searchable', $searchable);
+
 		return $this;
 	}
 
@@ -538,8 +547,8 @@ final class Column {
 	 * for each column. Complex headers with colspan and rowspan attributes must either already be defined in the
 	 * document, or be constructed using standard DOM / jQuery methods.
 	 *
+	 * @link https://datatables.net/reference/option/columns.title
 	 * @return string
-	 * @link   https://datatables.net/reference/option/columns.title
 	 */
 	public function getTitle(): string {
 		return Hash::get($this->_config, 'title');
@@ -556,13 +565,14 @@ final class Column {
 	 * for each column. Complex headers with colspan and rowspan attributes must either already be defined in the
 	 * document, or be constructed using standard DOM / jQuery methods.
 	 *
+	 * @link https://datatables.net/reference/option/columns.title
 	 * @param string $title
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.title
+	 * @return $this
 	 */
-	public function setTitle(string $title): self {
+	public function setTitle(string $title) {
 		$this->_config = Hash::insert($this->_config, 'title', $title);
+
 		return $this;
 	}
 
@@ -618,8 +628,8 @@ final class Column {
 	 * Please note that if you are using server-side processing (serverSide) this option has no effect since the
 	 * ordering and search actions are performed by a server-side script.
 	 *
+	 * @link https://datatables.net/reference/option/columns.type
 	 * @return string|null
-	 * @link   https://datatables.net/reference/option/columns.type
 	 */
 	public function getType(): ?string {
 		return Hash::get($this->_config, 'type');
@@ -677,16 +687,16 @@ final class Column {
 	 * Please note that if you are using server-side processing (serverSide) this option has no effect since the
 	 * ordering and search actions are performed by a server-side script.
 	 *
+	 * @link https://datatables.net/reference/option/columns.type
 	 * @param string|null $type
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.type
+	 * @return $this
 	 */
-	public function setType(?string $type): self {
+	public function setType(?string $type) {
 		Validator::getInstance()->inArrayOrFail($type, static::VALID_TYPES);
 		$this->_config = Hash::insert($this->_config, 'type', $type);
-		return $this;
 
+		return $this;
 	}
 
 	/**
@@ -699,8 +709,8 @@ final class Column {
 	 * ability to control which columns they can see, or you have data in the table that the end user shouldn't see
 	 * (for example a database ID column).
 	 *
+	 * @link https://datatables.net/reference/option/columns.visible
 	 * @return bool|null
-	 * @link   https://datatables.net/reference/option/columns.visible
 	 */
 	public function isVisible(): ?bool {
 		return Hash::get($this->_config, 'visible');
@@ -716,13 +726,14 @@ final class Column {
 	 * ability to control which columns they can see, or you have data in the table that the end user shouldn't see
 	 * (for example a database ID column).
 	 *
+	 * @link https://datatables.net/reference/option/columns.visible
 	 * @param bool|null $visible
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.visible
+	 * @return $this
 	 */
-	public function setVisible(?bool $visible): self {
+	public function setVisible(?bool $visible) {
 		$this->_config = Hash::insert($this->_config, 'visible', $visible);
+
 		return $this;
 	}
 
@@ -736,8 +747,8 @@ final class Column {
 	 * border-collapse property, the content of the table and many other properties. Both DataTables and the browsers
 	 * attempt to lay the table out in an optimal manner taking this options all into account.
 	 *
+	 * @link https://datatables.net/reference/option/columns.width
 	 * @return string|null
-	 * @link   https://datatables.net/reference/option/columns.width
 	 */
 	public function getWidth(): ?string {
 		return Hash::get($this->_config, 'width');
@@ -753,16 +764,15 @@ final class Column {
 	 * border-collapse property, the content of the table and many other properties. Both DataTables and the browsers
 	 * attempt to lay the table out in an optimal manner taking this options all into account.
 	 *
+	 * @link https://datatables.net/reference/option/columns.width
 	 * @param string|null $width
 	 *
-	 * @return \DataTables\Table\Column
-	 * @link   https://datatables.net/reference/option/columns.width
+	 * @return $this
 	 */
-	public function setWidth(?string $width): self {
+	public function setWidth(?string $width) {
 		$this->_config = Hash::insert($this->_config, 'width', $width);
 
 		return $this;
-
 	}
 
 }

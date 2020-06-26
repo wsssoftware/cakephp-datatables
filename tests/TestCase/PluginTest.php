@@ -4,8 +4,8 @@
  * Under Mit License
  * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase;
@@ -20,9 +20,9 @@ use TestApp\Application;
 /**
  * Class PluginTest
  *
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ * @author Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link https://github.com/allanmcarvalho/cakephp-datatables
  */
 class PluginTest extends TestCase {
 

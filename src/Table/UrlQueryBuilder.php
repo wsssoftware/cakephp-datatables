@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -57,8 +57,6 @@ class UrlQueryBuilder {
 	private $_query = [];
 
 	/**
-	 * UrlQueryBuilder constructor.
-	 *
 	 * @param \Cake\View\View $view
 	 * @param string $dataTables DataTables config name or FQN.
 	 * @param string $name
@@ -89,6 +87,7 @@ class UrlQueryBuilder {
 			],
 		];
 		$this->_url['?'] = $query;
+
 		return $this->_view->Html->link($this->_name, $this->_url, $this->_options);
 	}
 
@@ -98,10 +97,11 @@ class UrlQueryBuilder {
 	 * @param string $dataBaseField
 	 * @return $this
 	 */
-	public function setColumnOrderAsc(string $dataBaseField): self {
+	public function setColumnOrderAsc(string $dataBaseField) {
 		$columnInfo = $this->_configBundle->Columns->normalizeDataTableField($dataBaseField);
 		$dataBaseField = $columnInfo['table'] . '.' . $columnInfo['column'];
 		$this->_query['columns'][$dataBaseField]['order'] = 'asc';
+
 		return $this;
 	}
 
@@ -111,10 +111,11 @@ class UrlQueryBuilder {
 	 * @param string $dataBaseField
 	 * @return $this
 	 */
-	public function setColumnOrderDesc(string $dataBaseField): self {
+	public function setColumnOrderDesc(string $dataBaseField) {
 		$columnInfo = $this->_configBundle->Columns->normalizeDataTableField($dataBaseField);
 		$dataBaseField = $columnInfo['table'] . '.' . $columnInfo['column'];
 		$this->_query['columns'][$dataBaseField]['order'] = 'desc';
+
 		return $this;
 	}
 
@@ -125,10 +126,11 @@ class UrlQueryBuilder {
 	 * @param string $search
 	 * @return $this
 	 */
-	public function setColumnSearch(string $dataBaseField, string $search): self {
+	public function setColumnSearch(string $dataBaseField, string $search) {
 		$columnInfo = $this->_configBundle->Columns->normalizeDataTableField($dataBaseField);
 		$dataBaseField = $columnInfo['table'] . '.' . $columnInfo['column'];
 		$this->_query['columns'][$dataBaseField]['search'] = $search;
+
 		return $this;
 	}
 
@@ -138,7 +140,7 @@ class UrlQueryBuilder {
 	 * @param string|int $page
 	 * @return $this
 	 */
-	public function setPage($page): self {
+	public function setPage($page) {
 		if (is_string($page)) {
 			Validator::getInstance()->inArrayOrFail($page, ['first', 'next', 'previous', 'last']);
 		} elseif (!is_int($page)) {
@@ -155,7 +157,7 @@ class UrlQueryBuilder {
 	 * @param string $search
 	 * @return $this
 	 */
-	public function setSearch(string $search): self {
+	public function setSearch(string $search) {
 		$this->_query['search'] = $search;
 
 		return $this;

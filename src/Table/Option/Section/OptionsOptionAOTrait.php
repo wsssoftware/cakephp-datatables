@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -79,11 +79,11 @@ trait OptionsOptionAOTrait {
 	 *  - array: As an array, this also enables deferred loading, while the first data index tells DataTables how many
 	 *    rows are in the filtered result set, and the second how many in the full data set without filtering applied.
 	 *
+	 * @link https://datatables.net/reference/option/deferLoading
 	 * @param int|array $deferLoading
 	 * @return $this
-	 * @link https://datatables.net/reference/option/deferLoading
 	 */
-	public function setDeferLoading($deferLoading): self {
+	public function setDeferLoading($deferLoading) {
 		$type = getType($deferLoading);
 		if (!in_array($type, ['array', 'integer'])) {
 			throw new FatalErrorException("You must use only integer or array types on \$deferLoading. Found: '$type'.");
@@ -93,6 +93,7 @@ trait OptionsOptionAOTrait {
 			Validator::getInstance()->checkKeysValueTypesOrFail($deferLoading, 'integer', 'integer', '$deferLoading');
 		}
 		$this->_setConfig('deferLoading', $deferLoading);
+
 		return $this;
 	}
 
@@ -121,12 +122,13 @@ trait OptionsOptionAOTrait {
 	 * Note that if you are not changing the configuration of the table, but just altering the data displayed by the
 	 * table, it is far more efficient to use the ajax.reload() method (or rows.add() etc).
 	 *
+	 * @link https://datatables.net/reference/option/destroy
 	 * @param bool $destroy
 	 * @return $this
-	 * @link https://datatables.net/reference/option/destroy
 	 */
-	public function setDestroy(bool $destroy): self {
+	public function setDestroy(bool $destroy) {
 		$this->_setConfig('destroy', $destroy);
+
 		return $this;
 	}
 
@@ -151,12 +153,13 @@ trait OptionsOptionAOTrait {
 	 * Note that this parameter is the number of records (counting from 0), rather than the page number, so if you have
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
+	 * @link https://datatables.net/reference/option/displayStart
 	 * @param int $displayStart
 	 * @return $this
-	 * @link https://datatables.net/reference/option/displayStart
 	 */
-	public function setDisplayStart(int $displayStart): self {
+	public function setDisplayStart(int $displayStart) {
 		$this->_setConfig('displayStart', $displayStart);
+
 		return $this;
 	}
 
@@ -192,12 +195,13 @@ trait OptionsOptionAOTrait {
 	 * Note that this parameter is the number of records (counting from 0), rather than the page number, so if you have
 	 * 10 records per page and want to start on the third page, it should be 20 rather than 2 or 3.
 	 *
+	 * @link https://datatables.net/reference/option/dom
 	 * @param string $dom
 	 * @return $this
-	 * @link https://datatables.net/reference/option/dom
 	 */
-	public function setDom(string $dom): self {
+	public function setDom(string $dom) {
 		$this->_setConfig('dom', $dom);
+
 		return $this;
 	}
 
@@ -241,11 +245,11 @@ trait OptionsOptionAOTrait {
 	 * Note that the pageLength property will be automatically set to the first value given in this array, unless
 	 * pageLength is also provided.
 	 *
+	 * @link https://datatables.net/reference/option/lengthMenu
 	 * @param array $lengthMenu
 	 * @return $this
-	 * @link https://datatables.net/reference/option/lengthMenu
 	 */
-	public function setLengthMenu(array $lengthMenu): self {
+	public function setLengthMenu(array $lengthMenu) {
 		if (count($lengthMenu) === 2 && is_array($lengthMenu[Functions::getInstance()->arrayKeyFirst($lengthMenu)]) && is_array($lengthMenu[Functions::getInstance()->arrayKeyLast($lengthMenu)])) {
 			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[Functions::getInstance()->arrayKeyFirst($lengthMenu)], 'integer', 'integer', '$lengthMenu[options]');
 			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu[Functions::getInstance()->arrayKeyLast($lengthMenu)], 'integer', ['integer', 'string'], '$lengthMenu[optionsLabel]');
@@ -256,6 +260,7 @@ trait OptionsOptionAOTrait {
 			Validator::getInstance()->checkKeysValueTypesOrFail($lengthMenu, 'integer', 'integer', '$lengthMenu');
 		}
 		$this->_setConfig('lengthMenu', $lengthMenu);
+
 		return $this;
 	}
 
@@ -286,11 +291,11 @@ trait OptionsOptionAOTrait {
 	 *
 	 * This 2D array structure allows a multi-column order to be defined as the initial state should it be required.
 	 *
+	 * @link https://datatables.net/reference/option/order
 	 * @param array $order
 	 * @return $this
-	 * @link https://datatables.net/reference/option/order
 	 */
-	public function setOrder(array $order): self {
+	public function setOrder(array $order) {
 		Validator::getInstance()->checkKeysValueTypesOrFail($order, 'integer', 'array', '$order');
 		foreach ($order as $item) {
 			Validator::getInstance()->checkArraySizeOrFail($item, 2, 'In setOrder($order) you must pass the index and order (asc or desc). Eg.: [0, \'asc\'].');
@@ -305,6 +310,7 @@ trait OptionsOptionAOTrait {
 			}
 		}
 		$this->_setConfig('order', $order);
+
 		return $this;
 	}
 
@@ -353,12 +359,13 @@ trait OptionsOptionAOTrait {
 	 * In this case, when orderCellsTop is false (default) the cells 1 and 2.2 will have the order event listener
 	 * applied to them. If orderCellsTop is true then 1 and 2.1 will have the order event listeners applied to them.
 	 *
+	 * @link https://datatables.net/reference/option/orderCellsTop
 	 * @param bool $orderCellsTop
 	 * @return $this
-	 * @link https://datatables.net/reference/option/orderCellsTop
 	 */
-	public function setOrderCellsTop(bool $orderCellsTop): self {
+	public function setOrderCellsTop(bool $orderCellsTop) {
 		$this->_setConfig('orderCellsTop', $orderCellsTop);
+
 		return $this;
 	}
 
@@ -395,12 +402,13 @@ trait OptionsOptionAOTrait {
 	 * rows to be displayed as it is manipulating a large number of DOM elements. As such, this option is available as
 	 * a feature switch to allow this feature to be disabled with working with old browsers or large data sets.
 	 *
+	 * @link https://datatables.net/reference/option/orderClasses
 	 * @param bool $orderClasses
 	 * @return $this
-	 * @link https://datatables.net/reference/option/orderClasses
 	 */
-	public function setOrderClasses(bool $orderClasses): self {
+	public function setOrderClasses(bool $orderClasses) {
 		$this->_setConfig('orderClasses', $orderClasses);
+
 		return $this;
 	}
 
@@ -449,11 +457,11 @@ trait OptionsOptionAOTrait {
 	 * This option can be useful if you have a column (visible or hidden) which must always be sorted upon first - a
 	 * priority order or index column for example, or for grouping similar rows together.
 	 *
+	 * @link https://datatables.net/reference/option/orderFixed
 	 * @param array $orderFixed
 	 * @return $this
-	 * @link https://datatables.net/reference/option/orderFixed
 	 */
-	public function setOrderFixed(array $orderFixed): self {
+	public function setOrderFixed(array $orderFixed) {
 		if (getType(Functions::getInstance()->arrayKeyFirst($orderFixed)) === 'string') {
 			foreach ($orderFixed as $key => $objectItem) {
 				if (!in_array($key, ['pre', 'post'])) {
@@ -465,6 +473,7 @@ trait OptionsOptionAOTrait {
 			$this->checkOrderDefault($orderFixed);
 		}
 		$this->_setConfig('orderFixed', $orderFixed);
+
 		return $this;
 	}
 
@@ -518,12 +527,13 @@ trait OptionsOptionAOTrait {
 	 * using columns.orderData, order or order(), it just disallows the user from performing their own multi-column
 	 * order.
 	 *
+	 * @link https://datatables.net/reference/option/orderMulti
 	 * @param bool $orderMulti
 	 * @return $this
-	 * @link https://datatables.net/reference/option/orderMulti
 	 */
-	public function setOrderMulti(bool $orderMulti): self {
+	public function setOrderMulti(bool $orderMulti) {
 		$this->_setConfig('orderMulti', $orderMulti);
+
 		return $this;
 	}
 

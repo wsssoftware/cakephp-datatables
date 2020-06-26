@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -34,8 +34,6 @@ final class TableDataUtils {
 	private $_request;
 
 	/**
-	 * TableDataUtils constructor.
-	 *
 	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 * @param \Cake\Http\ServerRequest $request
 	 */
@@ -81,6 +79,7 @@ final class TableDataUtils {
 		$this->doSearch($query);
 		$pageSize = (int)$this->getData('length');
 		$page = (int)($this->getData('start') + $pageSize) / $pageSize;
+
 		return $query
 			->contain($contains)
 			->select($select)

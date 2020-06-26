@@ -2,10 +2,9 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -15,7 +14,6 @@ use Cake\Error\FatalErrorException;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\View\View;
-use DataTables\Table\DataTables;
 use DataTables\Table\Option\MainOption;
 
 /**
@@ -23,18 +21,6 @@ use DataTables\Table\Option\MainOption;
  * Created by allancarvalho in abril 17, 2020
  */
 final class ConfigBundle {
-
-	/**
-	 * @var string
-	 */
-	private $_dataTableFQN;
-
-	/**
-	 * A selected Tables class.
-	 *
-	 * @var \DataTables\Table\DataTables
-	 */
-	private $_dataTables;
 
 	/**
 	 * @var \DataTables\Table\Columns The DataTables table columns.
@@ -57,15 +43,28 @@ final class ConfigBundle {
 	public $Assets;
 
 	/**
+	 * @var string
+	 */
+	private $_dataTableFQN;
+
+	/**
+	 * A selected Tables class.
+	 *
+	 * @var \DataTables\Table\DataTables
+	 */
+	private $_dataTables;
+
+	/**
 	 * @var string The md5 used to check changes.
 	 */
 	private $_checkMd5;
 
 	/**
-	 * ConfigBundle constructor.
-	 *
 	 * @param string $checkMd5 The md5 used to check changes.
 	 * @param string $dataTablesFQN Tables class name.
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function __construct(
 		string $checkMd5,
@@ -86,13 +85,6 @@ final class ConfigBundle {
 	}
 
 	/**
-	 * @return \DataTables\Table\DataTables
-	 */
-	public function getDataTables(): DataTables {
-		return $this->_dataTables;
-	}
-
-	/**
 	 * Return the url to get table data.
 	 *
 	 * @return string
@@ -105,6 +97,13 @@ final class ConfigBundle {
 			'plugin' => 'DataTables',
 			'prefix' => false,
 		]);
+	}
+
+	/**
+	 * @return \DataTables\Table\DataTables
+	 */
+	public function getDataTables(): DataTables {
+		return $this->_dataTables;
 	}
 
 	/**

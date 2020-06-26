@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -116,19 +116,20 @@ final class QueryBaseState {
 		$this->mergeWhereNotInList($query);
 		$this->mergeWhereNull($query);
 		$this->mergeAndWhere($query);
+
 		return $query;
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::contain()
 	 * @param array|string $associations List of table aliases to be queried.
 	 * @param callable|bool $override The query builder for the association, or
 	 *   if associations is an array, a bool on whether to override previous list
 	 *   with the one passed
 	 * defaults to merging previous list with the new one.
 	 * @return $this
-	 * @see \Cake\ORM\Query::contain()
 	 */
-	public function contain($associations, $override = false): self {
+	public function contain($associations, $override = false) {
 		$queryBuilder = null;
 		if ($override === true) {
 			$this->_containItems = [];
@@ -143,6 +144,7 @@ final class QueryBaseState {
 				'queryBuilder' => $queryBuilder,
 			];
 		}
+
 		return $this;
 	}
 
@@ -157,19 +159,20 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::select()
 	 * @param array|\Cake\Database\ExpressionInterface|callable|string|\Cake\ORM\Table|\Cake\ORM\Association $fields Fields
 	 * to be added to the list.
 	 * @param bool $overwrite whether to reset fields with passed list or not
 	 * @return $this
-	 * @see \Cake\ORM\Query::select()
 	 */
-	public function select($fields, bool $overwrite = false): self {
+	public function select($fields, bool $overwrite = false) {
 		if ($overwrite === true) {
 			$this->_selectItems = [];
 		}
 		$this->_selectItems[] = [
 			'fields' => $fields,
 		];
+
 		return $this;
 	}
 
@@ -184,14 +187,14 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::selectAllExcept()
 	 * @param \Cake\ORM\Table|\Cake\ORM\Association $table The table to use to get an array of columns
 	 * @param string[] $excludedFields The un-aliased column names you do not want selected from $table
 	 * @param bool $overwrite Whether to reset/remove previous selected fields
-	 * @return $this
 	 * @throws \InvalidArgumentException If Association|Table is not passed in first argument
-	 * @see \Cake\ORM\Query::selectAllExcept()
+	 * @return $this
 	 */
-	public function selectAllExcept($table, array $excludedFields, bool $overwrite = false): self {
+	public function selectAllExcept($table, array $excludedFields, bool $overwrite = false) {
 		if ($overwrite === true) {
 			$this->_selectAllExceptItems = [];
 		}
@@ -199,6 +202,7 @@ final class QueryBaseState {
 			'table' => $table,
 			'excludedFields' => $excludedFields,
 		];
+
 		return $this;
 	}
 
@@ -213,17 +217,18 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::leftJoinWith()
 	 * @param string $assoc The association to join with
 	 * @param callable|null $builder a function that will receive a pre-made query object
 	 * that can be used to add custom conditions or selecting some fields
 	 * @return $this
-	 * @see \Cake\ORM\Query::leftJoinWith()
 	 */
-	public function leftJoinWith(string $assoc, ?callable $builder = null): self {
+	public function leftJoinWith(string $assoc, ?callable $builder = null) {
 		$this->_leftJoinWithItems[] = [
 			'assoc' => $assoc,
 			'builder' => $builder,
 		];
+
 		return $this;
 	}
 
@@ -238,17 +243,18 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::innerJoinWith()
 	 * @param string $assoc The association to join with
 	 * @param callable|null $builder a function that will receive a pre-made query object
 	 * that can be used to add custom conditions or selecting some fields
 	 * @return $this
-	 * @see \Cake\ORM\Query::innerJoinWith()
 	 */
-	public function innerJoinWith(string $assoc, ?callable $builder = null): self {
+	public function innerJoinWith(string $assoc, ?callable $builder = null) {
 		$this->_innerJoinWithItems[] = [
 			'assoc' => $assoc,
 			'builder' => $builder,
 		];
+
 		return $this;
 	}
 
@@ -263,17 +269,18 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::notMatching()
 	 * @param string $assoc The association to filter by
 	 * @param callable|null $builder a function that will receive a pre-made query object
 	 * that can be used to add custom conditions or selecting some fields
 	 * @return $this
-	 * @see \Cake\ORM\Query::notMatching()
 	 */
-	public function notMatching(string $assoc, ?callable $builder = null): self {
+	public function notMatching(string $assoc, ?callable $builder = null) {
 		$this->_notMatchingItems[] = [
 			'assoc' => $assoc,
 			'builder' => $builder,
 		];
+
 		return $this;
 	}
 
@@ -288,12 +295,12 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::order()
 	 * @param array|\Cake\Database\ExpressionInterface|\Closure|string $fields fields to be added to the list
 	 * @param bool $overwrite whether to reset order with field list or not
 	 * @return $this
-	 * @see \Cake\ORM\Query::order()
 	 */
-	public function order($fields, $overwrite = false): self {
+	public function order($fields, $overwrite = false) {
 		if ($overwrite === true) {
 			$this->_orderAscItems = [];
 		}
@@ -303,6 +310,7 @@ final class QueryBaseState {
 		$this->_orderItems[] = [
 			'fields' => $fields,
 		];
+
 		return $this;
 	}
 
@@ -317,18 +325,19 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::orderAsc()
 	 * @param string|\Cake\Database\Expression\QueryExpression $field The field to order on.
 	 * @param bool $overwrite Whether or not to reset the order clauses.
 	 * @return $this
-	 * @see \Cake\ORM\Query::orderAsc()
 	 */
-	public function orderAsc($field, bool $overwrite = false): self {
+	public function orderAsc($field, bool $overwrite = false) {
 		if ($overwrite === true) {
 			$this->_orderAscItems = [];
 		}
 		$this->_orderAscItems[] = [
 			'field' => $field,
 		];
+
 		return $this;
 	}
 
@@ -343,18 +352,19 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::orderDesc()
 	 * @param string|\Cake\Database\Expression\QueryExpression $field The field to order on.
 	 * @param bool $overwrite Whether or not to reset the order clauses.
 	 * @return $this
-	 * @see \Cake\ORM\Query::orderDesc()
 	 */
-	public function orderDesc($field, bool $overwrite = false): self {
+	public function orderDesc($field, bool $overwrite = false) {
 		if ($overwrite === true) {
 			$this->_orderDescItems = [];
 		}
 		$this->_orderDescItems[] = [
 			'field' => $field,
 		];
+
 		return $this;
 	}
 
@@ -369,13 +379,13 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::where()
 	 * @param string|array|\Cake\Database\ExpressionInterface|\Closure|null $conditions The conditions to filter on.
 	 * @param array $types associative array of type names used to bind values to query
 	 * @param bool $overwrite whether to reset conditions with passed list or not
 	 * @return $this
-	 * @see \Cake\ORM\Query::where()
 	 */
-	public function where($conditions = null, array $types = [], bool $overwrite = false): self {
+	public function where($conditions = null, array $types = [], bool $overwrite = false) {
 		if ($overwrite === true) {
 			$this->_whereItems = [];
 		}
@@ -383,6 +393,7 @@ final class QueryBaseState {
 			'conditions' => $conditions,
 			'types' => $types,
 		];
+
 		return $this;
 	}
 
@@ -397,18 +408,19 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::whereInList()
 	 * @param string $field Field
 	 * @param array $values Array of values
 	 * @param array $options Options
 	 * @return $this
-	 * @see \Cake\ORM\Query::whereInList()
 	 */
-	public function whereInList(string $field, array $values, array $options = []): self {
+	public function whereInList(string $field, array $values, array $options = []) {
 		$this->_whereInListItems[] = [
 			'field' => $field,
 			'values' => $values,
 			'options' => $options,
 		];
+
 		return $this;
 	}
 
@@ -423,15 +435,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::whereNotNull()
 	 * @param array|string|\Cake\Database\ExpressionInterface $fields A single field or expressions or a list of them
 	 *  that should be not null.
 	 * @return $this
-	 * @see \Cake\ORM\Query::whereNotNull()
 	 */
-	public function whereNotNull($fields): self {
+	public function whereNotNull($fields) {
 		$this->_whereNotNullItems[] = [
 			'fields' => $fields,
 		];
+
 		return $this;
 	}
 
@@ -446,18 +459,19 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::whereNotInList()
 	 * @param string $field Field
 	 * @param array $values Array of values
 	 * @param array $options Options
 	 * @return $this
-	 * @see \Cake\ORM\Query::whereNotInList()
 	 */
-	public function whereNotInList(string $field, array $values, array $options = []): self {
+	public function whereNotInList(string $field, array $values, array $options = []) {
 		$this->_whereNotInListItems[] = [
 			'field' => $field,
 			'values' => $values,
 			'options' => $options,
 		];
+
 		return $this;
 	}
 
@@ -472,15 +486,16 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::whereNull()
 	 * @param array|string|\Cake\Database\ExpressionInterface $fields A single field or expressions or a list of them
 	 *   that should be null.
 	 * @return $this
-	 * @see \Cake\ORM\Query::whereNull()
 	 */
-	public function whereNull($fields): self {
+	public function whereNull($fields) {
 		$this->_whereNullItems[] = [
 			'fields' => $fields,
 		];
+
 		return $this;
 	}
 
@@ -495,16 +510,17 @@ final class QueryBaseState {
 	}
 
 	/**
+	 * @see \Cake\ORM\Query::andWhere()
 	 * @param string|array|\Cake\Database\ExpressionInterface|\Closure $conditions The conditions to add with AND.
 	 * @param array $types associative array of type names used to bind values to query
 	 * @return $this
-	 * @see \Cake\ORM\Query::andWhere()
 	 */
-	public function andWhere($conditions, array $types = []): self {
+	public function andWhere($conditions, array $types = []) {
 		$this->_andWhereItems[] = [
 			'conditions' => $conditions,
 			'types' => $types,
 		];
+
 		return $this;
 	}
 

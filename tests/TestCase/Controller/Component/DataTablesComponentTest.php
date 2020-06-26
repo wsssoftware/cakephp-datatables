@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -79,8 +79,8 @@ class DataTablesComponentTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \ReflectionException
+	 * @return void
 	 */
 	public function testSaveInSessionColumns() {
 		$columns = $this->DataTables->getColumns(CategoriesDataTables::class);
@@ -95,8 +95,8 @@ class DataTablesComponentTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \ReflectionException
+	 * @return void
 	 */
 	public function testSaveInSessionOptions() {
 		$options = $this->DataTables->getOptions(CategoriesDataTables::class);
@@ -111,8 +111,8 @@ class DataTablesComponentTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @throws \ReflectionException
+	 * @return void
 	 */
 	public function testSaveInSessionQuery() {
 		$query = $this->DataTables->getQuery(CategoriesDataTables::class);

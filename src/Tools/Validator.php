@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -34,10 +34,11 @@ class Validator {
 	 *
 	 * @return \DataTables\Tools\Validator
 	 */
-	public static function getInstance(): Validator {
+	public static function getInstance() {
 		if (static::$instance === null) {
 			static::$instance = new self();
 		}
+
 		return static::$instance;
 	}
 
@@ -50,7 +51,7 @@ class Validator {
 	 * @param string|null $inString A string to make the error more friendly.
 	 * @return void
 	 */
-	public function checkKeysValueTypesOrFail(?array $array, $allowedKeyTypes = [], $allowedValueTypes = [], string $inString = null): void {
+	public function checkKeysValueTypesOrFail(?array $array, $allowedKeyTypes = [], $allowedValueTypes = [], ?string $inString = null): void {
 		if (empty($array)) {
 		    return;
 		}
@@ -71,10 +72,12 @@ class Validator {
 			$valueType = getType($value);
 			if (!in_array($keyType, $allowedKeyTypes) && $allowedKeyTypes !== ['*']) {
 				$needleString = str_replace(' and ', ' or ', Text::toList($allowedKeyTypes));
+
 				throw new InvalidArgumentException("In $inString array, the keys always must be $needleString. key: $key.");
 			}
 			if (!in_array($valueType, $allowedValueTypes) && $allowedValueTypes !== ['*']) {
 				$needleString = str_replace(' and ', ' or ', Text::toList($allowedValueTypes));
+
 				throw new InvalidArgumentException("In $inString array, the record $key isn't $needleString. Found: '$valueType'.");
 			}
 		}
@@ -94,6 +97,7 @@ class Validator {
 			if (empty($message)) {
 				$message = "Wrong array size. Expected: '$expected'. Found: '$size'.";
 			}
+
 			throw new InvalidArgumentException($message);
 		}
 	}
@@ -125,6 +129,7 @@ class Validator {
 		foreach ($array as $index => $item) {
 			$array[$index] = "'$item'";
 		}
+
 		return Text::toList($array, $and);
 	}
 

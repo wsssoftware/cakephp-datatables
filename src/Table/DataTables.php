@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -36,12 +36,9 @@ abstract class DataTables {
 	 */
 	protected $_alias;
 
-	/**
-	 * Tables constructor.
-	 */
 	public function __construct() {
-		$className = get_called_class();
-		$classShortName = explode('\\', get_called_class());
+		$className = static::class;
+		$classShortName = explode('\\', static::class);
 		$classShortName = array_pop($classShortName);
 		if (substr($classShortName, -10, 10) !== 'DataTables') {
 			throw new FatalErrorException("The class '$className' must have the name ending with 'DataTables'");

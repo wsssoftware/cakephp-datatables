@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -39,7 +39,7 @@ class Functions {
 	 *
 	 * @return \DataTables\Tools\Functions
 	 */
-	public static function getInstance(): Functions {
+	public static function getInstance() {
 		if (static::$instance === null) {
 			static::$instance = new self();
 		}
@@ -73,12 +73,13 @@ class Functions {
 
 	/**
 	 * @param string $classWithNameSpace
-	 * @return string
 	 * @throws \ReflectionException
+	 * @return string
 	 */
 	public function getClassAndVersionMd5(string $classWithNameSpace): string {
 		$classMd5 = $this->getClassMd5($classWithNameSpace);
 		$pluginCurrentHash = $this->getPluginCurrentCommit();
+
 		return md5($classMd5 . $pluginCurrentHash);
 	}
 
@@ -86,8 +87,8 @@ class Functions {
 	 * Return the class md5
 	 *
 	 * @param string $classWithNameSpace Class name with namespace.
-	 * @return string Md5 string
 	 * @throws \ReflectionException
+	 * @return string Md5 string
 	 */
 	public function getClassMd5(string $classWithNameSpace): string {
 		return md5_file((new ReflectionClass($classWithNameSpace))->getFileName());
@@ -117,6 +118,7 @@ class Functions {
 				}
 			}
 		}
+
 		return md5((string)time());
 	}
 
@@ -155,6 +157,7 @@ class Functions {
 		} else {
 			$urlMd5 = md5(Router::url());
 		}
+
 		return "$urlMd5.{$configBundle->getCheckMd5()}";
 	}
 
@@ -166,6 +169,7 @@ class Functions {
 	 */
 	public function checkRegexFormat(string $regex): bool {
 		$regexCheck = '/^((?:(?:[^?+*{}()[\]\\|]+|\\.|\[(?:\^?\\.|\^[^\\]|[^\\^])(?:[^\]\\]+|\\.)*\]|\((?:\?[:=!]|\?<[=!]|\?>)?(?1)??\)|\(\?(?:R|[+-]?\d+)\))(?:(?:[?+*]|\{\d+(?:,\d*)?\})[?+]?)?|\|)*)$/';
+
 		return (bool)preg_match(
 			$regexCheck,
 			$regex
@@ -199,6 +203,7 @@ class Functions {
 				return $result;
 			}
 		}
+
 		return false;
 	}
 
@@ -230,6 +235,7 @@ class Functions {
 	 */
 	public function getCallBackReplaceTag(string $callbackName): string {
 		$callbackName = uniqid(mb_strtoupper(Inflector::underscore($callbackName)) . '_', true);
+
 		return "##$callbackName##";
 	}
 

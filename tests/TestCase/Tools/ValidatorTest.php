@@ -4,8 +4,8 @@
  * Under Mit License
  * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase\Tools;

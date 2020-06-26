@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -27,8 +27,6 @@ class CacheStorageEngine implements StorageEngineInterface {
 	private $_cacheConfigName = '_data_tables_config_bundles_';
 
 	/**
-	 * CacheStorageEngine constructor.
-	 *
 	 * @param string|null $cacheConfigName
 	 */
 	public function __construct(?string $cacheConfigName = null) {
@@ -57,6 +55,7 @@ class CacheStorageEngine implements StorageEngineInterface {
 	 */
 	public function read(string $key): ?ConfigBundle {
 		$configBundle = Cache::read($key, '_data_tables_config_bundles_');
+
 		return ($configBundle instanceof ConfigBundle) ? $configBundle : null;
 	}
 

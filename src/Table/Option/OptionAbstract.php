@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -36,9 +36,6 @@ abstract class OptionAbstract {
 	 */
 	protected $_config = [];
 
-	/**
-	 * OptionAbstract constructor.
-	 */
 	public function __construct() {
 	}
 
@@ -53,6 +50,7 @@ abstract class OptionAbstract {
 		if (!empty($field)) {
 			return Hash::get($this->_config, $field, $default);
 		}
+
 		return $this->_config;
 	}
 

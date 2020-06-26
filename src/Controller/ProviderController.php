@@ -2,9 +2,9 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -54,8 +54,8 @@ class ProviderController extends AppController {
 	}
 
 	/**
-	 * @return void
 	 * @noinspection PhpUnused
+	 * @return void
 	 */
 	public function getI18nTranslation() {
 		$json = [
@@ -94,10 +94,10 @@ class ProviderController extends AppController {
 	/**
 	 * Index method
 	 *
-	 * @param string $tablesCass
-	 * @return \Cake\Http\Response|null|void Renders view
-	 * @throws \ReflectionException
 	 * @noinspection PhpUnused
+	 * @param string $tablesCass
+	 * @throws \ReflectionException
+	 * @return \Cake\Http\Response|null|void Renders view
 	 */
 	public function getTablesData(string $tablesCass) {
 		$configBundle = Builder::getInstance()->getConfigBundle(Inflector::camelize($tablesCass), $this->_cache);

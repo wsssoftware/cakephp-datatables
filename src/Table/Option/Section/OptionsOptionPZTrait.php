@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -44,15 +44,16 @@ trait OptionsOptionPZTrait {
 	 * If lengthChange is feature enabled (it is by default) then the end user will be able to override the value set
 	 * here to a custom setting using a pop-up menu (see lengthMenu).
 	 *
+	 * @link https://datatables.net/reference/option/pageLength
 	 * @param int $pageLength
 	 * @return $this
-	 * @link https://datatables.net/reference/option/pageLength
 	 */
-	public function setPageLength(int $pageLength): self {
+	public function setPageLength(int $pageLength) {
 		if ($pageLength <= 0) {
 			throw new InvalidArgumentException("\$pageLength must be a positive integer number. Found: $pageLength.");
 		}
 		$this->_setConfig('pageLength', $pageLength);
+
 		return $this;
 	}
 
@@ -93,16 +94,18 @@ trait OptionsOptionPZTrait {
 	 *  - first_last_numbers - 'First' and 'Last' buttons, plus page numbers
 	 *  - Further methods can be added using plug-ins.
 	 *
+	 * @link https://datatables.net/reference/option/pagingType
 	 * @param string $pagingType
 	 * @return $this
-	 * @link https://datatables.net/reference/option/pagingType
 	 */
-	public function setPagingType(string $pagingType): self {
+	public function setPagingType(string $pagingType) {
 		if (!in_array($pagingType, static::ALLOWED_PAGING_TYPES)) {
 			$allowedString = str_replace(' and ', ' or ', Text::toList(static::ALLOWED_PAGING_TYPES));
+
 			throw new InvalidArgumentException("You must use one of $allowedString. Found: $pagingType.");
 		}
 		$this->_setConfig('pagingType', $pagingType);
+
 		return $this;
 	}
 
@@ -155,11 +158,11 @@ trait OptionsOptionPZTrait {
 	 *
 	 * This list will likely expand significantly in future versions of DataTables!
 	 *
+	 * @link https://datatables.net/reference/option/renderer
 	 * @param string|array $renderer
 	 * @return $this
-	 * @link https://datatables.net/reference/option/renderer
 	 */
-	public function setRenderer($renderer): self {
+	public function setRenderer($renderer) {
 		$rendererType = getType($renderer);
 		if (!in_array($rendererType, ['string', 'array'])) {
 			throw new InvalidArgumentException("\$renderer must be a string or array. Found: $rendererType.");
@@ -173,6 +176,7 @@ trait OptionsOptionPZTrait {
 			}
 		}
 		$this->_setConfig('renderer', $renderer);
+
 		return $this;
 	}
 
@@ -199,12 +203,13 @@ trait OptionsOptionPZTrait {
 	 *
 	 * The destroy option can be used to reinitialise a table with different options if required.
 	 *
+	 * @link https://datatables.net/reference/option/retrieve
 	 * @param bool $retrieve
 	 * @return $this
-	 * @link https://datatables.net/reference/option/retrieve
 	 */
-	public function setRetrieve(bool $retrieve): self {
+	public function setRetrieve(bool $retrieve) {
 		$this->_setConfig('retrieve', $retrieve);
+
 		return $this;
 	}
 
@@ -261,12 +266,13 @@ trait OptionsOptionPZTrait {
 	 *    cannot start with a digit, two hyphens, or a hyphen followed by a digit. Identifiers can also contain escaped
 	 *    characters and any ISO 10646 character as a numeric code.
 	 *
+	 * @link https://datatables.net/reference/option/rowId
 	 * @param string $rowId
 	 * @return $this
-	 * @link https://datatables.net/reference/option/rowId
 	 */
-	public function setRowId(string $rowId): self {
+	public function setRowId(string $rowId) {
 		$this->_setConfig('rowId', $rowId);
+
 		return $this;
 	}
 
@@ -293,12 +299,13 @@ trait OptionsOptionPZTrait {
 	 * enabled) will cause DataTables to collapse the table's viewport when the result set fits within the given Y
 	 * height.
 	 *
+	 * @link https://datatables.net/reference/option/scrollCollapse
 	 * @param bool $scrollCollapse
 	 * @return $this
-	 * @link https://datatables.net/reference/option/scrollCollapse
 	 */
-	public function setScrollCollapse(bool $scrollCollapse): self {
+	public function setScrollCollapse(bool $scrollCollapse) {
 		$this->_setConfig('scrollCollapse', $scrollCollapse);
+
 		return $this;
 	}
 
@@ -317,12 +324,13 @@ trait OptionsOptionPZTrait {
 	 * Setter method.
 	 * Flag to indicate if the filtering should be case insensitive or not.
 	 *
+	 * @link https://datatables.net/reference/option/search.caseInsensitive
 	 * @param bool $caseInsensitive
 	 * @return $this
-	 * @link https://datatables.net/reference/option/search.caseInsensitive
 	 */
-	public function setSearchCaseInsensitive(bool $caseInsensitive): self {
+	public function setSearchCaseInsensitive(bool $caseInsensitive) {
 		$this->_setConfig('search.caseInsensitive', $caseInsensitive);
+
 		return $this;
 	}
 
@@ -351,12 +359,13 @@ trait OptionsOptionPZTrait {
 	 * It is simply a flag to indicate if the search term should be interpreted as a regular expression (true) or not
 	 * (false) and therefore and special regex characters escaped.
 	 *
+	 * @link https://datatables.net/reference/option/search.regex
 	 * @param bool $regex
 	 * @return $this
-	 * @link https://datatables.net/reference/option/search.regex
 	 */
-	public function setSearchRegex(bool $regex): self {
+	public function setSearchRegex(bool $regex) {
 		$this->_setConfig('search.regex', $regex);
+
 		return $this;
 	}
 
@@ -375,12 +384,13 @@ trait OptionsOptionPZTrait {
 	 * Setter method.
 	 * Search term that should be applied to the table.
 	 *
+	 * @link https://datatables.net/reference/option/search.search
 	 * @param string $search
 	 * @return $this
-	 * @link https://datatables.net/reference/option/search.search
 	 */
-	public function setSearchSearch(string $search): self {
+	public function setSearchSearch(string $search) {
 		$this->_setConfig('search.search', $search);
+
 		return $this;
 	}
 
@@ -411,12 +421,13 @@ trait OptionsOptionPZTrait {
 	 * to perform this task, and as such it can interfere with a custom regular expression input if you enable that
 	 * option (search.regex). As such, this option is provided to disable this smart filtering ability.
 	 *
+	 * @link https://datatables.net/reference/option/search.smart
 	 * @param bool $smart
 	 * @return $this
-	 * @link https://datatables.net/reference/option/search.smart
 	 */
-	public function setSearchSmart(bool $smart): self {
+	public function setSearchSmart(bool $smart) {
 		$this->_setConfig('search.smart', $smart);
+
 		return $this;
 	}
 
@@ -445,11 +456,11 @@ trait OptionsOptionPZTrait {
 	 * search, regex (optional, default false) and smart (optional, default true). null is also accepted and the
 	 * default will be used. See the search documentation for more information on these parameters.
 	 *
+	 * @link https://datatables.net/reference/option/searchCols
 	 * @param array $searchCols
 	 * @return $this
-	 * @link https://datatables.net/reference/option/searchCols
 	 */
-	public function setSearchCols(array $searchCols): self {
+	public function setSearchCols(array $searchCols) {
 		Validator::getInstance()->checkKeysValueTypesOrFail($searchCols, ['integer'], ['array', 'NULL'], '$searchCols');
 		foreach ($searchCols as $searchCol) {
 			if ($searchCol !== null) {
@@ -466,6 +477,7 @@ trait OptionsOptionPZTrait {
 			}
 		}
 		$this->_setConfig('searchCols', $searchCols);
+
 		return $this;
 	}
 
@@ -520,15 +532,16 @@ trait OptionsOptionPZTrait {
 	 * effect the search() or column().search() methods at all. If you wish to be able to throttle calls to those API
 	 * methods use the utility method $.fn.dataTable.util.throttle().
 	 *
+	 * @link https://datatables.net/reference/option/searchDelay
 	 * @param int $searchDelay
 	 * @return $this
-	 * @link https://datatables.net/reference/option/searchDelay
 	 */
-	public function setSearchDelay(int $searchDelay): self {
+	public function setSearchDelay(int $searchDelay) {
 		if ($searchDelay < 0) {
 			throw new InvalidArgumentException("\$searchDelay must be a positive integer number. Found: $searchDelay.");
 		}
 		$this->_setConfig('searchDelay', $searchDelay);
+
 		return $this;
 	}
 
@@ -569,15 +582,16 @@ trait OptionsOptionPZTrait {
 	 * Please note that the value is given in seconds. The value 0 is a special value as it indicates that the state
 	 * can be stored and retrieved indefinitely with no time limit.
 	 *
+	 * @link https://datatables.net/reference/option/stateDuration
 	 * @param int $stateDuration
 	 * @return $this
-	 * @link https://datatables.net/reference/option/stateDuration
 	 */
-	public function setStateDuration(int $stateDuration): self {
+	public function setStateDuration(int $stateDuration) {
 		if ($stateDuration <= 0) {
 			throw new InvalidArgumentException("\$stateDuration must be a positive integer number. Found: $stateDuration.");
 		}
 		$this->_setConfig('stateDuration', $stateDuration);
+
 		return $this;
 	}
 
@@ -604,13 +618,14 @@ trait OptionsOptionPZTrait {
 	 * Note that by default this option will take the values determined by the $.fn.dataTable.ext.classes.stripe*
 	 * options (these are odd and even by default).
 	 *
+	 * @link https://datatables.net/reference/option/stripeClasses
 	 * @param array $stripeClasses
 	 * @return $this
-	 * @link https://datatables.net/reference/option/stripeClasses
 	 */
-	public function setStripeClasses(array $stripeClasses): self {
+	public function setStripeClasses(array $stripeClasses) {
 		Validator::getInstance()->checkKeysValueTypesOrFail($stripeClasses, 'integer', 'string', '$stripeClasses');
 		$this->_setConfig('stripeClasses', $stripeClasses);
+
 		return $this;
 	}
 
@@ -641,12 +656,13 @@ trait OptionsOptionPZTrait {
 	 * this parameter if you wish. Use a value of -1 to disable built-in keyboard navigation, although this is not
 	 * recommended for accessibility reasons.
 	 *
+	 * @link https://datatables.net/reference/option/tabIndex
 	 * @param int $tabIndex
 	 * @return $this
-	 * @link https://datatables.net/reference/option/tabIndex
 	 */
-	public function setTabIndex(int $tabIndex): self {
+	public function setTabIndex(int $tabIndex) {
 		$this->_setConfig('tabIndex', $tabIndex);
+
 		return $this;
 	}
 

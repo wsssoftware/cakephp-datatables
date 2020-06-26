@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -38,11 +38,11 @@ trait FeaturesOptionTrait {
 	 * Enable or disable automatic column width calculation. This can be disabled as an optimisation(it takes a finite
 	 * amount of time to calculate the widths) if the tables widths are passed in using.
 	 *
+	 * @link https://datatables.net/reference/option/autoWidth
 	 * @param bool $autoWidth
 	 * @return $this
-	 * @link https://datatables.net/reference/option/autoWidth
 	 */
-	public function setAutoWidth(bool $autoWidth): self {
+	public function setAutoWidth(bool $autoWidth) {
 		$this->_setConfig('autoWidth', $autoWidth);
 
 		return $this;
@@ -87,11 +87,11 @@ trait FeaturesOptionTrait {
 	 * working with API methods such as columns().nodes() you must take this into account. Below shows an example of
 	 * how to use jQuery delegated events to handle such a situation.
 	 *
+	 * @link https://datatables.net/reference/option/deferRender
 	 * @param bool $deferRender
 	 * @return $this
-	 * @link https://datatables.net/reference/option/deferRender
 	 */
-	public function setDeferRender(bool $deferRender): self {
+	public function setDeferRender(bool $deferRender) {
 		$this->_setConfig('deferRender', $deferRender);
 
 		return $this;
@@ -120,11 +120,11 @@ trait FeaturesOptionTrait {
 	 * Note that by default the information display is shown below the table on the left, but this can be controlled
 	 * using dom and CSS).
 	 *
+	 * @link https://datatables.net/reference/option/info
 	 * @param bool $info
 	 * @return $this
-	 * @link https://datatables.net/reference/option/info
 	 */
-	public function setInfo(bool $info): self {
+	public function setInfo(bool $info) {
 		$this->_setConfig('info', $info);
 
 		return $this;
@@ -169,11 +169,11 @@ trait FeaturesOptionTrait {
 	 * Additionally, if pagination is disabled using the paging option, this option is automatically disabled since it
 	 * has no relevance when there is no pagination.
 	 *
+	 * @link https://datatables.net/reference/option/lengthChange
 	 * @param bool $lengthChange
 	 * @return $this
-	 * @link https://datatables.net/reference/option/lengthChange
 	 */
-	public function setLengthChange(bool $lengthChange): self {
+	public function setLengthChange(bool $lengthChange) {
 		$this->_setConfig('lengthChange', $lengthChange);
 
 		return $this;
@@ -206,11 +206,11 @@ trait FeaturesOptionTrait {
 	 * option for each column. This parameter is a global option - when disabled, there are no sorting actions applied
 	 * by DataTables at all.
 	 *
+	 * @link https://datatables.net/reference/option/ordering
 	 * @param bool $ordering
 	 * @return $this
-	 * @link https://datatables.net/reference/option/ordering
 	 */
-	public function setOrdering(bool $ordering): self {
+	public function setOrdering(bool $ordering) {
 		$this->_setConfig('ordering', $ordering);
 
 		return $this;
@@ -237,11 +237,11 @@ trait FeaturesOptionTrait {
 	 * data as the navigate through the data. This feature is enabled by default, but if you wish to disable it, you
 	 * may do so with this parameter.
 	 *
+	 * @link https://datatables.net/reference/option/paging
 	 * @param bool $paging
 	 * @return $this
-	 * @link https://datatables.net/reference/option/paging
 	 */
-	public function setPaging(bool $paging): self {
+	public function setPaging(bool $paging) {
 		$this->_setConfig('paging', $paging);
 
 		return $this;
@@ -266,11 +266,11 @@ trait FeaturesOptionTrait {
 	 * is particularly useful for tables with large amounts of data where it can take a noticeable amount of time to
 	 * sort the entries.
 	 *
+	 * @link https://datatables.net/reference/option/processing
 	 * @param bool $processing
 	 * @return $this
-	 * @link https://datatables.net/reference/option/processing
 	 */
-	public function setProcessing(bool $processing): self {
+	public function setProcessing(bool $processing) {
 		$this->_setConfig('processing', $processing);
 
 		return $this;
@@ -301,11 +301,11 @@ trait FeaturesOptionTrait {
 	 * This property can be true which will allow the table to scroll horizontally when needed (recommended), or any
 	 * CSS unit, or a number (in which case it will be treated as a pixel measurement).
 	 *
+	 * @link https://datatables.net/reference/option/scrollX
 	 * @param bool $scrollX
 	 * @return $this
-	 * @link https://datatables.net/reference/option/scrollX
 	 */
-	public function setScrollX(bool $scrollX): self {
+	public function setScrollX(bool $scrollX) {
 		$this->_setConfig('scrollX', $scrollX);
 
 		return $this;
@@ -338,11 +338,11 @@ trait FeaturesOptionTrait {
 	 * The value given here can be any CSS unit, or a number (in which case it will be treated as a pixel measurement)
 	 * and is applied to the table body (i.e. it does not take into account the header or footer height directly).
 	 *
+	 * @link https://datatables.net/reference/option/scrollY
 	 * @param string $scrollY
 	 * @return $this
-	 * @link https://datatables.net/reference/option/scrollY
 	 */
-	public function setScrollY(?string $scrollY): self {
+	public function setScrollY(?string $scrollY) {
 		$this->_setConfig('scrollY', $scrollY);
 
 		return $this;
@@ -385,11 +385,11 @@ trait FeaturesOptionTrait {
 	 * search input box whilst retaining searching abilities (for example you might use the search() method), use the
 	 * dom option.
 	 *
+	 * @link https://datatables.net/reference/option/searching
 	 * @param bool $searching
 	 * @return $this
-	 * @link https://datatables.net/reference/option/searching
 	 */
-	public function setSearching(bool $searching): self {
+	public function setSearching(bool $searching) {
 		$this->_setConfig('searching', $searching);
 
 		return $this;
@@ -438,11 +438,11 @@ trait FeaturesOptionTrait {
 	 * it has all the information required to display the table. The client-server communication protocol DataTables
 	 * uses is detailed in the DataTables documentation.
 	 *
+	 * @link https://datatables.net/reference/option/serverSide
 	 * @param bool $serverSide
 	 * @return $this
-	 * @link https://datatables.net/reference/option/serverSide
 	 */
-	public function setServerSide(bool $serverSide): self {
+	public function setServerSide(bool $serverSide) {
 		if ($serverSide === false) {
 			throw new FatalErrorException("By the plugin business rule, you can't change this option.");
 		}
@@ -494,11 +494,11 @@ trait FeaturesOptionTrait {
 	 * work with IE6/7 as these browsers do not support these APIs. Alternative options of using cookies or saving the
 	 * state on the server through Ajax can be used through the stateSaveCallback and stateLoadCallback options.
 	 *
+	 * @link https://datatables.net/reference/option/stateSave
 	 * @param bool $stateSave
 	 * @return $this
-	 * @link https://datatables.net/reference/option/stateSave
 	 */
-	public function setStateSave(bool $stateSave): self {
+	public function setStateSave(bool $stateSave) {
 		$this->_setConfig('stateSave', $stateSave);
 
 		return $this;

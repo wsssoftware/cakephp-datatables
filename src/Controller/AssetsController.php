@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace DataTables\Controller;
 
-use DataTables\Controller\AppController;
-
 /**
  * Class AssetsController
  * Created by allancarvalho in june 26, 2020

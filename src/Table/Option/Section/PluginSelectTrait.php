@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -55,11 +55,11 @@ trait PluginSelectTrait {
 	 * complex singular, plural, dual, etc language strings for true multi-language support. Please refer to the object
 	 * section below for details.
 	 *
+	 * @link https://datatables.net/reference/option/language.select.cells
 	 * @param string|array $cells
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.select.cells
 	 */
-	public function setPluginSelectLanguageCells($cells): self {
+	public function setPluginSelectLanguageCells($cells) {
 		if (!in_array(getType($cells), ['string', 'array'])) {
 			throw new InvalidArgumentException('Cells must be a string or a array with plural translations.');
 		} elseif (is_array($cells)) {
@@ -71,6 +71,7 @@ trait PluginSelectTrait {
 			}
 		}
 		$this->_setConfig('language.select.cells', $cells);
+
 		return $this;
 	}
 
@@ -107,11 +108,11 @@ trait PluginSelectTrait {
 	 * complex singular, plural, dual, etc language strings for true multi-language support. Please refer to the object
 	 * section below for details.
 	 *
+	 * @link https://datatables.net/reference/option/language.select.columns
 	 * @param string|array $columns
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.select.columns
 	 */
-	public function setPluginSelectLanguageColumns($columns): self {
+	public function setPluginSelectLanguageColumns($columns) {
 		if (!in_array(getType($columns), ['string', 'array'])) {
 			throw new InvalidArgumentException('Columns must be a string or a array with plural translations.');
 		} elseif (is_array($columns)) {
@@ -123,6 +124,7 @@ trait PluginSelectTrait {
 			}
 		}
 		$this->_setConfig('language.select.columns', $columns);
+
 		return $this;
 	}
 
@@ -159,11 +161,11 @@ trait PluginSelectTrait {
 	 * complex singular, plural, dual, etc language strings for true multi-language support. Please refer to the object
 	 * section below for details.
 	 *
+	 * @link https://datatables.net/reference/option/language.select.rows
 	 * @param string|array $rows
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.select.rows
 	 */
-	public function setPluginSelectLanguageRows($rows): self {
+	public function setPluginSelectLanguageRows($rows) {
 		if (!in_array(getType($rows), ['string', 'array'])) {
 			throw new InvalidArgumentException('Rows must be a string or a array with plural translations.');
 		} elseif (is_array($rows)) {
@@ -175,6 +177,7 @@ trait PluginSelectTrait {
 			}
 		}
 		$this->_setConfig('language.select.rows', $rows);
+
 		return $this;
 	}
 
@@ -195,6 +198,7 @@ trait PluginSelectTrait {
 		if (is_bool($this->_getConfig('select'))) {
 			return $this->_getConfig('select');
 		}
+
 		return (bool)$this->getMustPrint('select');
 	}
 
@@ -210,17 +214,18 @@ trait PluginSelectTrait {
 	 *
 	 * Exactly what selection the user can make, and how, depends upon the options selected.
 	 *
+	 * @link https://datatables.net/reference/option/select
 	 * @param bool $enabled
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select
 	 */
-	public function setPluginSelectEnabled(bool $enabled): self {
+	public function setPluginSelectEnabled(bool $enabled) {
 		if (empty($this->getMustPrint('select'))) {
 			$this->_setConfig('select', $enabled);
 		}
 		if ($enabled === false) {
 			$this->_setConfig('select', $enabled);
 		}
+
 		return $this;
 	}
 
@@ -245,12 +250,13 @@ trait PluginSelectTrait {
 	 * like a native operating system control, or if you have multiple tables on a page where only one should have
 	 * selection at a time.
 	 *
+	 * @link https://datatables.net/reference/option/select.blurable
 	 * @param bool $blurable
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.blurable
 	 */
-	public function setPluginSelectBlurable(bool $blurable): self {
+	public function setPluginSelectBlurable(bool $blurable) {
 		$this->_setConfig('select.blurable', $blurable);
+
 		return $this;
 	}
 
@@ -279,12 +285,13 @@ trait PluginSelectTrait {
 	 * useful to be able to specify your own class to perform your own custom highlighting. This option provides that
 	 * ability.
 	 *
+	 * @link https://datatables.net/reference/option/select.className
 	 * @param string $className
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.className
 	 */
-	public function setPluginSelectClassName(string $className): self {
+	public function setPluginSelectClassName(string $className) {
 		$this->_setConfig('select.className', $className);
+
 		return $this;
 	}
 
@@ -327,12 +334,13 @@ trait PluginSelectTrait {
 	 * information to be shown the element is not included. If there is no information for any of the items, the
 	 * wrapper element (select-info) is not added to the document.
 	 *
+	 * @link https://datatables.net/reference/option/select.info
 	 * @param bool $info
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.info
 	 */
-	public function setPluginSelectInfo(bool $info): self {
+	public function setPluginSelectInfo(bool $info) {
 		$this->_setConfig('select.info', $info);
+
 		return $this;
 	}
 
@@ -361,16 +369,17 @@ trait PluginSelectTrait {
 	 * This option provides the ability to define which table item type will be selected by user interaction with a
 	 * mouse. The items to be selected can also be defined at run time using the select.items() method.
 	 *
+	 * @link https://datatables.net/reference/option/select.items
 	 * @param string $items
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.items
 	 */
-	public function setPluginSelectItems(string $items): self {
+	public function setPluginSelectItems(string $items) {
 		$allowedOptions = ['row', 'column', 'cell'];
 		if (!in_array($items, $allowedOptions)) {
 			throw new InvalidArgumentException(sprintf('Items must be %s. Found: %s.', Validator::getInstance()->arrayToStringMessage($allowedOptions), $items));
 		}
 		$this->_setConfig('select.items', $items);
+
 		return $this;
 	}
 
@@ -397,12 +406,13 @@ trait PluginSelectTrait {
 	 *
 	 * It is a simple jQuery selector string that is used to attach the event listeners that Select adds to the table.
 	 *
+	 * @link https://datatables.net/reference/option/select.selector
 	 * @param string $selector
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.selector
 	 */
-	public function setPluginSelectSelector(string $selector): self {
+	public function setPluginSelectSelector(string $selector) {
 		$this->_setConfig('select.selector', $selector);
+
 		return $this;
 	}
 
@@ -459,16 +469,17 @@ trait PluginSelectTrait {
 	 *  - multi+shift - a hybrid between the os style and multi, allowing easy multi-row selection without immediate
 	 *    de-selection when clicking on a row.
 	 *
+	 * @link https://datatables.net/reference/option/select.style
 	 * @param string $style
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.style
 	 */
-	public function setPluginSelectStyle(string $style): self {
+	public function setPluginSelectStyle(string $style) {
 		$allowedOptions = ['api', 'single', 'multi', 'os', 'multi+shift'];
 		if (!in_array($style, $allowedOptions)) {
 			throw new InvalidArgumentException(sprintf('Items must be %s. Found: %s.', Validator::getInstance()->arrayToStringMessage($allowedOptions), $style));
 		}
 		$this->_setConfig('select.style', $style);
+
 		return $this;
 	}
 
@@ -491,12 +502,13 @@ trait PluginSelectTrait {
 	 * when a selected row is clicked it will be deselected. When the toggleable option is set to false then it will
 	 * disable this feature and selected rows will not deselect when they are clicked.
 	 *
+	 * @link https://datatables.net/reference/option/select.toggleable
 	 * @param bool $toggleable
 	 * @return $this
-	 * @link https://datatables.net/reference/option/select.toggleable
 	 */
-	public function setPluginSelectToggleable(bool $toggleable): self {
+	public function setPluginSelectToggleable(bool $toggleable) {
 		$this->_setConfig('select.toggleable', $toggleable);
+
 		return $this;
 	}
 

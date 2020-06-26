@@ -4,8 +4,8 @@
  * Under Mit License
  * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase\Table\Option\Section;
@@ -15,7 +15,6 @@ use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
-use DataTables\Table\Option\MainOption;
 use InvalidArgumentException;
 use TestApp\Application;
 use TestApp\DataTables\CategoriesDataTables;

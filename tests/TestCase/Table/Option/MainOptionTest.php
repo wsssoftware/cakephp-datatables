@@ -4,8 +4,8 @@
  * Under Mit License
  * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase\Table\Option;
@@ -15,20 +15,20 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
-use const JSON_ERROR_NONE;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
 use DataTables\Tools\Minifier;
 use Exception;
 use TestApp\Application;
 use TestApp\DataTables\CategoriesDataTables;
+use const JSON_ERROR_NONE;
 
 /**
  * Class MainOptionTest
  *
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ * @author Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link https://github.com/allanmcarvalho/cakephp-datatables
  */
 class MainOptionTest extends TestCase {
 
@@ -112,10 +112,10 @@ class MainOptionTest extends TestCase {
 	/**
 	 * Check if array and json getter is working
 	 *
-	 * @return void
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
+	 * @return void
 	 */
 	public function testArrayJson() {
 		$this->MainOption->callbackCreatedRow('console.log("ok");');

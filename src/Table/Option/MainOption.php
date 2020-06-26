@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -45,7 +45,7 @@ final class MainOption extends OptionAbstract {
 	use OptionsOptionPZTrait;
 	use PluginSelectTrait;
 
-	const ALLOWED_PAGING_TYPES = [
+	public const ALLOWED_PAGING_TYPES = [
 		'numbers',
 		'simple',
 		'simple_numbers',
@@ -54,7 +54,7 @@ final class MainOption extends OptionAbstract {
 		'first_last_numbers',
 	];
 
-	const I18N_TRANSLATION = -1;
+	public const I18N_TRANSLATION = -1;
 
 	/**
 	 * @var \DataTables\Table\ConfigBundle
@@ -64,7 +64,7 @@ final class MainOption extends OptionAbstract {
 	/**
 	 * @var int|string|null
 	 */
-	protected $_currentPage = null;
+	protected $_currentPage;
 
 	/**
 	 * @var array
@@ -141,8 +141,6 @@ final class MainOption extends OptionAbstract {
 	protected $_callbackReplaces = [];
 
 	/**
-	 * MainOption constructor.
-	 *
 	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 * @param string $url
 	 */
@@ -169,7 +167,7 @@ final class MainOption extends OptionAbstract {
 	 * @param int|string|null $page
 	 * @return $this
 	 */
-	public function setCurrentPage($page): self {
+	public function setCurrentPage($page) {
 	    if (is_numeric($page)) {
 	        $page = (int)$page;
 		}
@@ -180,6 +178,7 @@ final class MainOption extends OptionAbstract {
 			throw new FatalErrorException('Invalid type of page. Must be int or string');
 		}
 		$this->_currentPage = $page;
+
 	    return $this;
 	}
 
@@ -187,15 +186,15 @@ final class MainOption extends OptionAbstract {
 	 * Setter method.
 	 * Set all columns and defColumns options using a Columns class.
 	 *
+	 * @internal
+	 * @link https://datatables.net/reference/option/
 	 * @param \DataTables\Table\Columns $columns
-	 * @return $this
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
-	 * @internal
-	 * @link https://datatables.net/reference/option/
+	 * @return $this
 	 */
-	public function setColumns(Columns $columns): self {
+	public function setColumns(Columns $columns) {
 		$columnsConfig = [];
 		foreach ($columns->getColumns() as $column) {
 			if ($column->isDatabase() === false) {
@@ -219,6 +218,7 @@ final class MainOption extends OptionAbstract {
 		}
 		$this->_setConfig('columnDefs', [$columns->Default->getConfig(true, true)]);
 		$this->_setConfig('columns', $columnsConfig);
+
 		return $this;
 	}
 
@@ -237,8 +237,9 @@ final class MainOption extends OptionAbstract {
 	 * @param bool $printAllOptions
 	 * @return $this
 	 */
-	public function setPrintAllOptions(bool $printAllOptions): self {
+	public function setPrintAllOptions(bool $printAllOptions) {
 		$this->_printAllOptions = $printAllOptions;
+
 		return $this;
 	}
 
@@ -252,6 +253,7 @@ final class MainOption extends OptionAbstract {
 		if (!empty($field)) {
 			return Hash::get($this->_mustPrint, $field, null);
 		}
+
 		return $this->_mustPrint;
 	}
 
@@ -260,10 +262,11 @@ final class MainOption extends OptionAbstract {
 	 *
 	 * @param string $field The field that will be changed.
 	 * @param bool $must True or false to set if it will printed or not.
-	 * @return \DataTables\Table\Option\MainOption
+	 * @return $this
 	 */
-	public function setMustPrint(string $field, bool $must = true): MainOption {
+	public function setMustPrint(string $field, bool $must = true) {
 		$this->_mustPrint = Hash::insert($this->_mustPrint, $field, $must);
+
 		return $this;
 	}
 
@@ -286,7 +289,7 @@ final class MainOption extends OptionAbstract {
 	 * @param bool $mustPrint Set or not the field as 'mustPrint'.
 	 * @return $this
 	 */
-	public function setConfig(string $field, $value, bool $mustPrint = true): self {
+	public function setConfig(string $field, $value, bool $mustPrint = true) {
 		$this->_setConfig($field, $value, $mustPrint);
 
 		return $this;
@@ -313,6 +316,7 @@ final class MainOption extends OptionAbstract {
 				$json = substr_replace($json, $callbackReplace, $start, $length);
 			}
 		}
+
 		return $json;
 	}
 

@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -36,10 +36,11 @@ final class Builder {
 	 *
 	 * @return \DataTables\Table\Builder
 	 */
-	public static function getInstance(): Builder {
+	public static function getInstance() {
 		if (static::$instance === null) {
 			static::$instance = new self();
 		}
+
 		return static::$instance;
 	}
 
@@ -50,16 +51,17 @@ final class Builder {
 	 */
 	public function getStorageEngine(): StorageEngineInterface {
 		$class = Configure::read('DataTables.StorageEngine.class');
+
 		return new $class();
 	}
 
 	/**
 	 * Get a ConfigBundle if it exists in cache or build a new.
 	 *
-	 * @param string $dataTables  DataTables class FQN or name.
+	 * @param string $dataTables DataTables class FQN or name.
 	 * @param bool $cache If true will try to get from cache.
-	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\ConfigBundle
 	 */
 	public function getConfigBundle(string $dataTables, bool $cache = true): ConfigBundle {
 		$dataTablesFQN = $this->parseClassNameToFQN($dataTables);
@@ -80,6 +82,7 @@ final class Builder {
 			}
 		}
 		$configBundle = $this->checkIfHaveCustomItemsInSession($configBundle);
+
 		return $configBundle;
 	}
 
@@ -116,6 +119,7 @@ final class Builder {
 				$foundCustomQuery = true;
 			}
 		}
+
 		return $configBundle;
 	}
 
@@ -136,6 +140,7 @@ final class Builder {
 		if (strpos($dataTablesName, $expectedPath) === false) {
 			throw new FatalErrorException("All DataTables class must stay in '$expectedPath'. Found: '$dataTablesName'.");
 		}
+
 		return $dataTablesName;
 	}
 

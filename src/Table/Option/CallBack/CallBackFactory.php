@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -65,8 +65,6 @@ final class CallBackFactory {
 	public static $instance;
 
 	/**
-	 * MainCallBack constructor.
-	 *
 	 * @param string $callbackName
 	 * @param string $dataTablesName
 	 */
@@ -95,13 +93,14 @@ final class CallBackFactory {
 	 * @param string $dataTablesName
 	 * @return \DataTables\Table\Option\CallBack\CallBackFactory
 	 */
-	public static function getInstance(string $callBack, string $dataTablesName): CallBackFactory {
+	public static function getInstance(string $callBack, string $dataTablesName) {
 		$callBack = Inflector::underscore($callBack);
 		$dataTablesName = Inflector::camelize($dataTablesName);
 		$md5 = md5($callBack . $dataTablesName);
 		if (empty(static::$instance[$md5])) {
 			static::$instance[$md5] = new self($callBack, $dataTablesName);
 		}
+
 		return static::$instance[$md5];
 	}
 
@@ -117,15 +116,15 @@ final class CallBackFactory {
 	/**
 	 * Render callback js functions with application template file or body.
 	 *
+	 * @link https://twig.symfony.com/doc/3.x/api.html
 	 * @param string|array $bodyOrParams To use application template file, leave blank or pass an array with params
 	 *                                   that will be used in file. To use the body mode, pass an js code that will
 	 *                                   putted inside the js function.
 	 * @param int $tabAmount
-	 * @return string
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
-	 * @link https://twig.symfony.com/doc/3.x/api.html
+	 * @return string
 	 */
 	public function render($bodyOrParams = [], int $tabAmount = 1): string {
 		if (is_array($bodyOrParams)) {
@@ -143,6 +142,7 @@ final class CallBackFactory {
 		$this->checkIfFileExistsOfFail($this->_pluginTemplateFolder . $this->_twigCallbackName);
 		$this->_twigLoader->setPaths($this->_pluginTemplateFolder);
 		$result = $this->_twig->render($this->_twigCallbackName, compact('body'));
+
 		return Functions::getInstance()->increaseTabOnString($result, $tabAmount, true);
 	}
 
@@ -161,6 +161,7 @@ final class CallBackFactory {
 				unset($bodyLines[$index]);
 			}
 		}
+
 		return implode("\n", $bodyLines);
 	}
 

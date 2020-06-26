@@ -50,8 +50,8 @@ class DataTablesComponent extends Component {
 	 * original ConfigBundle Columns configuration on table render.
 	 *
 	 * @param string $dataTablesName
-	 * @return \DataTables\Table\Columns
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\Columns
 	 */
 	public function getColumns(string $dataTablesName): Columns {
 		return $this->setEventAndGetObject($dataTablesName, 'Columns');
@@ -62,8 +62,8 @@ class DataTablesComponent extends Component {
 	 * original ConfigBundle MainOption configuration on table render.
 	 *
 	 * @param string $dataTablesName
-	 * @return \DataTables\Table\Option\MainOption
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\Option\MainOption
 	 */
 	public function getOptions(string $dataTablesName): MainOption {
 		return $this->setEventAndGetObject($dataTablesName, 'Options');
@@ -74,8 +74,8 @@ class DataTablesComponent extends Component {
 	 * original ConfigBundle QueryBaseState configuration on table render.
 	 *
 	 * @param string $dataTablesName
-	 * @return \DataTables\Table\QueryBaseState
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\QueryBaseState
 	 */
 	public function getQuery(string $dataTablesName): QueryBaseState {
 		return $this->setEventAndGetObject($dataTablesName, 'Query');
@@ -86,8 +86,8 @@ class DataTablesComponent extends Component {
 	 *
 	 * @param string $dataTablesName
 	 * @param string $objectName
-	 * @return \DataTables\Table\QueryBaseState|\DataTables\Table\Option\MainOption|\DataTables\Table\Columns
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\QueryBaseState|\DataTables\Table\Option\MainOption|\DataTables\Table\Columns
 	 */
 	private function setEventAndGetObject(string $dataTablesName, string $objectName) {
 		$configBundle = $this->getConfigBundle($dataTablesName);
@@ -111,8 +111,8 @@ class DataTablesComponent extends Component {
 	 * Get a ConfigBundle instance using its name or FQN.
 	 *
 	 * @param string $dataTables
-	 * @return \DataTables\Table\ConfigBundle
 	 * @throws \ReflectionException
+	 * @return \DataTables\Table\ConfigBundle
 	 */
 	private function getConfigBundle(string $dataTables): ConfigBundle {
 		if (empty($this->_configBundles[$dataTables])) {

@@ -2,9 +2,9 @@
 /**
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -37,8 +37,6 @@ final class Renderer {
 	private $_configBundle;
 
 	/**
-	 * Renderer constructor.
-	 *
 	 * @param \DataTables\Table\ConfigBundle $configBundle
 	 */
 	public function __construct(ConfigBundle $configBundle) {
@@ -52,13 +50,14 @@ final class Renderer {
 	 * @param mixed $value
 	 * @return $this
 	 */
-	public function add(string $columnName, $value): self {
+	public function add(string $columnName, $value) {
 		if (!empty($this->_configBundle->Columns->getColumns()[$columnName])) {
 			$this->_cache[$columnName] = (string)$value;
 		} else {
 			$column = $this->_configBundle->Columns->normalizeDataTableField($columnName);
 			$this->_cache["{$column['table']}.{$column['column']}"] = (string)$value;
 		}
+
 		return $this;
 	}
 
@@ -78,6 +77,7 @@ final class Renderer {
 			}
 			$result[] = $value;
 		}
+
 		return $result;
 	}
 
@@ -115,6 +115,7 @@ final class Renderer {
 			$title = __d('data_tables', 'this column data was auto generated.');
 			$pattern = "<span class='data-tables-plugin auto-loaded' title='$title'>%s</span>";
 		}
+
 		return sprintf($pattern, $value);
 	}
 
@@ -141,11 +142,13 @@ final class Renderer {
 		}
 		if (is_array($result)) {
 			$lastProperty = $propertyPath[Functions::getInstance()->arrayKeyLast($propertyPath)];
+
 			return $this->returnArrayCountWithLabel($result, $lastProperty);
 		}
 		if (!empty($result->{$property})) {
 			return $result->{$property};
 		}
+
 		return '';
 	}
 
@@ -168,6 +171,7 @@ final class Renderer {
 				$propertyPath[] = Inflector::underscore(Inflector::pluralize($association->getAlias()));
 			}
 		}
+
 		return $propertyPath;
 	}
 
@@ -183,6 +187,7 @@ final class Renderer {
 		if ($count === 1) {
 			return $count . ' ' . Inflector::humanize(Inflector::singularize($name));
 		}
+
 		return $count . ' ' . Inflector::humanize($name);
 	}
 

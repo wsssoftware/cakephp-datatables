@@ -4,8 +4,8 @@
  * Under Mit License
  * php version 7.2
  *
- * link     https://github.com/allanmcarvalho/cakephp-data-renderer
- * author   Allan Carvalho <allan.m.carvalho@outlook.com>
+ * link https://github.com/allanmcarvalho/cakephp-data-renderer
+ * author Allan Carvalho <allan.m.carvalho@outlook.com>
  */
 
 namespace DataTables\Test\TestCase\Table;
@@ -18,16 +18,15 @@ use Cake\TestSuite\TestCase;
 use DataTables\Plugin;
 use DataTables\Table\Builder;
 use DataTables\Table\Column;
-use DataTables\Table\Columns;
 use InvalidArgumentException;
 use TestApp\Application;
 
 /**
  * Class ColumnsTest
  *
- * @author   Allan Carvalho <allan.m.carvalho@outlook.com>
- * @license  MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
- * @link     https://github.com/allanmcarvalho/cakephp-datatables
+ * @author Allan Carvalho <allan.m.carvalho@outlook.com>
+ * @license MIT License https://github.com/allanmcarvalho/cakephp-datatables/blob/master/LICENSE
+ * @link https://github.com/allanmcarvalho/cakephp-datatables
  */
 class ColumnsTest extends TestCase {
 

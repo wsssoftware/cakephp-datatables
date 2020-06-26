@@ -3,9 +3,9 @@
  * Copyright (c) Allan Carvalho 2020.
  * Under Mit License
  *
- * link:     https://github.com/wsssoftware/cakephp-data-renderer
- * author:   Allan Carvalho <allan.m.carvalho@outlook.com>
- * license:  MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
+ * link: https://github.com/wsssoftware/cakephp-data-renderer
+ * author: Allan Carvalho <allan.m.carvalho@outlook.com>
+ * license: MIT License https://github.com/wsssoftware/cakephp-datatables/blob/master/LICENSE
  */
 declare(strict_types = 1);
 
@@ -40,12 +40,13 @@ trait LanguageOptionTrait {
 	 * Set the ARIA label attribute for the first pagination button. This can be particularly useful for cases where
 	 * you wish to show an icon such as « in the button itself, while retaining full accessibility.
 	 *
+	 * @link https://datatables.net/reference/option/language.aria.paginate.first
 	 * @param string $ariaPaginateFirst
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.aria.paginate.first
 	 */
-	public function setLanguageAriaPaginateFirst(string $ariaPaginateFirst): self {
+	public function setLanguageAriaPaginateFirst(string $ariaPaginateFirst) {
 		$this->_setConfig('language.aria.paginate.first', $ariaPaginateFirst);
+
 		return $this;
 	}
 
@@ -66,12 +67,13 @@ trait LanguageOptionTrait {
 	 * Set the ARIA label attribute for the last pagination button. This can be particularly useful for cases where you
 	 * wish to show an icon such as » in the button itself, while retaining full accessibility.
 	 *
+	 * @link https://datatables.net/reference/option/language.aria.paginate.last
 	 * @param string $ariaPaginateLast
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.aria.paginate.last
 	 */
-	public function setLanguageAriaPaginateLast(string $ariaPaginateLast): self {
+	public function setLanguageAriaPaginateLast(string $ariaPaginateLast) {
 		$this->_setConfig('language.aria.paginate.last', $ariaPaginateLast);
+
 		return $this;
 	}
 
@@ -92,12 +94,13 @@ trait LanguageOptionTrait {
 	 * Set the ARIA label attribute for the next pagination button. This can be particularly useful for cases where you
 	 * wish to show an icon such as » or › in the button itself, while retaining full accessibility.
 	 *
+	 * @link https://datatables.net/reference/option/language.aria.paginate.next
 	 * @param string $ariaPaginateNext
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.aria.paginate.next
 	 */
-	public function setLanguageAriaPaginateNext(string $ariaPaginateNext): self {
+	public function setLanguageAriaPaginateNext(string $ariaPaginateNext) {
 		$this->_setConfig('language.aria.paginate.next', $ariaPaginateNext);
+
 		return $this;
 	}
 
@@ -118,12 +121,13 @@ trait LanguageOptionTrait {
 	 * Set the ARIA label attribute for the previous pagination button. This can be particularly useful for cases where
 	 * you wish to show an icon such as « or ‹ in the button itself, while retaining full accessibility.
 	 *
+	 * @link https://datatables.net/reference/option/language.aria.paginate.previous
 	 * @param string $ariaPaginatePrevious
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.aria.paginate.previous
 	 */
-	public function setLanguageAriaPaginatePrevious(string $ariaPaginatePrevious): self {
+	public function setLanguageAriaPaginatePrevious(string $ariaPaginatePrevious) {
 		$this->_setConfig('language.aria.paginate.previous', $ariaPaginatePrevious);
+
 		return $this;
 	}
 
@@ -148,12 +152,13 @@ trait LanguageOptionTrait {
 	 *
 	 * Note that the column header text is prefixed to this string.
 	 *
+	 * @link https://datatables.net/reference/option/language.aria.sortAscending
 	 * @param string $ariaSortAscending
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.aria.sortAscending
 	 */
-	public function setLanguageAriaSortAscending(string $ariaSortAscending): self {
+	public function setLanguageAriaSortAscending(string $ariaSortAscending) {
 		$this->_setConfig('language.aria.sortAscending', $ariaSortAscending);
+
 		return $this;
 	}
 
@@ -178,12 +183,13 @@ trait LanguageOptionTrait {
 	 *
 	 * Note that the column header text is prefixed to this string.
 	 *
+	 * @link https://datatables.net/reference/option/language.aria.sortDescending
 	 * @param string $ariaSortDescending
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.aria.sortDescending
 	 */
-	public function setLanguageAriaSortDescending(string $ariaSortDescending): self {
+	public function setLanguageAriaSortDescending(string $ariaSortDescending) {
 		$this->_setConfig('language.aria.sortDescending', $ariaSortDescending);
+
 		return $this;
 	}
 
@@ -240,12 +246,13 @@ trait LanguageOptionTrait {
 	 * When given as an empty string (as this parameter is by default) a dot (.) is assumed to be the character used
 	 * for the decimal place.
 	 *
+	 * @link https://datatables.net/reference/option/language.decimal
 	 * @param string $decimal
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.decimal
 	 */
-	public function setLanguageDecimal(string $decimal): self {
+	public function setLanguageDecimal(string $decimal) {
 		$this->_setConfig('language.decimal', $decimal);
+
 		return $this;
 	}
 
@@ -272,12 +279,13 @@ trait LanguageOptionTrait {
 	 * Note that this is an optional parameter. If it is not given, the value of language.zeroRecords will be used
 	 * instead (either the default or given value).
 	 *
+	 * @link https://datatables.net/reference/option/language.emptyTable
 	 * @param string $emptyTable
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.emptyTable
 	 */
-	public function setLanguageEmptyTable(string $emptyTable): self {
+	public function setLanguageEmptyTable(string $emptyTable) {
 		$this->_setConfig('language.emptyTable', $emptyTable);
+
 		return $this;
 	}
 
@@ -314,12 +322,13 @@ trait LanguageOptionTrait {
 	 *  - _PAGE_ - Current page number
 	 *  - _PAGES_ - Total number of pages of data in the table
 	 *
+	 * @link https://datatables.net/reference/option/language.info
 	 * @param string $info
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.info
 	 */
-	public function setLanguageInfo(string $info): self {
+	public function setLanguageInfo(string $info) {
 		$this->_setConfig('language.info', $info);
+
 		return $this;
 	}
 
@@ -338,12 +347,13 @@ trait LanguageOptionTrait {
 	 * Setter method.
 	 * Display information string for when the table is empty. Typically the format of this string should match info.
 	 *
+	 * @link https://datatables.net/reference/option/language.infoEmpty
 	 * @param string $infoEmpty
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.infoEmpty
 	 */
-	public function setLanguageInfoEmpty(string $infoEmpty): self {
+	public function setLanguageInfoEmpty(string $infoEmpty) {
 		$this->_setConfig('language.infoEmpty', $infoEmpty);
+
 		return $this;
 	}
 
@@ -368,12 +378,13 @@ trait LanguageOptionTrait {
 	 *
 	 * The token _MAX_ is dynamically updated - see language.info for information about all available tokens.
 	 *
+	 * @link https://datatables.net/reference/option/language.infoFiltered
 	 * @param string $infoFiltered
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.infoFiltered
 	 */
-	public function setLanguageInfoFiltered(string $infoFiltered): self {
+	public function setLanguageInfoFiltered(string $infoFiltered) {
 		$this->_setConfig('language.infoFiltered', $infoFiltered);
+
 		return $this;
 	}
 
@@ -398,12 +409,13 @@ trait LanguageOptionTrait {
 	 * This string will be appended to the language.info (language.infoEmpty and language.infoFiltered in whatever
 	 * combination they are being used) at all times.
 	 *
+	 * @link https://datatables.net/reference/option/language.infoPostFix
 	 * @param string $infoPostFix
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.infoPostFix
 	 */
-	public function setLanguageInfoPostFix(string $infoPostFix): self {
+	public function setLanguageInfoPostFix(string $infoPostFix) {
 		$this->_setConfig('language.infoPostFix', $infoPostFix);
+
 		return $this;
 	}
 
@@ -426,12 +438,13 @@ trait LanguageOptionTrait {
 	 * token _MENU_ is replaced with a default select list of 10, 25, 50 and 100 (or any other value specified by
 	 * lengthMenu), and can be replaced with a custom select list if required.
 	 *
+	 * @link https://datatables.net/reference/option/language.lengthMenu
 	 * @param string $lengthMenu
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.lengthMenu
 	 */
-	public function setLanguageLengthMenu(string $lengthMenu): self {
+	public function setLanguageLengthMenu(string $lengthMenu) {
 		$this->_setConfig('language.lengthMenu', $lengthMenu);
+
 		return $this;
 	}
 
@@ -456,12 +469,13 @@ trait LanguageOptionTrait {
 	 * parameter is not used when loading data by server-side processing, just Ajax sourced data with client-side
 	 * processing.
 	 *
+	 * @link https://datatables.net/reference/option/language.loadingRecords
 	 * @param string $loadingRecords
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.loadingRecords
 	 */
-	public function setLanguageLoadingRecords(string $loadingRecords): self {
+	public function setLanguageLoadingRecords(string $loadingRecords) {
 		$this->_setConfig('language.loadingRecords', $loadingRecords);
+
 		return $this;
 	}
 
@@ -486,12 +500,13 @@ trait LanguageOptionTrait {
 	 * Note that DataTables writes this property to the document as HTML, so you can use HTML tags in the language
 	 * string, but HTML entities such as < and > should be encoded as &lt; and &gt; respectively.
 	 *
+	 * @link https://datatables.net/reference/option/language.paginate.first
 	 * @param string $paginateFirst
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.paginate.first
 	 */
-	public function setLanguagePaginateFirst(string $paginateFirst): self {
+	public function setLanguagePaginateFirst(string $paginateFirst) {
 		$this->_setConfig('language.paginate.first', $paginateFirst);
+
 		return $this;
 	}
 
@@ -516,12 +531,13 @@ trait LanguageOptionTrait {
 	 * Note that DataTables writes this property to the document as HTML, so you can use HTML tags in the language
 	 * string, but HTML entities such as < and > should be encoded as &lt; and &gt; respectively.
 	 *
+	 * @link https://datatables.net/reference/option/language.paginate.last
 	 * @param string $paginateLast
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.paginate.last
 	 */
-	public function setLanguagePaginateLast(string $paginateLast): self {
+	public function setLanguagePaginateLast(string $paginateLast) {
 		$this->_setConfig('language.paginate.last', $paginateLast);
+
 		return $this;
 	}
 
@@ -546,12 +562,13 @@ trait LanguageOptionTrait {
 	 * Note that DataTables writes this property to the document as HTML, so you can use HTML tags in the language
 	 * string, but HTML entities such as < and > should be encoded as &lt; and &gt; respectively.
 	 *
+	 * @link https://datatables.net/reference/option/language.processing
 	 * @param string $paginateNext
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.processing
 	 */
-	public function setLanguagePaginateNext(string $paginateNext): self {
+	public function setLanguagePaginateNext(string $paginateNext) {
 		$this->_setConfig('language.paginate.next', $paginateNext);
+
 		return $this;
 	}
 
@@ -570,12 +587,13 @@ trait LanguageOptionTrait {
 	 * Setter method.
 	 * Text that is displayed when the table is processing a user action (usually a sort command or similar).
 	 *
+	 * @link https://datatables.net/reference/option/language.processing
 	 * @param string $processing
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.processing
 	 */
-	public function setLanguageProcessing(string $processing): self {
+	public function setLanguageProcessing(string $processing) {
 		$this->_setConfig('language.processing', $processing);
+
 		return $this;
 	}
 
@@ -602,12 +620,13 @@ trait LanguageOptionTrait {
 	 * control over where it appears in the string. If _INPUT_ is not given then the input box is appended to the
 	 * string automatically.
 	 *
+	 * @link https://datatables.net/reference/option/language.search
 	 * @param string $search
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.search
 	 */
-	public function setLanguageSearch(string $search): self {
+	public function setLanguageSearch(string $search) {
 		$this->_setConfig('language.search', $search);
+
 		return $this;
 	}
 
@@ -632,12 +651,13 @@ trait LanguageOptionTrait {
 	 *
 	 * This parameter can be used to set a value for the placeholder attribute in a DataTable's search input.
 	 *
+	 * @link https://datatables.net/reference/option/language.searchPlaceholder
 	 * @param string $searchPlaceholder
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.searchPlaceholder
 	 */
-	public function setLanguageSearchPlaceholder(string $searchPlaceholder): self {
+	public function setLanguageSearchPlaceholder(string $searchPlaceholder) {
 		$this->_setConfig('language.searchPlaceholder', $searchPlaceholder);
+
 		return $this;
 	}
 
@@ -668,12 +688,13 @@ trait LanguageOptionTrait {
 	 * Please note that unlike the language.decimal option, the thousands separator option is used for output of
 	 * information only (specifically the info option). Changing it does not effect how DataTables reads numeric data.
 	 *
+	 * @link https://datatables.net/reference/option/language.thousands
 	 * @param string $thousands
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.thousands
 	 */
-	public function setLanguageThousands(string $thousands): self {
+	public function setLanguageThousands(string $thousands) {
 		$this->_setConfig('language.thousands', $thousands);
+
 		return $this;
 	}
 
@@ -708,11 +729,11 @@ trait LanguageOptionTrait {
 	 * That is to say that the table will not be drawn until the Ajax request as completed. As such, any actions that
 	 * require the table to have completed its initialisation should be placed into the initComplete callback.
 	 *
+	 * @link https://datatables.net/reference/option/language.url
 	 * @param string|array|int $url
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.url
 	 */
-	public function setLanguageUrl($url): self {
+	public function setLanguageUrl($url) {
 		if (!in_array(getType($url), ['string', 'array']) && $url !== MainOption::I18N_TRANSLATION) {
 			throw new InvalidArgumentException('Url must be a string or a array with params.');
 		} elseif (is_array($url)) {
@@ -726,6 +747,7 @@ trait LanguageOptionTrait {
 			]);
 		}
 		$this->_setConfig('language.url', $url);
+
 		return $this;
 	}
 
@@ -750,12 +772,13 @@ trait LanguageOptionTrait {
 	 * Note that language.emptyTable is shown when there is simply no information in the table at all (regardless of
 	 * filtering), while this parameter is used for when the table is empty due to filtering.
 	 *
+	 * @link https://datatables.net/reference/option/language.zeroRecords
 	 * @param string $zeroRecords
 	 * @return $this
-	 * @link https://datatables.net/reference/option/language.zeroRecords
 	 */
-	public function setLanguageZeroRecords(string $zeroRecords): self {
+	public function setLanguageZeroRecords(string $zeroRecords) {
 		$this->_setConfig('language.zeroRecords', $zeroRecords);
+
 		return $this;
 	}
 
