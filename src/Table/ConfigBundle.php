@@ -58,6 +58,11 @@ final class ConfigBundle {
 	public $LocalResourcesConfig;
 
 	/**
+	 * @var \DataTables\Table\Assets The DataTables Assets manager.
+	 */
+	public $Assets;
+
+	/**
 	 * @var string The md5 used to check changes.
 	 */
 	private $_checkMd5;
@@ -83,6 +88,7 @@ final class ConfigBundle {
 		$this->Query = new QueryBaseState();
 		$this->_dataTables->config($this);
 		$this->Options->setColumns($this->Columns);
+		$this->Assets = new Assets();
 		$this->LocalResourcesConfig = LocalResourcesConfig::getInstance();
 	}
 
