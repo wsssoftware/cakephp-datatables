@@ -83,7 +83,11 @@ trait AssetsTrait {
 		$body = '';
 		$basePath = DATA_TABLES_WWW_ROOT . $type . DS . $version . DS;
 		foreach ($files as $file) {
-			$body .= file_get_contents($basePath . $file) . "\n";
+			$body .= file_get_contents($basePath . $file);
+			if ($type === 'js') {
+			    $body .= ';';
+			}
+			$body .= "\n";
 		}
 
 		return $body;

@@ -74,6 +74,7 @@ final class Builder {
 		if ($cache === true && $storageEngine->exists($cacheKey)) {
 			/** @var \DataTables\Table\ConfigBundle $configBundle */
 			$configBundle = $storageEngine->read($cacheKey);
+			Assets::getInstance()->applyConfig($configBundle->Assets);
 		}
 		if (empty($configBundle) || $configBundle->getCheckMd5() !== $md5) {
 			$configBundle = new ConfigBundle($md5, $dataTablesFQN);

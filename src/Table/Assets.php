@@ -200,6 +200,35 @@ class Assets {
 	}
 
 	/**
+	 * Apply a assets instance to main instance.
+	 *
+	 * @param \DataTables\Table\Assets $assets
+	 * @return void
+	 */
+	public function applyConfig(Assets $assets): void {
+		$this->setEnabled($assets->isEnabled());
+		$this->setAutoload($assets->isAutoload());
+		$this->setCssBlock($assets->getCssBlock());
+		$this->setScriptBlock($assets->getScriptBlock());
+		$this->setDataTablesVersion($assets->getDataTablesVersion());
+		$this->setTheme($assets->getTheme());
+		$this->setLoadThemeLibrary($assets->isLoadThemeLibrary());
+		$this->setJquery($assets->getJquery());
+		$this->setLoadPluginAutoFill($assets->isLoadPluginAutoFill());
+		$this->setLoadPluginButtons($assets->isLoadPluginButtons());
+		$this->setLoadPluginColReorder($assets->isLoadPluginColReorder());
+		$this->setLoadPluginFixedColumns($assets->isLoadPluginFixedColumns());
+		$this->setLoadPluginFixedHeader($assets->isLoadPluginFixedHeader());
+		$this->setLoadPluginKeyTable($assets->isLoadPluginKeyTable());
+		$this->setLoadPluginResponsive($assets->isLoadPluginResponsive());
+		$this->setLoadPluginRowGroup($assets->isLoadPluginRowGroup());
+		$this->setLoadPluginRowReorder($assets->isLoadPluginRowReorder());
+		$this->setLoadPluginScroller($assets->isLoadPluginScroller());
+		$this->setLoadPluginSearchPanes($assets->isLoadPluginSearchPanes());
+		$this->setLoadPluginSelect($assets->isLoadPluginSelect());
+	}
+
+	/**
 	 * Return the assets to default state.
 	 *
 	 * @return $this

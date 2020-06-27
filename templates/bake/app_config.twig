@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+namespace {{ namespace }}\DataTables;
+
+use DataTables\Table\Option\MainOption;
+use DataTables\Table\Assets;
+
+/**
+ * Class {{ name }}DataTables
+ */
+class {{ name }}DataTables {
+
+	/**
+	 * This will be applied to all DataTables tables.
+	 *
+	 * @param \DataTables\Table\Option\MainOption $options Options of DataTable library.
+	 * @param \DataTables\Table\Assets $assets Options for asset load.
+	 */
+    public function mainConfig(MainOption $options, Assets $assets): void
+    {
+        // TODO: Configure here the rules that will be applied to all tables.
+    }
+}

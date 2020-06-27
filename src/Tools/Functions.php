@@ -11,6 +11,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Tools;
 
+use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DataTables\Table\ConfigBundle;
@@ -77,10 +78,14 @@ class Functions {
 	 * @return string
 	 */
 	public function getClassAndVersionMd5(string $classWithNameSpace): string {
+		$appClassMd5 = '';
+		if (file_exists(APP . 'DataTables' . DS . 'AppDataTables.php')) {
+			$appClassMd5 = $this->getClassMd5(Configure::read('App.namespace') . '\\DataTables\\AppDataTables');
+		}
 		$classMd5 = $this->getClassMd5($classWithNameSpace);
 		$pluginCurrentHash = $this->getPluginCurrentCommit();
 
-		return md5($classMd5 . $pluginCurrentHash);
+		return md5($appClassMd5 . $classMd5 . $pluginCurrentHash);
 	}
 
 	/**

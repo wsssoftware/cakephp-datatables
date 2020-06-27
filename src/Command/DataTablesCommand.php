@@ -106,6 +106,7 @@ class DataTablesCommand extends SimpleBakeCommand {
 
 				return static::CODE_SUCCESS;
 			}
+			$this->bakeAppConfig($args, $io);
 			$this->bakeConfig($args, $io);
 			$this->bakeConfigTest($args, $io);
 		} else {
@@ -152,6 +153,31 @@ class DataTablesCommand extends SimpleBakeCommand {
 
 		$emptyFile = $this->getPath($args) . '.gitkeep';
 		$this->deleteEmptyFile($emptyFile, $io);
+	}
+
+	/**
+	 * Bake a config class.
+	 *
+	 * @param \Cake\Console\Arguments $args
+	 * @param \Cake\Console\ConsoleIo $io
+	 * @return void
+	 */
+	public function bakeAppConfig(Arguments $args, ConsoleIo $io) {
+		$filename = $this->getPath($args) . $this->fileName('App');
+	    if (!file_exists($filename)) {
+			$this->_template = 'DataTables.app_config';
+			$renderer = new TemplateRenderer();
+			$renderer->set('name', 'App');
+			$templateData = $this->templateData($args);
+			$renderer->set($templateData);
+			$contents = $renderer->generate($this->template());
+			$io->createFile($filename, $contents, (bool)$args->getOption('force'));
+
+			$emptyFile = $this->getPath($args) . '.gitkeep';
+			$this->deleteEmptyFile($emptyFile, $io);
+		} else {
+	        $io->info(sprintf('"%s" will not baked because it already exists.', $this->fileName('App')));
+		}
 	}
 
 	/**

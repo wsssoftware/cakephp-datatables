@@ -10,6 +10,7 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
+use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -80,8 +81,15 @@ final class ConfigBundle {
 		$this->Options = new MainOption($this, $this->getUrl());
 		$this->Query = new QueryBaseState();
 		$this->Assets = Assets::getInstance();
-		$this->_dataTables->config($this);
 		$this->Options->setColumns($this->Columns);
+		$this->_dataTables->config($this);
+		if (file_exists(APP . 'DataTables' . DS . 'AppDataTables.php')) {
+			$class = Configure::read('App.namespace') . '\\DataTables\\AppDataTables';
+			$appDataTables = new $class();
+			if (method_exists($appDataTables, 'mainConfig')) {
+				$appDataTables->mainConfig($this->Options, $this->Assets);
+			}
+		}
 	}
 
 	/**

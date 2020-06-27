@@ -40,21 +40,21 @@ class CacheStorageEngine implements StorageEngineInterface {
 	 * @inheritDoc
 	 */
 	public function save(string $key, ConfigBundle $configBundle): bool {
-		return Cache::write($key, $configBundle, '_data_tables_config_bundles_');
+		return Cache::write($key, $configBundle, $this->_cacheConfigName);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function exists(string $key): bool {
-		return Cache::read($key, '_data_tables_config_bundles_') instanceof ConfigBundle;
+		return Cache::read($key, $this->_cacheConfigName) instanceof ConfigBundle;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function read(string $key): ?ConfigBundle {
-		$configBundle = Cache::read($key, '_data_tables_config_bundles_');
+		$configBundle = Cache::read($key, $this->_cacheConfigName);
 
 		return ($configBundle instanceof ConfigBundle) ? $configBundle : null;
 	}
@@ -63,7 +63,7 @@ class CacheStorageEngine implements StorageEngineInterface {
 	 * @inheritDoc
 	 */
 	public function delete(string $key): bool {
-		return Cache::delete($key, '_data_tables_config_bundles_');
+		return Cache::delete($key, $this->_cacheConfigName);
 	}
 
 }
