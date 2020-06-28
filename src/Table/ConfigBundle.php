@@ -10,7 +10,6 @@ declare(strict_types = 1);
 
 namespace DataTables\Table;
 
-use Cake\Core\Configure;
 use Cake\Error\FatalErrorException;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -63,13 +62,15 @@ final class ConfigBundle {
 	/**
 	 * @param string $checkMd5 The md5 used to check changes.
 	 * @param string $dataTablesFQN Tables class name.
+	 * @param object $appDataTablesClass The AppDataTables class from application.
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function __construct(
 		string $checkMd5,
-		string $dataTablesFQN
+		string $dataTablesFQN,
+		object $appDataTablesClass
 	) {
 		$this->_checkMd5 = $checkMd5;
 		$this->_dataTableFQN = $dataTablesFQN;
@@ -83,12 +84,8 @@ final class ConfigBundle {
 		$this->Assets = Assets::getInstance();
 		$this->Options->setColumns($this->Columns);
 		$this->_dataTables->config($this);
-		if (file_exists(APP . 'DataTables' . DS . 'AppDataTables.php')) {
-			$class = Configure::read('App.namespace') . '\\DataTables\\AppDataTables';
-			$appDataTables = new $class();
-			if (method_exists($appDataTables, 'mainConfig')) {
-				$appDataTables->mainConfig($this->Options, $this->Assets);
-			}
+		if (method_exists($appDataTablesClass, 'mainConfig')) {
+			$appDataTablesClass->mainConfig($this->Options, $this->Assets);
 		}
 	}
 

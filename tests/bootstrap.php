@@ -47,6 +47,7 @@ Cake\Core\Configure::write('App.namespace', 'TestApp');
 
 class_alias(TestApp\Controller\AppController::class, 'App\Controller\AppController');
 class_alias(TestApp\DataTables\CategoriesDataTables::class, 'App\DataTables\CategoriesTables');
+class_alias(TestApp\DataTables\AppDataTables::class, 'App\DataTables\AppDataTables');
 
 if (file_exists($root . '/config/bootstrap.php')) {
 	require $root . '/config/bootstrap.php';

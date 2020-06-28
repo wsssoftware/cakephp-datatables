@@ -11,6 +11,7 @@ use Cake\Utility\Inflector;
 use DataTables\Table\Builder;
 use DataTables\Table\Columns;
 use DataTables\Table\ConfigBundle;
+use DataTables\Table\Configure as TableConfigure;
 use DataTables\Table\Option\MainOption;
 use DataTables\Table\QueryBaseState;
 use DataTables\Tools\Functions;
@@ -35,7 +36,7 @@ class DataTablesComponent extends Component {
 	 */
 	public function initialize(array $config): void {
 		parent::initialize($config);
-		$forceCache = (bool)Configure::read('DataTables.StorageEngine.forceCache');
+		$forceCache = TableConfigure::getInstance()->isForceCache();
 		if (Configure::read('debug') === true && $forceCache === false) {
 			$this->_cache = false;
 		}

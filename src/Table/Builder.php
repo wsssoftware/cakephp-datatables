@@ -16,6 +16,7 @@ use Cake\Error\FatalErrorException;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DataTables\StorageEngine\StorageEngineInterface;
+use DataTables\Table\Configure as TableConfigure;
 use DataTables\Tools\Functions;
 
 /**
@@ -50,7 +51,7 @@ final class Builder {
 	 * @return \DataTables\StorageEngine\StorageEngineInterface
 	 */
 	public function getStorageEngine(): StorageEngineInterface {
-		$class = Configure::read('DataTables.StorageEngine.class');
+		$class = TableConfigure::getInstance()->getStorageEngine();
 
 		return new $class();
 	}
@@ -67,6 +68,16 @@ final class Builder {
 		$dataTablesFQN = $this->parseClassNameToFQN($dataTables);
 		$dataTablesName = explode('\\', $dataTables);
 		$dataTablesName = array_pop($dataTablesName);
+		$configure = TableConfigure::getInstance();
+		$appDataTablesClassFqn = Configure::read('App.namespace') . '\\DataTables\\AppDataTables';
+		if (class_exists($appDataTablesClassFqn)) {
+			$appDataTablesClass = new $appDataTablesClassFqn();
+			if (method_exists($appDataTablesClass, 'configure')) {
+				$appDataTablesClass->configure($configure);
+			}
+		} else {
+			throw new FatalErrorException(sprintf('The AppDataTables class was not found in "%s".', $appDataTablesClassFqn));
+		}
 		$storageEngine = $this->getStorageEngine();
 		$md5 = Functions::getInstance()->getClassAndVersionMd5($dataTablesFQN);
 		$cacheKey = Inflector::underscore($dataTablesName);
@@ -77,7 +88,7 @@ final class Builder {
 			Assets::getInstance()->applyConfig($configBundle->Assets);
 		}
 		if (empty($configBundle) || $configBundle->getCheckMd5() !== $md5) {
-			$configBundle = new ConfigBundle($md5, $dataTablesFQN);
+			$configBundle = new ConfigBundle($md5, $dataTablesFQN, $appDataTablesClass);
 			if ($cache && !$storageEngine->save($cacheKey, $configBundle)) {
 				throw new FatalErrorException('Unable to save the ConfigBundle cache.');
 			}
