@@ -1,5 +1,5 @@
 {
-  "name": "wsssoftware/cakephp-datatables",
+  "name": "nshiddqui/cakephp-datatables",
   "type": "cakephp-plugin",
   "description": "DataTables plugin for CakePHP 4.x",
   "homepage": "https://github.com/allanmcarvalho/cakephp-datatables",
