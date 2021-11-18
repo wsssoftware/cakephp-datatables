@@ -121,7 +121,7 @@ class Functions {
 				continue;
 			}
 			foreach ($packages as $package) {
-				if ($package->name === 'wsssoftware/cakephp-datatables') {
+				if ($package->name === 'nshiddqui/cakephp-datatables') {
 					return $package->dist->reference;
 				}
 			}
