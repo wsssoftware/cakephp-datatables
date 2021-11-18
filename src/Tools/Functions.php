@@ -114,6 +114,9 @@ class Functions {
 			$filePath = $filePath . $subPath;
 			if (is_file($filePath)) {
 				$packages = json_decode(file_get_contents($filePath));
+				if(isset($packages->packages)){
+					$packages = $packages->packages;
+				}
 			} else {
 				continue;
 			}
