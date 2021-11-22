@@ -135,9 +135,9 @@ final class TableDataUtils {
 	 */
 	private function insertSearchInArray(array &$conditions, string $databaseColumn, string $searchValue, bool $searchRegex): void {
 		if (!empty($searchValue)) {
-			$conditions += ["CONVERT($databaseColumn,char) LIKE" => "%$searchValue%"];
+			$conditions += ["$databaseColumn LIKE" => "%$searchValue%"];
 			if ($searchRegex === true && Functions::getInstance()->checkRegexFormat($searchValue)) {
-				$conditions += ["CONVERT($databaseColumn,char) REGEXP" => "$searchValue"];
+				$conditions += ["$databaseColumn REGEXP" => "$searchValue"];
 			}
 		}
 	}
