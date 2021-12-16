@@ -16,6 +16,7 @@ use Cake\ORM\Association\HasMany;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use DataTables\Tools\Functions;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Class AjaxData
