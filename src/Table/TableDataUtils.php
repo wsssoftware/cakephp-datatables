@@ -135,9 +135,10 @@ final class TableDataUtils {
 	 */
 	private function insertSearchInArray(array &$conditions, string $databaseColumn, string $searchValue, bool $searchRegex): void {
 		if (!empty($searchValue)) {
-			$conditions += ["$databaseColumn LIKE" => "%$searchValue%"];
+			$databaseColumn = ConnectionManager::get('default')->getDriver()->quoteIdentifier($databaseColumn);
+			$conditions += ["CONVERT($databaseColumn,char) LIKE" => "%$searchValue%"];
 			if ($searchRegex === true && Functions::getInstance()->checkRegexFormat($searchValue)) {
-				$conditions += ["$databaseColumn REGEXP" => "$searchValue"];
+				$conditions += ["CONVERT($databaseColumn,char) REGEXP" => "$searchValue"];
 			}
 		}
 	}
