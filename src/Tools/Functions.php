@@ -193,7 +193,7 @@ class Functions {
 	 * @param int $treeMax
 	 * @return mixed
 	 */
-	public function getAssociationPath($table, string $neededAssociation, array $currentPath = [], int $treeMax = 15) {
+	public function getAssociationPath($table, string $neededAssociation, array $currentPath = [], int $treeMax = 50) {
 		if (empty($currentPath)) {
 			$this->getAssociationAttempt = 0;
 		}
