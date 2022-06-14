@@ -193,8 +193,25 @@ class Functions {
 	 * @param int $treeMax
 	 * @return mixed
 	 */
-	public function getAssociationPath($table, string $neededAssociation, array $currentPath = [], int $treeMax = 50) {
-		return $table->getAssociation($neededAssociation);
+	public function getAssociationPath($table, string $neededAssociation, array $currentPath = [], int $treeMax = 15) {
+		if (empty($currentPath)) {
+			$this->getAssociationAttempt = 0;
+		}
+		$this->getAssociationAttempt++;
+		if ($this->getAssociationAttempt > $treeMax) {
+			return false;
+		}
+		$currentPath[] = $table->getAlias();
+		if ($neededAssociation === $table->getAlias()) {
+			return implode('.', $currentPath);
+		}
+		foreach ($table->associations() as $association) {
+			$result = $this->getAssociationPath($association, $neededAssociation, $currentPath, $treeMax);
+			if ($result !== false) {
+				return $result;
+			}
+		}
+		return false;
 	}
 
 	/**
