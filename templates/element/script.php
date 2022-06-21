@@ -21,7 +21,7 @@ foreach ($configBundles as $configBundle) {
 	$body .= "            $('#{$configBundle->getUniqueId()}').DataTable($bodyJson);\n";
     $currentPage = $configBundle->Options->getCurrentPage();
 	if ($currentPage !== null) {
-        $body .= "            $('#{$configBundle->getUniqueId()}').on('init.dt', function ( e, settings, json ) {\n";
+        $body .= "window[{$configBundle->getUniqueId()}] = $('#{$configBundle->getUniqueId()}').on('init.dt', function ( e, settings, json ) {\n";
         $body .= "                setTimeout( function () {\n";
         $body .= "                    (new $.fn.dataTable.Api(settings)).page($currentPage).draw(false);\n";
         $body .= "                }, 5 );\n";
