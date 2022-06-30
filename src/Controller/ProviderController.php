@@ -100,7 +100,7 @@ class ProviderController extends AppController {
 	 * @return \Cake\Http\Response|null|void Renders view
 	 */
 	public function getTablesData(string $tablesCass) {
-		$configBundle = Builder::getInstance()->getConfigBundle(Inflector::camelize($tablesCass), $this->_cache);
+		$configBundle = Builder::getInstance()->getConfigBundle(Inflector::camelize(str_replace('-','_',$tablesCass)), $this->_cache);
 		$tableDataUtils = new TableDataUtils($configBundle, $this->getRequest());
 		$find = $tableDataUtils->getFind();
 		$data = $find->toArray();

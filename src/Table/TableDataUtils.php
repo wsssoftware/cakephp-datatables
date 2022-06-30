@@ -16,6 +16,7 @@ use Cake\ORM\Association\HasMany;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use DataTables\Tools\Functions;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Class AjaxData
@@ -135,6 +136,7 @@ final class TableDataUtils {
 	 */
 	private function insertSearchInArray(array &$conditions, string $databaseColumn, string $searchValue, bool $searchRegex): void {
 		if (!empty($searchValue)) {
+			$databaseColumn = ConnectionManager::get('default')->getDriver()->quoteIdentifier($databaseColumn);
 			$conditions += ["CONVERT($databaseColumn,char) LIKE" => "%$searchValue%"];
 			if ($searchRegex === true && Functions::getInstance()->checkRegexFormat($searchValue)) {
 				$conditions += ["CONVERT($databaseColumn,char) REGEXP" => "$searchValue"];

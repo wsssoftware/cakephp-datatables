@@ -10,9 +10,8 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 
-Router::plugin('DataTables', ['path' => '/data-tables'], function (RouteBuilder $builder) {
+$routes->plugin('DataTables', ['path' => '/data-tables'], function (RouteBuilder $builder) {
 	$builder->connect('/images/*', ['controller' => 'Assets', 'action' => 'images']);
 	$builder->fallbacks(DashedRoute::class);
 });
